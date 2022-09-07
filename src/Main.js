@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SlokaScreen from "./screens/SlokaScreen";
+import SelectVerseScreen from "./screens/SelectVerseScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -29,7 +30,20 @@ const Main = () => {
               headerShown: false,
             }}
           />
-          <Stack.Screen name="Sloka" component={SlokaScreen} />
+          <Stack.Screen
+            name="Sloka"
+            component={SlokaScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="Select"
+            component={SelectVerseScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>

@@ -3,6 +3,12 @@ const setTheme = (state, action) => {
   return state;
 };
 
+const setVerse = (state, action) => {
+  state.selectedVerse = action.payload;
+  return state;
+};
+
 export default {
   setTheme,
+  setVerse,
 };
