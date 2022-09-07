@@ -1,5 +1,5 @@
 import { Button, Card, Divider } from "react-native-paper";
-import { StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import Text from "../components/base/Text";
 import { useDispatch, useSelector } from "react-redux";
 import { selectTheme, setTheme, setVerse } from "../redux/slices/app";
@@ -7,6 +7,7 @@ import { darkTheme, lightTheme } from "../theme";
 import { useEffect, useState } from "react";
 import VerseCard from "../components/base/VerseCard";
 import DataAPI from "../gita-data/dataApi";
+import { StatusBar } from "expo-status-bar";
 
 export default function HomeScreen({ navigation }) {
   const theme = useSelector(selectTheme);
@@ -69,7 +70,8 @@ export default function HomeScreen({ navigation }) {
   }, []);
 
   return (
-    <View style={styles.screen}>
+    <ScrollView style={styles.screen}>
+      <StatusBar style={theme.dark ? "light" : "dark"} />
       <VerseCard
         sloka={randomSloka}
         title="Today's Sloka"
@@ -99,7 +101,7 @@ export default function HomeScreen({ navigation }) {
           </View>
         ))}
       </View>
-    </View>
+    </ScrollView>
   );
 }
 

@@ -6,13 +6,15 @@ import {
   IconButton,
   Menu,
 } from "react-native-paper";
-import { StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import Text from "../components/base/Text";
 import { useDispatch, useSelector } from "react-redux";
 import { selectTheme, selectVerse, setTheme } from "../redux/slices/app";
 import VerseCard from "../components/base/VerseCard";
 import { useState } from "react";
 import { darkTheme, lightTheme } from "../theme";
+import ScreenHeader from "../components/base/ScreenHeader";
+import { StatusBar } from "expo-status-bar";
 
 export default function SlokaScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -22,40 +24,13 @@ export default function SlokaScreen({ navigation }) {
   const [headerMenuAnchor, setHeaderMenuAnchor] = useState(null);
 
   return (
-    <View style={styles.screen}>
-      <Appbar.Header>
-        <Appbar.BackAction size={20} onPress={() => navigation.goBack()} />
-        <Appbar.Content
-          titleStyle={{ fontSize: 18 }}
-          title={`Chapter ${currentSloka.chapter_number}, Verse ${currentSloka.verse_number}`}
-        />
-        {/* <Appbar.Action> */}
-        <Menu
-          visible={headerMenuAnchor}
-          onDismiss={() => {
-            setHeaderMenuAnchor(null);
-          }}
-          anchor={
-            <IconButton
-              onPress={() => setHeaderMenuAnchor(true)}
-              icon="dots-vertical"
-            ></IconButton>
-          }
-        >
-          <Menu.Item
-            onPress={() => {
-              dispatch(setTheme(theme.dark ? lightTheme : darkTheme));
-              setHeaderMenuAnchor(null);
-            }}
-            title="Toggle Theme"
-          />
-          {/* <Divider />
-          <Menu.Item onPress={() => {}} title="Item 2" />
-          <Divider />
-          <Menu.Item onPress={() => {}} title="Item 3" /> */}
-        </Menu>
-        {/* </Appbar.Action> */}
-      </Appbar.Header>
+    <ScrollView style={styles.screen} stickyHeaderIndices={[1]}>
+      <StatusBar style={theme.dark ? "light" : "dark"} />
+      <ScreenHeader
+        title={`Chapter ${currentSloka.chapter_number}, Verse ${currentSloka.verse_number}`}
+        navigation={navigation}
+        theme={theme}
+      />
       <View style={styles.slokaCardContainer}>
         <IconButton icon="arrow-left-drop-circle" />
         <View style={styles.card}>
@@ -65,7 +40,7 @@ export default function SlokaScreen({ navigation }) {
         </View>
         <IconButton icon="arrow-right-drop-circle" />
       </View>
-    </View>
+    </ScrollView>
   );
 }
 

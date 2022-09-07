@@ -13,6 +13,7 @@ import DataAPI from "../gita-data/dataApi";
 import { selectTheme, setVerse } from "../redux/slices/app";
 import VerseCard from "../components/base/VerseCard";
 import ScreenHeader from "../components/base/ScreenHeader";
+import { StatusBar } from "expo-status-bar";
 
 export default function SelectVerseScreen(props) {
   const { navigation } = props;
@@ -103,7 +104,8 @@ export default function SelectVerseScreen(props) {
   }
 
   return (
-    <ScrollView style={styles.screen} stickyHeaderIndices={[0]}>
+    <ScrollView style={styles.screen} stickyHeaderIndices={[1]}>
+      <StatusBar style={theme.dark ? "light" : "dark"} />
       <ScreenHeader
         navigation={navigation}
         title="Select Verse"
