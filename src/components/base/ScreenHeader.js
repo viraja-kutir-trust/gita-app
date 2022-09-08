@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Dimensions } from "react-native";
 import { Appbar, IconButton, Menu } from "react-native-paper";
 import { useDispatch } from "react-redux";
 import { setTheme } from "../../redux/slices/app";
