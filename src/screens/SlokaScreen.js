@@ -28,6 +28,7 @@ import { StatusBar } from "expo-status-bar";
 import DataAPI from "../gita-data/dataApi";
 import { capitalizeFirstLetter } from "../utils";
 import ListSelectionItem from "../components/base/ListSelectionItem";
+import CollapsibleCard from "../components/base/CollapsibleCard";
 
 export default function SlokaScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -165,17 +166,28 @@ export default function SlokaScreen({ navigation }) {
         </View>
       </View>
       {contents.map((content) => (
-        <View key={content.id} style={styles.card}>
-          <Text
-            style={styles.cardTitle}
-            variant={"titleMedium"}
-          >{`${capitalizeFirstLetter(content.lang)} ${capitalizeFirstLetter(
-            content.type
-          )} by ${content.authorName}`}</Text>
-          <Text variant={"bodyMedium"} style={styles.cardContent}>
-            {content.description}
-          </Text>
-        </View>
+        <CollapsibleCard
+          key={content.id}
+          title={`${capitalizeFirstLetter(
+            content.lang
+          )} ${capitalizeFirstLetter(content.type)} by ${content.authorName}`}
+          content={content.description}
+          theme={theme}
+          menuProps={{
+            menuItems: [
+              {
+                title: "Remove",
+                onPress: () => {
+                  onAddMoreContent(
+                    { id: content.author_id },
+                    content.type,
+                    false
+                  );
+                },
+              },
+            ],
+          }}
+        />
       ))}
       <Button
         icon="plus"
