@@ -43,21 +43,13 @@ export default function SelectVerseScreen(props) {
 
   const chapterMenuRef = useRef();
 
-  console.log(
-    currentChapter,
-    currentVerse,
-    Object.entries((verses && currentChapter && verses[currentChapter]) || {})
-  );
-
   const onChapterLayout = (event) => {
     const { x, y, width, height } = event.nativeEvent.layout;
-    console.log(x, y, width, height);
     setChapterLayout({ x, y, width, height });
   };
 
   const onVerseLayout = (event) => {
     const { x, y, width, height } = event.nativeEvent.layout;
-    console.log(x, y, width, height);
     setVerseLayout({ x, y, width, height });
   };
 
@@ -79,7 +71,6 @@ export default function SelectVerseScreen(props) {
         <IconButton
           icon={"arrow-down-drop-circle"}
           onClick={() => {
-            console.log("Clicked dropdown");
             setShowChapters(true);
           }}
         />
@@ -140,7 +131,7 @@ export default function SelectVerseScreen(props) {
         contentStyle={{ borderRadius: 12, fontFamily: "readex-pro" }}
       >
         {chapters.map((chapter, index) => (
-          <>
+          <View key={chapter.id}>
             <Menu.Item
               key={chapter.id}
               onPress={() => {
@@ -153,8 +144,8 @@ export default function SelectVerseScreen(props) {
               contentStyle={styles.selectionText}
               titleStyle={styles.selectionText}
             />
-            {index !== chapters.length - 1 && <Divider />}
-          </>
+            {index !== chapters.length - 1 && <Divider id={chapter.id} />}
+          </View>
         ))}
       </Menu>
       <Menu
@@ -168,7 +159,7 @@ export default function SelectVerseScreen(props) {
         contentStyle={{ borderRadius: 12, fontFamily: "readex-pro" }}
       >
         {Object.entries(verses[currentChapter]).map((verse, index) => (
-          <>
+          <View key={verse[1].id}>
             <Menu.Item
               key={verse[1].id}
               onPress={() => {
@@ -180,8 +171,8 @@ export default function SelectVerseScreen(props) {
               contentStyle={styles.selectionText}
               titleStyle={styles.selectionText}
             />
-            {index !== chapters.length - 1 && <Divider />}
-          </>
+            {index !== chapters.length - 1 && <Divider id={verse[1].id} />}
+          </View>
         ))}
       </Menu>
       <VerseCard

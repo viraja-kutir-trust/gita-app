@@ -9,8 +9,6 @@ export default function VerseCard(props) {
   const styles = getStyles(theme);
   const [translation, setTranslation] = useState(sloka?.translation);
 
-  console.log(showTranslation, translation);
-
   useEffect(() => {
     DataAPI.getTranslations().then((translations) => {
       const translationOfVerse = translations.find(

@@ -81,14 +81,31 @@ export default function SlokaScreen({ navigation }) {
     getAllAuthors();
   }, []);
 
-  const onAddMoreContent = useCallback(async (author, type, isSelected) => {
+  const onAddMoreContent = async (author, type, isSelected) => {
     let newContent;
     if (!isSelected) {
       // remove the content
-      newContent = contents.filter(
-        (content) => content.author_id !== author.id && content.type !== type
-      );
+      console.log(contents);
+      newContent = contents.filter((content) => {
+        if (content.author_id === author.id && content.type === type) {
+          return false;
+        }
+        return true;
+      });
+      console.log(newContent);
       setContents(newContent);
+
+      if (type === "translation") {
+        const newSelectedTranslators = selectedTranslators.filter(
+          (translator) => translator.id !== author.id
+        );
+        setSelectedTranslators(newSelectedTranslators);
+      } else {
+        const newSelectedCommentators = selectedCommentators.filter(
+          (commentator) => commentator.id !== author.id
+        );
+        setSelectedCommentators(newSelectedCommentators);
+      }
       return;
     }
     if (type === "translation") {
@@ -107,7 +124,7 @@ export default function SlokaScreen({ navigation }) {
       setSelectedCommentators(selectedCommentators);
     }
     setContents((prev) => [...prev, newContent]);
-  }, []);
+  };
 
   useEffect(() => {
     console.log(
@@ -115,7 +132,7 @@ export default function SlokaScreen({ navigation }) {
       selectedTranslators,
       selectedCommentators
     );
-  }, [selectedTranslators, selectedCommentators]);
+  }, [selectedTranslators, selectedCommentators, showAddMoreDialog]);
 
   const contentExists = (author, type) => {
     return contents.some((content) => {
@@ -190,9 +207,11 @@ export default function SlokaScreen({ navigation }) {
             />
             <ScrollView>
               {allTranslators.map((translator) => (
-                <View style={{ marginVertical: 5 }}>
+                <View
+                  style={{ marginVertical: 5 }}
+                  key={translator.id + "translator"}
+                >
                   <ListSelectionItem
-                    key={translator.id + "translator"}
                     text={`${capitalizeFirstLetter(
                       translator.lang
                     )} Translation by ${translator.authorName}`}
@@ -205,9 +224,11 @@ export default function SlokaScreen({ navigation }) {
                 </View>
               ))}
               {allCommentators.map((commentator) => (
-                <View style={{ marginVertical: 5 }}>
+                <View
+                  style={{ marginVertical: 5 }}
+                  key={commentator.id + "commentator"}
+                >
                   <ListSelectionItem
-                    key={commentator.id + "commentator"}
                     text={`${capitalizeFirstLetter(
                       commentator.lang
                     )} Commentary by ${commentator.authorName}`}
