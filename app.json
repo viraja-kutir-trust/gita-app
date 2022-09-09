@@ -26,7 +26,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFF4F2"
-      }
+      },
+      "package": "com.saiteja.bhagavadgita"
     },
     "web": {
       "favicon": "./assets/favicon.png"

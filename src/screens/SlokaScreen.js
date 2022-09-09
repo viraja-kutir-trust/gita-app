@@ -143,10 +143,10 @@ export default function SlokaScreen({ navigation }) {
   };
 
   const changeSloka = async (goNext) => {
+    const chapters = await DataAPI.getChapters();
     if (goNext) {
-      const availableSlokasInChapter = await DataAPI.getChapters()[
-        currentSloka.chapter_number - 1
-      ].verses_count;
+      const availableSlokasInChapter =
+        chapters[currentSloka.chapter_number - 1].verses_count;
       if (currentSloka.verse_number < availableSlokasInChapter) {
         dispatch(
           setVerse(
@@ -157,6 +157,13 @@ export default function SlokaScreen({ navigation }) {
           )
         );
       } else {
+        if (
+          currentSloka.chapter_number === chapters.length &&
+          currentSloka.verse_number === availableSlokasInChapter
+        ) {
+          // do nothing
+          return;
+        }
         dispatch(
           setVerse(await DataAPI.getVerse(currentSloka.chapter_number + 1, 1))
         );
@@ -172,9 +179,15 @@ export default function SlokaScreen({ navigation }) {
           )
         );
       } else {
-        const availableSlokasInChapter = await DataAPI.getChapters()[
-          currentSloka.chapter_number - 1
-        ].verses_count;
+        if (
+          currentSloka.chapter_number === 1 &&
+          currentSloka.verse_number === 1
+        ) {
+          // do nothing
+          return;
+        }
+        const availableSlokasInChapter =
+          chapters[currentSloka.chapter_number - 1].verses_count;
         dispatch(
           setVerse(
             await DataAPI.getVerse(
@@ -225,7 +238,7 @@ export default function SlokaScreen({ navigation }) {
             size={35}
             style={{ zIndex: 5, elevation: 5 }}
             onPress={() => {
-              changeSloka(false);
+              changeSloka(true);
             }}
           />
         </View>
