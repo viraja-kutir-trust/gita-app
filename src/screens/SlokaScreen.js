@@ -227,12 +227,7 @@ export default function SlokaScreen({ navigation }) {
             {currentSloka.transliteration}
           </Text>
         </View>
-        <View
-          style={{ ...styles.slokaNavigators, right: 2 }}
-          onPress={() => {
-            changeSloka(true);
-          }}
-        >
+        <View style={{ ...styles.slokaNavigators, right: 2 }}>
           <IconButton
             icon="arrow-right-drop-circle"
             size={35}

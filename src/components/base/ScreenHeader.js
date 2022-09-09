@@ -1,14 +1,50 @@
-import { useState } from "react";
-import { Dimensions } from "react-native";
-import { Appbar, IconButton, Menu } from "react-native-paper";
-import { useDispatch } from "react-redux";
-import { setTheme } from "../../redux/slices/app";
+import { useEffect, useMemo, useState } from "react";
+import { Dimensions, ScrollView, StyleSheet, View } from "react-native";
+import { Appbar, Button, Divider, IconButton, Menu } from "react-native-paper";
+import { useDispatch, useSelector } from "react-redux";
+import DataAPI from "../../gita-data/dataApi";
+import {
+  selectDefaultCommentary,
+  selectDefaultTranslation,
+  setDefaultCommentary,
+  setDefaultTranslation,
+  setTheme,
+} from "../../redux/slices/app";
 import { darkTheme, lightTheme } from "../../theme";
+import { capitalizeFirstLetter } from "../../utils";
+import DropDown from "./DropDown";
+import Modal from "./Modal";
+import Text from "./Text";
 
 export default function ScreenHeader(props) {
   const { navigation, title, theme } = props;
+  const styles = getStyles(theme);
   const dispatch = useDispatch();
+  const defaultTranslation = useSelector(selectDefaultTranslation);
+  const defaultCommentary = useSelector(selectDefaultCommentary);
   const [headerMenuAnchor, setHeaderMenuAnchor] = useState(null);
+  const [showModifyDefaults, setShowModifyDefaults] = useState(false);
+  const [allTranslators, setAllTranslators] = useState([]);
+  const [allCommentators, setAllCommentators] = useState([]);
+  const [selectedTranslator, setSelectedTranslator] =
+    useState(defaultTranslation);
+  const [selectedCommentator, setSelectedCommentator] =
+    useState(defaultCommentary);
+
+  useEffect(() => {
+    async function fetchAuthors() {
+      const translators = await DataAPI.getTranslators();
+      const commentators = await DataAPI.getCommenters();
+      setAllTranslators(translators);
+      setAllCommentators(commentators);
+    }
+    fetchAuthors();
+  }, []);
+
+  useEffect(() => {
+    setSelectedTranslator(defaultTranslation);
+    setSelectedCommentator(defaultCommentary);
+  }, [defaultCommentary, defaultTranslation]);
 
   return (
     <Appbar.Header>
@@ -34,12 +70,123 @@ export default function ScreenHeader(props) {
           }}
           title="Toggle Theme"
         />
-        {/* <Divider />
-          <Menu.Item onPress={() => {}} title="Item 2" />
-          <Divider />
-          <Menu.Item onPress={() => {}} title="Item 3" /> */}
+        <Divider />
+        <Menu.Item
+          onPress={() => {
+            setShowModifyDefaults(true);
+            setHeaderMenuAnchor(null);
+          }}
+          title="Modify Defaults"
+        />
       </Menu>
       {/* </Appbar.Action> */}
+      <Modal
+        theme={theme}
+        visible={showModifyDefaults}
+        title="Modify Defaults"
+        onClose={() => {
+          setShowModifyDefaults(false);
+        }}
+      >
+        <View style={{ paddingBottom: 25 }}>
+          <DropDown
+            header={"Default Translation"}
+            description={`${capitalizeFirstLetter(selectedTranslator.lang)} - ${
+              selectedTranslator.authorName
+            }`}
+            options={allTranslators.map(
+              (translator) =>
+                `${capitalizeFirstLetter(translator.lang)} - ${
+                  translator.authorName
+                }`
+            )}
+            onChange={(translatorText) => {
+              const authorName = translatorText.split("- ")[1].trim();
+              const translator = allTranslators.find(
+                (t) => t.authorName === authorName
+              );
+              setSelectedTranslator(translator);
+            }}
+            theme={theme}
+          />
+          <DropDown
+            header={"Default Commentary"}
+            description={`${capitalizeFirstLetter(
+              selectedCommentator.lang
+            )} - ${selectedCommentator.authorName}`}
+            options={allCommentators.map(
+              (commentator) =>
+                `${capitalizeFirstLetter(commentator.lang)} - ${
+                  commentator.authorName
+                }`
+            )}
+            onChange={(commentatorText) => {
+              const authorName = commentatorText.split("- ")[1].trim();
+              const translator = allCommentators.find(
+                (t) => t.authorName === authorName
+              );
+              setSelectedCommentator(translator);
+            }}
+            theme={theme}
+          />
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-around",
+              margin: 10,
+            }}
+          >
+            <Button
+              mode="contained"
+              onPress={() => {
+                dispatch(setDefaultTranslation(selectedTranslator));
+                dispatch(setDefaultCommentary(selectedCommentator));
+                setShowModifyDefaults(false);
+              }}
+              style={{ width: 130 }}
+              buttonColor={theme.colors.primaryContainer}
+            >
+              <Text variant={"labelMedium"}>Save</Text>
+            </Button>
+            <Button
+              mode="contained"
+              onPress={() => {
+                setShowModifyDefaults(false);
+              }}
+              style={{ width: 130 }}
+              buttonColor={theme.colors.error}
+            >
+              <Text
+                variant={"labelMedium"}
+                style={{ color: theme.colors.background }}
+              >
+                Cancel
+              </Text>
+            </Button>
+          </View>
+        </View>
+      </Modal>
     </Appbar.Header>
   );
 }
+
+const getStyles = (theme) =>
+  StyleSheet.create({
+    modalContainer: {
+      backgroundColor: theme.colors.surface,
+      padding: 20,
+      // minWidth: "80%",
+      width: 360,
+      alignSelf: "center",
+      maxHeight: "95%",
+    },
+    modalTitle: {
+      textAlign: "center",
+      marginBottom: 15,
+    },
+    modalCloseIcon: {
+      position: "absolute",
+      top: -13,
+      right: -13,
+    },
+  });

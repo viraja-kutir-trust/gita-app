@@ -21,12 +21,14 @@ const setDefaultLanguage = (state, action) => {
 };
 
 const setDefaultTranslation = (state, action) => {
-  state.translation = action.payload;
+  console.log(state.defaults.translation, action.payload);
+  state.defaults.translation = action.payload;
   return state;
 };
 
 const setDefaultCommentary = (state, action) => {
-  state.commentary = action.payload;
+  console.log(state.defaults.commentary, action.payload);
+  state.defaults.commentary = action.payload;
   return state;
 };
 
