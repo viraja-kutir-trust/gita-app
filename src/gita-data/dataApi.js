@@ -7,6 +7,9 @@ const DataAPI = {
     const verses = await require("./verses-parsed.json");
     return verses;
   },
+  getVerse: async function (chapterNumber, verseNumber) {
+    return (await this.getVerses())[chapterNumber][verseNumber];
+  },
   getTranslations: async function () {
     const translations = await require("./translation.json");
     return translations;

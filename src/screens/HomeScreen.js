@@ -17,7 +17,7 @@ export default function HomeScreen({ navigation }) {
 
   const actions = [
     {
-      label: "Continue from where you left",
+      label: "Continue from where you left (Coming Soon)",
       onClick: () => {
         console.log("continue from where you left");
       },
@@ -29,7 +29,7 @@ export default function HomeScreen({ navigation }) {
       },
     },
     {
-      label: "Favorites",
+      label: "Favorites (Coming Soon)",
       onClick: () => {},
     },
     {
@@ -112,6 +112,7 @@ const getStyles = (theme) =>
       width: "100%",
       height: "100%",
       backgroundColor: theme.colors.background,
+      paddingTop: 30,
     },
     cardContainer: {
       margin: 20,

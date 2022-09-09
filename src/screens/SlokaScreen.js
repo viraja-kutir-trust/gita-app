@@ -19,6 +19,7 @@ import {
   selectTheme,
   selectVerse,
   setTheme,
+  setVerse,
 } from "../redux/slices/app";
 import VerseCard from "../components/base/VerseCard";
 import { useCallback, useEffect, useState } from "react";
@@ -141,6 +142,51 @@ export default function SlokaScreen({ navigation }) {
     });
   };
 
+  const changeSloka = async (goNext) => {
+    if (goNext) {
+      const availableSlokasInChapter = await DataAPI.getChapters()[
+        currentSloka.chapter_number - 1
+      ].verses_count;
+      if (currentSloka.verse_number < availableSlokasInChapter) {
+        dispatch(
+          setVerse(
+            await DataAPI.getVerse(
+              currentSloka.chapter_number,
+              currentSloka.verse_number + 1
+            )
+          )
+        );
+      } else {
+        dispatch(
+          setVerse(await DataAPI.getVerse(currentSloka.chapter_number + 1, 1))
+        );
+      }
+    } else {
+      if (currentSloka.verse_number > 1) {
+        dispatch(
+          setVerse(
+            await DataAPI.getVerse(
+              currentSloka.chapter_number,
+              currentSloka.verse_number - 1
+            )
+          )
+        );
+      } else {
+        const availableSlokasInChapter = await DataAPI.getChapters()[
+          currentSloka.chapter_number - 1
+        ].verses_count;
+        dispatch(
+          setVerse(
+            await DataAPI.getVerse(
+              currentSloka.chapter_number - 1,
+              availableSlokasInChapter
+            )
+          )
+        );
+      }
+    }
+  };
+
   return (
     <ScrollView stickyHeaderIndices={[1]} style={styles.screen}>
       <StatusBar style={theme.dark ? "light" : "dark"} />
@@ -151,7 +197,14 @@ export default function SlokaScreen({ navigation }) {
       />
       <View style={styles.slokaCardContainer}>
         <View style={{ ...styles.slokaNavigators, left: 2 }}>
-          <IconButton icon="arrow-left-drop-circle" size={35} />
+          <IconButton
+            icon="arrow-left-drop-circle"
+            style={{ zIndex: 5, elevation: 5 }}
+            size={35}
+            onPress={() => {
+              changeSloka(false);
+            }}
+          />
         </View>
         <View style={{ ...styles.card }}>
           <Text variant={"bodyMedium"} style={styles.cardContent}>
@@ -161,8 +214,20 @@ export default function SlokaScreen({ navigation }) {
             {currentSloka.transliteration}
           </Text>
         </View>
-        <View style={{ ...styles.slokaNavigators, right: 2 }}>
-          <IconButton icon="arrow-right-drop-circle" size={35} />
+        <View
+          style={{ ...styles.slokaNavigators, right: 2 }}
+          onPress={() => {
+            changeSloka(true);
+          }}
+        >
+          <IconButton
+            icon="arrow-right-drop-circle"
+            size={35}
+            style={{ zIndex: 5, elevation: 5 }}
+            onPress={() => {
+              changeSloka(false);
+            }}
+          />
         </View>
       </View>
       {contents.map((content) => (
@@ -269,7 +334,7 @@ const getStyles = (theme) =>
     },
     slokaNavigators: {
       position: "absolute",
-      elevation: 5,
+      elevation: 2,
       zIndex: 2,
       opacity: 0.8,
     },
