@@ -47,7 +47,8 @@ const getStyles = (theme) =>
   StyleSheet.create({
     modalContainer: {
       backgroundColor: theme.colors.surface,
-      padding: 20,
+      paddingVertical: 20,
+      paddingHorizontal: 10,
       // minWidth: "80%",
       width: 360,
       alignSelf: "center",

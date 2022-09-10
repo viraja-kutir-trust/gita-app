@@ -27,7 +27,7 @@ import { darkTheme, lightTheme } from "../theme";
 import ScreenHeader from "../components/base/ScreenHeader";
 import { StatusBar } from "expo-status-bar";
 import DataAPI from "../gita-data/dataApi";
-import { capitalizeFirstLetter } from "../utils";
+import { capitalizeFirstLetter, detectAndTransliterate } from "../utils";
 import ListSelectionItem from "../components/base/ListSelectionItem";
 import CollapsibleCard from "../components/base/CollapsibleCard";
 
@@ -35,7 +35,9 @@ export default function SlokaScreen({ navigation }) {
   const dispatch = useDispatch();
   const currentSloka = useSelector(selectVerse);
   const theme = useSelector(selectTheme);
-  const defaultLanguage = useSelector(selectDefaultLanguage);
+  const defaultLanguage = useSelector(
+    selectDefaultLanguage
+  ).devanagariToLanguage;
   const defaultTranslation = useSelector(selectDefaultTranslation);
   const defaultCommentary = useSelector(selectDefaultCommentary);
   const styles = getStyles(theme);
@@ -221,10 +223,13 @@ export default function SlokaScreen({ navigation }) {
         </View>
         <View style={{ ...styles.card }}>
           <Text variant={"bodyMedium"} style={styles.cardContent}>
-            {currentSloka.text}
+            {detectAndTransliterate(currentSloka.text, defaultLanguage)}
           </Text>
           <Text variant={"bodyMedium"} style={styles.cardContent}>
-            {currentSloka.transliteration}
+            {detectAndTransliterate(
+              currentSloka.transliteration,
+              defaultLanguage
+            )}
           </Text>
         </View>
         <View style={{ ...styles.slokaNavigators, right: 2 }}>
@@ -260,6 +265,7 @@ export default function SlokaScreen({ navigation }) {
               },
             ],
           }}
+          defaultLanguage={defaultLanguage}
         />
       ))}
       <Button

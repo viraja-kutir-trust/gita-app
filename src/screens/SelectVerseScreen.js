@@ -10,15 +10,23 @@ import { TouchableOpacity } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import Text from "../components/base/Text";
 import DataAPI from "../gita-data/dataApi";
-import { selectTheme, setVerse } from "../redux/slices/app";
+import {
+  selectDefaultLanguage,
+  selectTheme,
+  setVerse,
+} from "../redux/slices/app";
 import VerseCard from "../components/base/VerseCard";
 import ScreenHeader from "../components/base/ScreenHeader";
 import { StatusBar } from "expo-status-bar";
+import { detectAndTransliterate } from "../utils";
 
 export default function SelectVerseScreen(props) {
   const { navigation } = props;
   const dispatch = useDispatch();
   const theme = useSelector(selectTheme);
+  const defaultLanguage = useSelector(
+    selectDefaultLanguage
+  ).devanagariToLanguage;
   const styles = getStyles(theme);
   const [chapters, setChapters] = useState([]);
   const [verses, setVerses] = useState([]);
@@ -115,7 +123,7 @@ export default function SelectVerseScreen(props) {
       )}
       {selectionComponent(
         `Verse ${currentVerse?.verse_number || 1}`,
-        currentVerse?.text,
+        detectAndTransliterate(currentVerse?.text, defaultLanguage),
         onVerseLayout,
         () => {
           setShowVerses(true);
@@ -167,7 +175,10 @@ export default function SelectVerseScreen(props) {
                 setCurrentVerse(verse[1]);
                 setShowVerses(false);
               }}
-              title={`${index + 1} - ${verse[1].text}`}
+              title={`${index + 1} - ${detectAndTransliterate(
+                verse[1].text,
+                defaultLanguage
+              )}`}
               style={{ width: "100%", minWidth: "100%", maxWidth: "100%" }}
               contentStyle={styles.selectionText}
               titleStyle={styles.selectionText}
@@ -185,6 +196,7 @@ export default function SelectVerseScreen(props) {
           dispatch(setVerse(currentVerse));
           navigation.navigate("Sloka");
         }}
+        defaultLanguage={defaultLanguage}
       />
     </ScrollView>
   );

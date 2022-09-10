@@ -5,8 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 import DataAPI from "../../gita-data/dataApi";
 import {
   selectDefaultCommentary,
+  selectDefaultLanguage,
   selectDefaultTranslation,
   setDefaultCommentary,
+  setDefaultLanguage,
   setDefaultTranslation,
   setTheme,
 } from "../../redux/slices/app";
@@ -20,6 +22,7 @@ export default function ScreenHeader(props) {
   const { navigation, title, theme } = props;
   const styles = getStyles(theme);
   const dispatch = useDispatch();
+  const defaultLanguage = useSelector(selectDefaultLanguage);
   const defaultTranslation = useSelector(selectDefaultTranslation);
   const defaultCommentary = useSelector(selectDefaultCommentary);
   const [headerMenuAnchor, setHeaderMenuAnchor] = useState(null);
@@ -30,6 +33,9 @@ export default function ScreenHeader(props) {
     useState(defaultTranslation);
   const [selectedCommentator, setSelectedCommentator] =
     useState(defaultCommentary);
+  const [selectedLanguage, setSelectedLanguage] = useState(
+    defaultLanguage.devanagariToLanguage
+  );
 
   useEffect(() => {
     async function fetchAuthors() {
@@ -44,7 +50,12 @@ export default function ScreenHeader(props) {
   useEffect(() => {
     setSelectedTranslator(defaultTranslation);
     setSelectedCommentator(defaultCommentary);
-  }, [defaultCommentary, defaultTranslation]);
+    setSelectedLanguage(defaultLanguage.devanagariToLanguage);
+  }, [
+    defaultCommentary,
+    defaultTranslation,
+    defaultLanguage.devanagariToLanguage,
+  ]);
 
   return (
     <Appbar.Header>
@@ -89,6 +100,17 @@ export default function ScreenHeader(props) {
         }}
       >
         <View style={{ paddingBottom: 25 }}>
+          <DropDown
+            header={"Devanagari to Language"}
+            description={selectedLanguage}
+            options={DataAPI.getTransliterationLanguages().map(
+              (language) => language.name
+            )}
+            onChange={(newLanguage) => {
+              setSelectedLanguage(newLanguage);
+            }}
+            theme={theme}
+          />
           <DropDown
             header={"Default Translation"}
             description={`${capitalizeFirstLetter(selectedTranslator.lang)} - ${
@@ -141,6 +163,9 @@ export default function ScreenHeader(props) {
               onPress={() => {
                 dispatch(setDefaultTranslation(selectedTranslator));
                 dispatch(setDefaultCommentary(selectedCommentator));
+                dispatch(
+                  setDefaultLanguage({ devanagariToLanguage: selectedLanguage })
+                );
                 setShowModifyDefaults(false);
               }}
               style={{ width: 130 }}
@@ -151,6 +176,9 @@ export default function ScreenHeader(props) {
             <Button
               mode="contained"
               onPress={() => {
+                setSelectedTranslator(defaultTranslation);
+                setSelectedCommentator(defaultCommentary);
+                setSelectedLanguage(defaultLanguage.devanagariToLanguage);
                 setShowModifyDefaults(false);
               }}
               style={{ width: 130 }}

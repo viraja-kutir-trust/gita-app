@@ -16,7 +16,7 @@ const setVerse = (state, action) => {
 };
 
 const setDefaultLanguage = (state, action) => {
-  state.language = { ...state.language, ...action.payload };
+  state.defaults.language = { ...state.defaults.language, ...action.payload };
   return state;
 };
 

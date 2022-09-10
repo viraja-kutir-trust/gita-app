@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { IconButton, Menu } from "react-native-paper";
+import { detectAndTransliterate } from "../../utils";
 import Text from "./Text";
 
 export default function CollapsibleCard(props) {
-  const { title, content, theme, menuProps } = props;
+  const { title, content, theme, menuProps, defaultLanguage } = props;
   const styles = getStyles(theme);
   const [isOpen, setIsOpen] = useState(true);
   const [showMenu, setShowMenu] = useState(false);
@@ -47,7 +48,7 @@ export default function CollapsibleCard(props) {
       {isOpen && (
         <>
           <Text variant={"bodyMedium"} style={styles.cardContent}>
-            {content}
+            {detectAndTransliterate(content, defaultLanguage)}
           </Text>
         </>
       )}

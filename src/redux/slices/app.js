@@ -9,10 +9,10 @@ export const appSlice = createSlice({
     selectedVerse: null,
     defaults: {
       language: {
-        sloka: "DE",
-        transliteration: "EN",
-        meaning: "EN",
-        commentary: "EN",
+        devanagariToLanguage: "Devanagari",
+        transliteration: "English",
+        meaning: "English",
+        commentary: "English",
       },
       translation: { authorName: "Swami Gambhiranda", id: 19, lang: "english" },
       commentary: { authorName: "Swami Sivananda", lang: "english", id: 16 },

@@ -89,6 +89,15 @@ const DataAPI = {
     );
     return commentary;
   },
+  getTransliterationLanguages() {
+    return [
+      { lang: "devanagari", name: "Devanagari" },
+      { lang: "telugu", name: "Telugu" },
+      { lang: "kannada", name: "Kannada" },
+      { lang: "malayalam", name: "Malayalam" },
+      { lang: "tamil_extended", name: "Tamil" },
+    ];
+  },
 };
 
 export default DataAPI;

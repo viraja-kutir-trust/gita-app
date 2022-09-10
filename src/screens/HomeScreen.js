@@ -2,7 +2,12 @@ import { Button, Card, Divider } from "react-native-paper";
 import { ScrollView, StyleSheet, View } from "react-native";
 import Text from "../components/base/Text";
 import { useDispatch, useSelector } from "react-redux";
-import { selectTheme, setTheme, setVerse } from "../redux/slices/app";
+import {
+  selectDefaultLanguage,
+  selectTheme,
+  setTheme,
+  setVerse,
+} from "../redux/slices/app";
 import { darkTheme, lightTheme } from "../theme";
 import { useEffect, useState } from "react";
 import VerseCard from "../components/base/VerseCard";
@@ -14,6 +19,9 @@ export default function HomeScreen({ navigation }) {
   const dispatch = useDispatch();
   const styles = getStyles(theme);
   const [randomSloka, setRandomSloka] = useState({});
+  const defaultLanguage = useSelector(
+    selectDefaultLanguage
+  ).devanagariToLanguage;
 
   const actions = [
     {
@@ -82,6 +90,7 @@ export default function HomeScreen({ navigation }) {
           dispatch(setVerse(randomSloka));
           navigation.navigate("Sloka");
         }}
+        defaultLanguage={defaultLanguage}
       />
       <View style={styles.actionsContainer}>
         {actions.map((action, index) => (

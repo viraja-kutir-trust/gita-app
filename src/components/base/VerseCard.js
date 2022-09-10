@@ -2,12 +2,42 @@ import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { ActivityIndicator, Button, Card } from "react-native-paper";
 import DataAPI from "../../gita-data/dataApi";
+import { detectAndTransliterate } from "../../utils";
 import Text from "./Text";
 
 export default function VerseCard(props) {
-  const { title, showVerseId, sloka, theme, onAction, showTranslation } = props;
+  const {
+    title,
+    showVerseId,
+    sloka,
+    theme,
+    onAction,
+    showTranslation,
+    defaultLanguage,
+  } = props;
   const styles = getStyles(theme);
+  const [verse, setVerse] = useState(sloka);
   const [translation, setTranslation] = useState(sloka?.translation);
+
+  useEffect(() => {
+    const newVerse = { ...sloka };
+    console.log(newVerse, translation);
+    newVerse.text = detectAndTransliterate(sloka.text, defaultLanguage);
+    if (newVerse.translation) {
+      newVerse.translation = detectAndTransliterate(
+        sloka.translation.description,
+        defaultLanguage
+      );
+      setTranslation(newVerse.translation);
+    } else if (translation) {
+      const newTranslation = detectAndTransliterate(
+        translation,
+        defaultLanguage
+      );
+      setTranslation(newTranslation);
+    }
+    setVerse(newVerse);
+  }, [defaultLanguage, translation, sloka]);
 
   useEffect(() => {
     DataAPI.getTranslations().then((translations) => {
@@ -16,6 +46,7 @@ export default function VerseCard(props) {
       );
       setTranslation(translationOfVerse?.description);
     });
+    setVerse(sloka);
   }, [sloka]);
 
   if (showTranslation && !translation) {
@@ -33,11 +64,11 @@ export default function VerseCard(props) {
           )}
           {showVerseId && (
             <Text style={styles.cardSubtitle} variant={"labelLarge"}>
-              Chapter {sloka.chapter_number}, Verse {sloka.verse_number}
+              Chapter {sloka.chapter_number}, Verse {verse.verse_number}
             </Text>
           )}
           <Text style={styles.cardContent} variant="titleMedium">
-            {sloka.text}
+            {verse.text}
           </Text>
           {showTranslation && (
             <Text style={styles.cardContent} variant="bodyMedium">
