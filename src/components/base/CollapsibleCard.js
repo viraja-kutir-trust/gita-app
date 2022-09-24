@@ -60,6 +60,7 @@ export default function CollapsibleCard(props) {
                 key={item.title}
                 onPress={() => {
                   handleMenuItemPress(item.title);
+                  item.onPress && item.onPress();
                 }}
                 title={item.title}
                 style={{ ...styles.menuItem, ...menuProps.menuItemStyle }}
@@ -79,6 +80,7 @@ export default function CollapsibleCard(props) {
       <Portal>
         <Modal
           visible={showScriptChoiceDialog}
+          title={"Change Script in Card"}
           onDismiss={() => {
             setScriptLanguage(defaultLanguage);
             closeScriptChoiceDialog();
