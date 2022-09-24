@@ -1,7 +1,11 @@
+import { useEffect } from "react";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { IconButton, Menu } from "react-native-paper";
+import { Divider, IconButton, Menu, Portal } from "react-native-paper";
+import DataAPI from "../../gita-data/dataApi";
 import { detectAndTransliterate } from "../../utils";
+import DropDown from "./DropDown";
+import Modal from "./Modal";
 import Text from "./Text";
 
 export default function CollapsibleCard(props) {
@@ -9,8 +13,23 @@ export default function CollapsibleCard(props) {
   const styles = getStyles(theme);
   const [isOpen, setIsOpen] = useState(true);
   const [showMenu, setShowMenu] = useState(false);
+  const [scriptLanguage, setScriptLanguage] = useState(defaultLanguage);
+  const [showScriptChoiceDialog, setShowScriptChoiceDialog] = useState(false);
 
-  console.log("menu props", menuProps);
+  useEffect(() => {
+    setScriptLanguage(defaultLanguage);
+  }, [defaultLanguage]);
+
+  const handleMenuItemPress = (itemTitle) => {
+    setShowMenu(false);
+    if (itemTitle === "Change Script") {
+      setShowScriptChoiceDialog(true);
+    }
+  };
+
+  const closeScriptChoiceDialog = () => {
+    setShowScriptChoiceDialog(false);
+  };
 
   return (
     <View style={styles.card}>
@@ -35,23 +54,57 @@ export default function CollapsibleCard(props) {
             />
           }
         >
-          {menuProps.menuItems?.map((item) => (
-            <Menu.Item
-              key={item.title}
-              onPress={item.onPress}
-              title={item.title}
-              style={{ ...styles.menuItem, ...menuProps.menuItemStyle }}
-            />
+          {menuProps.menuItems?.map((item, index) => (
+            <>
+              <Menu.Item
+                key={item.title}
+                onPress={() => {
+                  handleMenuItemPress(item.title);
+                }}
+                title={item.title}
+                style={{ ...styles.menuItem, ...menuProps.menuItemStyle }}
+              />
+              {index < menuProps.menuItems.length - 1 && <Divider />}
+            </>
           ))}
         </Menu>
       </View>
       {isOpen && (
         <>
           <Text variant={"bodyMedium"} style={styles.cardContent}>
-            {detectAndTransliterate(content, defaultLanguage)}
+            {detectAndTransliterate(content, scriptLanguage)}
           </Text>
         </>
       )}
+      <Portal>
+        <Modal
+          visible={showScriptChoiceDialog}
+          onDismiss={() => {
+            setScriptLanguage(defaultLanguage);
+            closeScriptChoiceDialog();
+          }}
+          contentContainerStyle={styles.modalContainer}
+          theme={theme}
+          showFooterActions
+          onSave={closeScriptChoiceDialog}
+          onClose={() => {
+            setScriptLanguage(defaultLanguage);
+            closeScriptChoiceDialog();
+          }}
+        >
+          <DropDown
+            header={"Script"}
+            description={scriptLanguage}
+            options={DataAPI.getTransliterationLanguages().map(
+              (language) => language.name
+            )}
+            onChange={(newLanguage) => {
+              setScriptLanguage(newLanguage);
+            }}
+            theme={theme}
+          />
+        </Modal>
+      </Portal>
     </View>
   );
 }
@@ -95,4 +148,12 @@ const getStyles = (theme) =>
     moreIcon: {},
     menu: {},
     menuItem: {},
+    modalContainer: {
+      backgroundColor: theme.colors.surface,
+      padding: 20,
+      // minWidth: "80%",
+      width: 360,
+      alignSelf: "center",
+      maxHeight: "95%",
+    },
   });

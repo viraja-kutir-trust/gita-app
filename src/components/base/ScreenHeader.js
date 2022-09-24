@@ -95,13 +95,25 @@ export default function ScreenHeader(props) {
         theme={theme}
         visible={showModifyDefaults}
         title="Modify Defaults"
+        showFooterActions
+        onSave={() => {
+          dispatch(setDefaultTranslation(selectedTranslator));
+          dispatch(setDefaultCommentary(selectedCommentator));
+          dispatch(
+            setDefaultLanguage({ devanagariToLanguage: selectedLanguage })
+          );
+          setShowModifyDefaults(false);
+        }}
         onClose={() => {
+          setSelectedTranslator(defaultTranslation);
+          setSelectedCommentator(defaultCommentary);
+          setSelectedLanguage(defaultLanguage.devanagariToLanguage);
           setShowModifyDefaults(false);
         }}
       >
         <View style={{ paddingBottom: 25 }}>
           <DropDown
-            header={"Devanagari to Language"}
+            header={"Script"}
             description={selectedLanguage}
             options={DataAPI.getTransliterationLanguages().map(
               (language) => language.name
@@ -151,47 +163,6 @@ export default function ScreenHeader(props) {
             }}
             theme={theme}
           />
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-around",
-              margin: 10,
-            }}
-          >
-            <Button
-              mode="contained"
-              onPress={() => {
-                dispatch(setDefaultTranslation(selectedTranslator));
-                dispatch(setDefaultCommentary(selectedCommentator));
-                dispatch(
-                  setDefaultLanguage({ devanagariToLanguage: selectedLanguage })
-                );
-                setShowModifyDefaults(false);
-              }}
-              style={{ width: 130 }}
-              buttonColor={theme.colors.primaryContainer}
-            >
-              <Text variant={"labelMedium"}>Save</Text>
-            </Button>
-            <Button
-              mode="contained"
-              onPress={() => {
-                setSelectedTranslator(defaultTranslation);
-                setSelectedCommentator(defaultCommentary);
-                setSelectedLanguage(defaultLanguage.devanagariToLanguage);
-                setShowModifyDefaults(false);
-              }}
-              style={{ width: 130 }}
-              buttonColor={theme.colors.error}
-            >
-              <Text
-                variant={"labelMedium"}
-                style={{ color: theme.colors.background }}
-              >
-                Cancel
-              </Text>
-            </Button>
-          </View>
         </View>
       </Modal>
     </Appbar.Header>

@@ -263,6 +263,9 @@ export default function SlokaScreen({ navigation }) {
                   );
                 },
               },
+              {
+                title: "Change Script",
+              },
             ],
           }}
           defaultLanguage={defaultLanguage}

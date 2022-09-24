@@ -1,10 +1,24 @@
 import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { Portal, Modal as PaperModal, IconButton } from "react-native-paper";
+import {
+  Portal,
+  Modal as PaperModal,
+  IconButton,
+  Button,
+} from "react-native-paper";
 import Text from "./Text";
 
 export default function Modal(props) {
-  const { visible, children, theme, title, onClose, ...args } = props;
+  const {
+    visible,
+    children,
+    theme,
+    title,
+    onClose,
+    showFooterActions,
+    onSave,
+    ...args
+  } = props;
   const styles = getStyles(theme);
   const [isVisible, setIsVisible] = useState(visible);
 
@@ -37,6 +51,37 @@ export default function Modal(props) {
             style={styles.modalCloseIcon}
           />
           {children}
+          {showFooterActions && (
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-around",
+                margin: 10,
+              }}
+            >
+              <Button
+                mode="contained"
+                onPress={onSave}
+                style={{ width: 130 }}
+                buttonColor={theme.colors.primaryContainer}
+              >
+                <Text variant={"labelMedium"}>Save</Text>
+              </Button>
+              <Button
+                mode="contained"
+                onPress={onClose}
+                style={{ width: 130 }}
+                buttonColor={theme.colors.error}
+              >
+                <Text
+                  variant={"labelMedium"}
+                  style={{ color: theme.colors.background }}
+                >
+                  Cancel
+                </Text>
+              </Button>
+            </View>
+          )}
         </View>
       </PaperModal>
     </Portal>

@@ -29,7 +29,7 @@
         "backgroundColor": "#FFF4F2"
       },
       "package": "com.saiteja.bhagavadgita",
-      "versionCode": 2
+      "versionCode": 3
     },
     "web": {
       "favicon": "./assets/favicon.png"
