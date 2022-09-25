@@ -56,7 +56,6 @@ export default function Modal(props) {
               style={{
                 flexDirection: "row",
                 justifyContent: "space-around",
-                margin: 10,
               }}
             >
               <Button
@@ -97,7 +96,7 @@ const getStyles = (theme) =>
       // minWidth: "80%",
       width: 360,
       alignSelf: "center",
-      maxHeight: "95%",
+      maxHeight: "100%",
     },
     modalTitle: {
       textAlign: "center",

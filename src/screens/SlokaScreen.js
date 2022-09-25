@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Appbar,
   Button,
   Card,
@@ -6,7 +7,6 @@ import {
   IconButton,
   List,
   Menu,
-  Modal,
   Portal,
 } from "react-native-paper";
 import { ScrollView, StyleSheet, View } from "react-native";
@@ -30,10 +30,11 @@ import DataAPI from "../gita-data/dataApi";
 import { capitalizeFirstLetter, detectAndTransliterate } from "../utils";
 import ListSelectionItem from "../components/base/ListSelectionItem";
 import CollapsibleCard from "../components/base/CollapsibleCard";
+import Modal from "../components/base/Modal";
 
 export default function SlokaScreen({ navigation }) {
   const dispatch = useDispatch();
-  const currentSloka = useSelector(selectVerse);
+  const selectedVerse = useSelector(selectVerse);
   const theme = useSelector(selectTheme);
   const defaultLanguage = useSelector(
     selectDefaultLanguage
@@ -41,6 +42,7 @@ export default function SlokaScreen({ navigation }) {
   const defaultTranslation = useSelector(selectDefaultTranslation);
   const defaultCommentary = useSelector(selectDefaultCommentary);
   const styles = getStyles(theme);
+  const [currentSloka, setCurrentSloka] = useState(selectedVerse);
   const [showAddMoreDialog, setShowAddMoreDialog] = useState(false);
   const [allTranslators, setAllTranslators] = useState([]);
   const [allCommentators, setAllCommentators] = useState([]);
@@ -52,6 +54,10 @@ export default function SlokaScreen({ navigation }) {
   ]);
 
   const [contents, setContents] = useState([]);
+
+  useEffect(() => {
+    setCurrentSloka(selectedVerse);
+  }, [selectedVerse]);
 
   useEffect(() => {
     async function getDefaults() {
@@ -81,6 +87,10 @@ export default function SlokaScreen({ navigation }) {
       setAllTranslators(translators);
       setAllCommentators(commentators);
     }
+    async function getFirstSloka() {
+      const firstSloka = await DataAPI.getVerse(1, 1);
+      setCurrentSloka(firstSloka);
+    }
 
     getAllAuthors();
   }, []);
@@ -89,14 +99,12 @@ export default function SlokaScreen({ navigation }) {
     let newContent;
     if (!isSelected) {
       // remove the content
-      console.log(contents);
       newContent = contents.filter((content) => {
         if (content.author_id === author.id && content.type === type) {
           return false;
         }
         return true;
       });
-      console.log(newContent);
       setContents(newContent);
 
       if (type === "translation") {
@@ -131,11 +139,11 @@ export default function SlokaScreen({ navigation }) {
   };
 
   useEffect(() => {
-    console.log(
-      "Need to persist these guys: ",
-      selectedTranslators,
-      selectedCommentators
-    );
+    // console.log(
+    //   "Need to persist these guys: ",
+    //   selectedTranslators,
+    //   selectedCommentators
+    // );
   }, [selectedTranslators, selectedCommentators, showAddMoreDialog]);
 
   const contentExists = (author, type) => {
@@ -201,6 +209,10 @@ export default function SlokaScreen({ navigation }) {
       }
     }
   };
+
+  if (!currentSloka) {
+    return <ActivityIndicator animating={true} />;
+  }
 
   return (
     <ScrollView stickyHeaderIndices={[1]} style={styles.screen}>
@@ -284,22 +296,22 @@ export default function SlokaScreen({ navigation }) {
       <Portal>
         <Modal
           visible={showAddMoreDialog}
+          title={"Select One/More"}
           onDismiss={() => {
             setShowAddMoreDialog(false);
           }}
           contentContainerStyle={styles.modalContainer}
+          showFooterActions={false}
+          onSave={() => {
+            setShowAddMoreDialog(false);
+          }}
+          onClose={() => {
+            setShowAddMoreDialog(false);
+          }}
+          theme={theme}
         >
           <View style={{ maxHeight: "100%" }}>
-            <Text variant={"titleMedium"} style={styles.modalTitle}>
-              Select One/More
-            </Text>
-            <IconButton
-              icon={"close"}
-              iconColor="maroon"
-              onPress={() => setShowAddMoreDialog(false)}
-              style={styles.modalCloseIcon}
-            />
-            <ScrollView>
+            <ScrollView style={{ marginBottom: 20 }}>
               {allTranslators.map((translator) => (
                 <View
                   style={{ marginVertical: 5 }}

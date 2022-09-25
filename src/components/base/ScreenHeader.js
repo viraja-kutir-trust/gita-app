@@ -111,7 +111,7 @@ export default function ScreenHeader(props) {
           setShowModifyDefaults(false);
         }}
       >
-        <View style={{ paddingBottom: 25 }}>
+        <View style={{ paddingBottom: 0 }}>
           <DropDown
             header={"Script"}
             description={selectedLanguage}

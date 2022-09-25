@@ -28,7 +28,6 @@ export default function DropDown(props) {
             }}
             onLayout={(event) => {
               let { x, y, width, height, left, top } = event.nativeEvent.layout;
-              console.log("layout", event.nativeEvent.layout);
               if (x !== left) {
                 x = left;
               }

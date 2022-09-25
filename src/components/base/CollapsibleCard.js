@@ -55,9 +55,8 @@ export default function CollapsibleCard(props) {
           }
         >
           {menuProps.menuItems?.map((item, index) => (
-            <>
+            <View key={title + item.title}>
               <Menu.Item
-                key={item.title}
                 onPress={() => {
                   handleMenuItemPress(item.title);
                   item.onPress && item.onPress();
@@ -66,7 +65,7 @@ export default function CollapsibleCard(props) {
                 style={{ ...styles.menuItem, ...menuProps.menuItemStyle }}
               />
               {index < menuProps.menuItems.length - 1 && <Divider />}
-            </>
+            </View>
           ))}
         </Menu>
       </View>

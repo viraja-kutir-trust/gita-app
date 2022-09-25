@@ -8,7 +8,6 @@ export default function ListSelectionItem(props) {
   const [selected, setSelected] = useState(defaultSelected);
 
   const handlePress = () => {
-    console.log("pressed ", selected);
     setSelected(!selected);
     onPress && onPress(!selected);
   };

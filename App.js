@@ -1,11 +1,12 @@
 import { Provider } from "react-redux";
-import { store } from "./src/redux/store";
+import { store, persistor } from "./src/redux/store";
 import Main from "./src/Main";
 import { useCallback, useEffect, useState } from "react";
 // import AppLoading from "expo-app-loading";
 import * as SplashScreen from "expo-splash-screen";
 import * as Font from "expo-font";
 import { View, Text } from "react-native";
+import { PersistGate } from "redux-persist/integration/react";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -20,17 +21,14 @@ export default function App() {
   useEffect(() => {
     fetchFonts()
       .then(() => {
-        console.log("Got the fonts...");
         setInitialized(true);
       })
       .catch((e) => {
-        console.log("Failed to get fonts...", e);
         setInitialized(true);
       });
   }, []);
 
   const onLayoutRootView = useCallback(async () => {
-    console.log("Hiding splash...", initialized);
     if (initialized) {
       await SplashScreen.hideAsync();
     }
@@ -42,12 +40,14 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      <View
-        style={{ width: "100%", height: "100%" }}
-        onLayout={onLayoutRootView}
-      >
-        <Main />
-      </View>
+      <PersistGate loading={<Text>Loading...</Text>} persistor={persistor}>
+        <View
+          style={{ width: "100%", height: "100%" }}
+          onLayout={onLayoutRootView}
+        >
+          <Main />
+        </View>
+      </PersistGate>
     </Provider>
   );
 }

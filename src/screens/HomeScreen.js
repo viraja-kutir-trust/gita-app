@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import VerseCard from "../components/base/VerseCard";
 import DataAPI from "../gita-data/dataApi";
 import { StatusBar } from "expo-status-bar";
+import seedrandom from "seedrandom";
 
 export default function HomeScreen({ navigation }) {
   const theme = useSelector(selectTheme);
@@ -25,9 +26,9 @@ export default function HomeScreen({ navigation }) {
 
   const actions = [
     {
-      label: "Continue from where you left (Coming Soon)",
+      label: "Continue from where you left",
       onClick: () => {
-        console.log("continue from where you left");
+        navigation.navigate("Sloka");
       },
     },
     {
@@ -53,12 +54,14 @@ export default function HomeScreen({ navigation }) {
     const verses = await DataAPI.getVerses();
     const translation = await DataAPI.getTranslations();
     const chapterCount = chapters.length;
+    const dateLocale = new Date().toLocaleDateString();
     // Generate random number between 1 and chapterCount inclusive
-    const randomChapter = Math.floor(Math.random() * chapterCount) + 1;
+    const randomChapter =
+      Math.floor(seedrandom(dateLocale)() * chapterCount) + 1;
     const verseCount = chapters[randomChapter - 1].verses_count;
     // Generate random number between 1 and verseCount inclusive
-    const randomVerse = Math.floor(Math.random() * verseCount) + 1;
-    console.log(randomChapter, randomVerse);
+    const randomVerse =
+      Math.floor(seedrandom(dateLocale + "more")() * verseCount) + 1;
     const verse = verses[randomChapter][randomVerse];
     // Find the translation of author_id 19 and verse_id equal to verse.verse_order
     try {
@@ -69,7 +72,6 @@ export default function HomeScreen({ navigation }) {
     } catch (e) {
       console.log(e);
     }
-    console.log(verse);
     setRandomSloka(verse);
   }
 

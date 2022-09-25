@@ -53,7 +53,6 @@ export default function SelectVerseScreen(props) {
 
   const onChapterLayout = (event) => {
     const { x, y, width, height } = event.nativeEvent.layout;
-    console.log(event.nativeEvent.layout);
     setChapterLayout({ x, y, width, height });
   };
 

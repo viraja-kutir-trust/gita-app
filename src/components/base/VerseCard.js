@@ -21,7 +21,6 @@ export default function VerseCard(props) {
 
   useEffect(() => {
     const newVerse = { ...sloka };
-    console.log(newVerse, translation);
     newVerse.text = detectAndTransliterate(sloka.text, defaultLanguage);
     if (newVerse.translation) {
       newVerse.translation = detectAndTransliterate(
