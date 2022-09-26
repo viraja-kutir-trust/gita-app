@@ -9,16 +9,21 @@ import Modal from "./Modal";
 import Text from "./Text";
 
 export default function CollapsibleCard(props) {
-  const { title, content, theme, menuProps, defaultLanguage } = props;
+  const { title, content, theme, menuProps, defaultLanguage, contentLanguage } =
+    props;
+  const isHindi = contentLanguage === "hindi";
+  console.log("is hindi? ", isHindi, contentLanguage);
   const styles = getStyles(theme);
   const [isOpen, setIsOpen] = useState(true);
   const [showMenu, setShowMenu] = useState(false);
-  const [scriptLanguage, setScriptLanguage] = useState(defaultLanguage);
+  const [scriptLanguage, setScriptLanguage] = useState(
+    isHindi ? "Devanagari" : defaultLanguage
+  );
   const [showScriptChoiceDialog, setShowScriptChoiceDialog] = useState(false);
 
   useEffect(() => {
-    setScriptLanguage(defaultLanguage);
-  }, [defaultLanguage]);
+    setScriptLanguage(isHindi ? "Devanagari" : defaultLanguage);
+  }, [defaultLanguage, isHindi]);
 
   const handleMenuItemPress = (itemTitle) => {
     setShowMenu(false);
@@ -61,6 +66,7 @@ export default function CollapsibleCard(props) {
                   handleMenuItemPress(item.title);
                   item.onPress && item.onPress();
                 }}
+                disabled={item.disabled}
                 title={item.title}
                 style={{ ...styles.menuItem, ...menuProps.menuItemStyle }}
               />

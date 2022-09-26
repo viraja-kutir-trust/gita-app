@@ -16,6 +16,8 @@ export const appSlice = createSlice({
       },
       translation: { authorName: "Swami Gambhiranda", id: 19, lang: "english" },
       commentary: { authorName: "Swami Sivananda", lang: "english", id: 16 },
+      moreTranslators: [],
+      moreCommentators: [],
     },
   },
   reducers: app,
@@ -28,6 +30,8 @@ export const {
   setDefaultLanguage,
   setDefaultCommentary,
   setDefaultTranslation,
+  setMoreDefaultCommentators,
+  setMoreDefaultTranslators,
 } = appSlice.actions;
 
 export const selectTheme = (state) => state.app.theme;
@@ -36,3 +40,7 @@ export const selectDefaultLanguage = (state) => state.app.defaults.language;
 export const selectDefaultTranslation = (state) =>
   state.app.defaults.translation;
 export const selectDefaultCommentary = (state) => state.app.defaults.commentary;
+export const selectMoreTranslators = (state) =>
+  state.app.defaults.moreTranslators;
+export const selectMoreCommentators = (state) =>
+  state.app.defaults.moreCommentators;

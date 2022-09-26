@@ -1,12 +1,7 @@
 import {
   ActivityIndicator,
-  Appbar,
   Button,
-  Card,
-  Divider,
   IconButton,
-  List,
-  Menu,
   Portal,
 } from "react-native-paper";
 import { ScrollView, StyleSheet, View } from "react-native";
@@ -16,8 +11,12 @@ import {
   selectDefaultCommentary,
   selectDefaultLanguage,
   selectDefaultTranslation,
+  selectMoreCommentators,
+  selectMoreTranslators,
   selectTheme,
   selectVerse,
+  setMoreDefaultCommentators,
+  setMoreDefaultTranslators,
   setTheme,
   setVerse,
 } from "../redux/slices/app";
@@ -41,6 +40,8 @@ export default function SlokaScreen({ navigation }) {
   ).devanagariToLanguage;
   const defaultTranslation = useSelector(selectDefaultTranslation);
   const defaultCommentary = useSelector(selectDefaultCommentary);
+  const moreDefaultTranslators = useSelector(selectMoreTranslators);
+  const moreDefaultCommentators = useSelector(selectMoreCommentators);
   const styles = getStyles(theme);
   const [currentSloka, setCurrentSloka] = useState(selectedVerse);
   const [showAddMoreDialog, setShowAddMoreDialog] = useState(false);
@@ -48,36 +49,72 @@ export default function SlokaScreen({ navigation }) {
   const [allCommentators, setAllCommentators] = useState([]);
   const [selectedTranslators, setSelectedTranslators] = useState([
     defaultTranslation,
+    ...moreDefaultTranslators,
   ]);
   const [selectedCommentators, setSelectedCommentators] = useState([
     defaultCommentary,
+    ...moreDefaultCommentators,
   ]);
 
+  const [forceRemove, setForceRemove] = useState(false);
   const [contents, setContents] = useState([]);
+  const [saveSelected, setSaveSelected] = useState(false);
 
   useEffect(() => {
     setCurrentSloka(selectedVerse);
   }, [selectedVerse]);
 
-  useEffect(() => {
-    async function getDefaults() {
-      if (currentSloka && defaultTranslation && defaultCommentary) {
-        const currentDefaults = [];
-        const currentTranslation = await DataAPI.getTranslationByAuthor(
-          currentSloka.id,
-          defaultTranslation.id
-        );
-        const currentCommentary = await DataAPI.getCommentaryByAuthor(
-          currentSloka.id,
-          defaultCommentary.id
-        );
-        currentDefaults.push(currentTranslation);
-        currentDefaults.push(currentCommentary);
-        setContents(currentDefaults);
+  async function getMoreContents(
+    contentsProvided,
+    moreDefaultTranslators,
+    moreDefaultCommentators,
+    currentSloka
+  ) {
+    let currentContents = contentsProvided || [];
+    if (moreDefaultTranslators?.length) {
+      for (let translator of moreDefaultTranslators) {
+        if (
+          !currentContents.find(
+            (content) =>
+              content.author_id === translator.id &&
+              content.type === "translation"
+          )
+        ) {
+          const translation = await DataAPI.getTranslationByAuthor(
+            currentSloka.id,
+            translator.id
+          );
+          currentContents.push(translation);
+        }
       }
     }
+    if (moreDefaultCommentators?.length) {
+      for (let commentator of moreDefaultCommentators) {
+        if (
+          !currentContents.find(
+            (content) =>
+              content.author_id === commentator.id &&
+              content.type === "commentary"
+          )
+        ) {
+          const commentary = await DataAPI.getCommentaryByAuthor(
+            currentSloka.id,
+            commentator.id
+          );
+          currentContents.push(commentary);
+        }
+      }
+    }
+    setContents(currentContents);
+  }
 
-    getDefaults();
+  useEffect(() => {
+    getMoreContents(
+      null,
+      [defaultTranslation, ...moreDefaultTranslators],
+      [defaultCommentary, ...moreDefaultCommentators],
+      currentSloka
+    );
   }, [currentSloka, defaultTranslation, defaultCommentary]);
 
   useEffect(() => {
@@ -96,17 +133,7 @@ export default function SlokaScreen({ navigation }) {
   }, []);
 
   const onAddMoreContent = async (author, type, isSelected) => {
-    let newContent;
     if (!isSelected) {
-      // remove the content
-      newContent = contents.filter((content) => {
-        if (content.author_id === author.id && content.type === type) {
-          return false;
-        }
-        return true;
-      });
-      setContents(newContent);
-
       if (type === "translation") {
         const newSelectedTranslators = selectedTranslators.filter(
           (translator) => translator.id !== author.id
@@ -121,30 +148,44 @@ export default function SlokaScreen({ navigation }) {
       return;
     }
     if (type === "translation") {
-      newContent = await DataAPI.getTranslationByAuthor(
-        currentSloka.id,
-        author.id
-      );
-      selectedTranslators.push(author);
-      setSelectedTranslators(selectedTranslators);
+      if (
+        !selectedTranslators.find((translator) => translator.id === author.id)
+      ) {
+        selectedTranslators.push(author);
+        setSelectedTranslators(selectedTranslators);
+      }
     } else {
-      newContent = await DataAPI.getCommentaryByAuthor(
-        currentSloka.id,
-        author.id
-      );
-      selectedCommentators.push(author);
-      setSelectedCommentators(selectedCommentators);
+      if (
+        !selectedCommentators.find(
+          (commentator) => commentator.id === author.id
+        )
+      ) {
+        selectedCommentators.push(author);
+        setSelectedCommentators(selectedCommentators);
+      }
     }
-    setContents((prev) => [...prev, newContent]);
   };
 
   useEffect(() => {
-    // console.log(
-    //   "Need to persist these guys: ",
-    //   selectedTranslators,
-    //   selectedCommentators
-    // );
-  }, [selectedTranslators, selectedCommentators, showAddMoreDialog]);
+    if (saveSelected || forceRemove) {
+      getMoreContents(
+        null,
+        selectedTranslators,
+        selectedCommentators,
+        currentSloka
+      );
+      dispatch(setMoreDefaultTranslators(selectedTranslators));
+      dispatch(setMoreDefaultCommentators(selectedCommentators));
+      setSaveSelected(false);
+      setForceRemove(false);
+    }
+  }, [
+    saveSelected,
+    forceRemove,
+    selectedTranslators,
+    selectedCommentators,
+    currentSloka,
+  ]);
 
   const contentExists = (author, type) => {
     return contents.some((content) => {
@@ -262,6 +303,7 @@ export default function SlokaScreen({ navigation }) {
             content.lang
           )} ${capitalizeFirstLetter(content.type)} by ${content.authorName}`}
           content={content.description}
+          contentLanguage={content.lang}
           theme={theme}
           menuProps={{
             menuItems: [
@@ -271,9 +313,15 @@ export default function SlokaScreen({ navigation }) {
                   onAddMoreContent(
                     { id: content.author_id },
                     content.type,
-                    false
+                    false,
+                    true
                   );
+                  setForceRemove(true);
                 },
+                disabled: [
+                  defaultTranslation.id,
+                  defaultCommentary.id,
+                ].includes(content.author_id),
               },
               {
                 title: "Change Script",
@@ -299,18 +347,35 @@ export default function SlokaScreen({ navigation }) {
           title={"Select One/More"}
           onDismiss={() => {
             setShowAddMoreDialog(false);
+            setSelectedTranslators([
+              defaultTranslation,
+              ...moreDefaultTranslators,
+            ]);
+            setSelectedCommentators([
+              defaultCommentary,
+              ...moreDefaultCommentators,
+            ]);
           }}
           contentContainerStyle={styles.modalContainer}
-          showFooterActions={false}
+          showFooterActions={true}
           onSave={() => {
             setShowAddMoreDialog(false);
+            setSaveSelected(true);
           }}
           onClose={() => {
             setShowAddMoreDialog(false);
+            setSelectedTranslators([
+              defaultTranslation,
+              ...moreDefaultTranslators,
+            ]);
+            setSelectedCommentators([
+              defaultCommentary,
+              ...moreDefaultCommentators,
+            ]);
           }}
           theme={theme}
         >
-          <View style={{ maxHeight: "100%" }}>
+          <View style={{ maxHeight: "90%" }}>
             <ScrollView style={{ marginBottom: 20 }}>
               {allTranslators.map((translator) => (
                 <View
@@ -323,6 +388,7 @@ export default function SlokaScreen({ navigation }) {
                     )} Translation by ${translator.authorName}`}
                     theme={theme}
                     defaultSelected={contentExists(translator, "translation")}
+                    forceState={defaultTranslation.id === translator.id}
                     onPress={(isSelected) => {
                       onAddMoreContent(translator, "translation", isSelected);
                     }}
@@ -340,6 +406,7 @@ export default function SlokaScreen({ navigation }) {
                     )} Commentary by ${commentator.authorName}`}
                     theme={theme}
                     defaultSelected={contentExists(commentator, "commentary")}
+                    forceState={defaultCommentary.id === commentator.id}
                     onPress={(isSelected) => {
                       onAddMoreContent(commentator, "commentary", isSelected);
                     }}

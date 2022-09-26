@@ -3,11 +3,14 @@ import { StyleSheet, View, TouchableHighlight } from "react-native";
 import Text from "./Text";
 import CheckIcon from "react-native-vector-icons/FontAwesome";
 export default function ListSelectionItem(props) {
-  const { text, theme, onPress, defaultSelected } = props;
+  const { text, theme, onPress, defaultSelected, forceState } = props;
   const styles = getStyles(theme);
   const [selected, setSelected] = useState(defaultSelected);
 
   const handlePress = () => {
+    if (forceState) {
+      return;
+    }
     setSelected(!selected);
     onPress && onPress(!selected);
   };
@@ -17,7 +20,9 @@ export default function ListSelectionItem(props) {
       <View
         style={{
           ...styles.container,
-          backgroundColor: selected
+          backgroundColor: forceState
+            ? theme.colors.tertiaryContainer
+            : selected
             ? theme.colors.primaryContainer
             : theme.colors.secondaryContainer,
         }}

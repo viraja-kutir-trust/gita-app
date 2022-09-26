@@ -30,6 +30,42 @@ const setDefaultCommentary = (state, action) => {
   return state;
 };
 
+const setMoreDefaultTranslators = (state, action) => {
+  const tempTranslators = [];
+  const { payload } = action;
+  if (payload) {
+    payload.forEach((author) => {
+      if (
+        author.id !== state.defaults.translation.id &&
+        !state.defaults.moreTranslators.find(
+          (translator) => author.id === translator.id
+        )
+      ) {
+        tempTranslators.push(author);
+      }
+    });
+  }
+  state.defaults.moreTranslators = tempTranslators;
+};
+
+const setMoreDefaultCommentators = (state, action) => {
+  const tempCommentators = [];
+  const { payload } = action;
+  if (payload) {
+    payload.forEach((author) => {
+      if (
+        author.id !== state.defaults.commentary.id &&
+        !state.defaults.moreCommentators.find(
+          (commentator) => author.id === commentator.id
+        )
+      ) {
+        tempCommentators.push(author);
+      }
+    });
+  }
+  state.defaults.moreCommentators = tempCommentators;
+};
+
 export default {
   setTheme,
   toggleTheme,
@@ -37,4 +73,6 @@ export default {
   setDefaultLanguage,
   setDefaultTranslation,
   setDefaultCommentary,
+  setMoreDefaultTranslators,
+  setMoreDefaultCommentators,
 };
