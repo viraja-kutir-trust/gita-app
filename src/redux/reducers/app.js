@@ -66,6 +66,27 @@ const setMoreDefaultCommentators = (state, action) => {
   state.defaults.moreCommentators = tempCommentators;
 };
 
+const addOrRemoveFavorite = (state, action) => {
+  const allFavorites = [...(state.favorites || [])];
+  const {
+    payload: { type, verse },
+  } = action;
+  if (type === "add") {
+    if (
+      !allFavorites?.find((sloka) => sloka && verse && sloka.id === verse.id)
+    ) {
+      allFavorites.push(verse);
+      allFavorites.sort((a, b) => a && b && a.id - b.id);
+    }
+  } else if (type === "remove") {
+    const index = allFavorites.findIndex(
+      (sloka) => sloka && verse && sloka.id === verse.id
+    );
+    allFavorites.splice(index, 1);
+  }
+  state.favorites = allFavorites;
+};
+
 export default {
   setTheme,
   toggleTheme,
@@ -75,4 +96,5 @@ export default {
   setDefaultCommentary,
   setMoreDefaultTranslators,
   setMoreDefaultCommentators,
+  addOrRemoveFavorite,
 };

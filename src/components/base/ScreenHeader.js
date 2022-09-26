@@ -19,7 +19,7 @@ import Modal from "./Modal";
 import Text from "./Text";
 
 export default function ScreenHeader(props) {
-  const { navigation, title, theme } = props;
+  const { navigation, title, theme, customActions } = props;
   const styles = getStyles(theme);
   const dispatch = useDispatch();
   const defaultLanguage = useSelector(selectDefaultLanguage);
@@ -62,6 +62,7 @@ export default function ScreenHeader(props) {
       <Appbar.BackAction size={20} onPress={() => navigation.goBack()} />
       <Appbar.Content titleStyle={{ fontSize: 18 }} title={title} />
       {/* <Appbar.Action> */}
+      {customActions?.map((action) => action)}
       <Menu
         visible={headerMenuAnchor}
         onDismiss={() => {

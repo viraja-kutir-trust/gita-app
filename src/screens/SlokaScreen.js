@@ -3,14 +3,17 @@ import {
   Button,
   IconButton,
   Portal,
+  Snackbar,
 } from "react-native-paper";
 import { ScrollView, StyleSheet, View } from "react-native";
 import Text from "../components/base/Text";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  addOrRemoveFavorite,
   selectDefaultCommentary,
   selectDefaultLanguage,
   selectDefaultTranslation,
+  selectFavorites,
   selectMoreCommentators,
   selectMoreTranslators,
   selectTheme,
@@ -42,17 +45,14 @@ export default function SlokaScreen({ navigation }) {
   const defaultCommentary = useSelector(selectDefaultCommentary);
   const moreDefaultTranslators = useSelector(selectMoreTranslators) || [];
   const moreDefaultCommentators = useSelector(selectMoreCommentators) || [];
+  const isFavorite = useSelector(selectFavorites)?.find(
+    (verse) => verse && selectedVerse && verse.id === selectedVerse.id
+  );
   const styles = getStyles(theme);
   const [currentSloka, setCurrentSloka] = useState(selectedVerse);
   const [showAddMoreDialog, setShowAddMoreDialog] = useState(false);
   const [allTranslators, setAllTranslators] = useState([]);
   const [allCommentators, setAllCommentators] = useState([]);
-  console.log(
-    moreDefaultTranslators,
-    moreDefaultCommentators,
-    defaultCommentary,
-    defaultTranslation
-  );
   const [selectedTranslators, setSelectedTranslators] = useState([
     defaultTranslation,
     ...moreDefaultTranslators,
@@ -65,6 +65,7 @@ export default function SlokaScreen({ navigation }) {
   const [forceRemove, setForceRemove] = useState(false);
   const [contents, setContents] = useState([]);
   const [saveSelected, setSaveSelected] = useState(false);
+  const [snackbar, setSnackbar] = useState({ visible: false, text: "" });
 
   useEffect(() => {
     setCurrentSloka(selectedVerse);
@@ -262,91 +263,112 @@ export default function SlokaScreen({ navigation }) {
   }
 
   return (
-    <ScrollView stickyHeaderIndices={[1]} style={styles.screen}>
+    <View style={styles.screen}>
       <StatusBar style={theme.dark ? "light" : "dark"} />
       <ScreenHeader
         title={`Chapter ${currentSloka.chapter_number}, Verse ${currentSloka.verse_number}`}
         navigation={navigation}
         theme={theme}
+        customActions={[
+          <IconButton
+            icon={isFavorite ? "star" : "star-outline"}
+            onPress={() => {
+              dispatch(
+                addOrRemoveFavorite({
+                  type: isFavorite ? "remove" : "add",
+                  verse: selectedVerse,
+                })
+              );
+              setSnackbar({
+                visible: true,
+                text: isFavorite
+                  ? "Verse removed from favorites"
+                  : "Verse added to favorites",
+              });
+            }}
+          />,
+        ]}
       />
-      <View style={styles.slokaCardContainer}>
-        <View style={{ ...styles.slokaNavigators, left: 2 }}>
-          <IconButton
-            icon="arrow-left-drop-circle"
-            style={{ zIndex: 5, elevation: 5 }}
-            size={35}
-            onPress={() => {
-              changeSloka(false);
-            }}
-          />
+      <ScrollView>
+        <View style={styles.slokaCardContainer}>
+          <View style={{ ...styles.slokaNavigators, left: 2 }}>
+            <IconButton
+              icon="arrow-left-drop-circle"
+              style={{ zIndex: 5, elevation: 5 }}
+              size={35}
+              onPress={() => {
+                changeSloka(false);
+              }}
+            />
+          </View>
+          <View style={{ ...styles.card }}>
+            <Text variant={"bodyMedium"} style={styles.cardContent}>
+              {detectAndTransliterate(currentSloka.text, defaultLanguage)}
+            </Text>
+            <Text variant={"bodyMedium"} style={styles.cardContent}>
+              {detectAndTransliterate(
+                currentSloka.transliteration,
+                defaultLanguage
+              )}
+            </Text>
+          </View>
+          <View style={{ ...styles.slokaNavigators, right: 2 }}>
+            <IconButton
+              icon="arrow-right-drop-circle"
+              size={35}
+              style={{ zIndex: 5, elevation: 5 }}
+              onPress={() => {
+                changeSloka(true);
+              }}
+            />
+          </View>
         </View>
-        <View style={{ ...styles.card }}>
-          <Text variant={"bodyMedium"} style={styles.cardContent}>
-            {detectAndTransliterate(currentSloka.text, defaultLanguage)}
-          </Text>
-          <Text variant={"bodyMedium"} style={styles.cardContent}>
-            {detectAndTransliterate(
-              currentSloka.transliteration,
-              defaultLanguage
-            )}
-          </Text>
-        </View>
-        <View style={{ ...styles.slokaNavigators, right: 2 }}>
-          <IconButton
-            icon="arrow-right-drop-circle"
-            size={35}
-            style={{ zIndex: 5, elevation: 5 }}
-            onPress={() => {
-              changeSloka(true);
-            }}
-          />
-        </View>
-      </View>
-      {contents.map((content) => (
-        <CollapsibleCard
-          key={content.id}
-          title={`${capitalizeFirstLetter(
-            content.lang
-          )} ${capitalizeFirstLetter(content.type)} by ${content.authorName}`}
-          content={content.description}
-          contentLanguage={content.lang}
-          theme={theme}
-          menuProps={{
-            menuItems: [
-              {
-                title: "Remove",
-                onPress: () => {
-                  onAddMoreContent(
-                    { id: content.author_id },
-                    content.type,
-                    false,
-                    true
-                  );
-                  setForceRemove(true);
+        {contents.map((content) => (
+          <CollapsibleCard
+            key={content.id}
+            title={`${capitalizeFirstLetter(
+              content.lang
+            )} ${capitalizeFirstLetter(content.type)} by ${content.authorName}`}
+            content={content.description}
+            contentLanguage={content.lang}
+            theme={theme}
+            menuProps={{
+              menuItems: [
+                {
+                  title: "Remove",
+                  onPress: () => {
+                    onAddMoreContent(
+                      { id: content.author_id },
+                      content.type,
+                      false,
+                      true
+                    );
+                    setForceRemove(true);
+                  },
+                  disabled: [
+                    defaultTranslation.id,
+                    defaultCommentary.id,
+                  ].includes(content.author_id),
                 },
-                disabled: [
-                  defaultTranslation.id,
-                  defaultCommentary.id,
-                ].includes(content.author_id),
-              },
-              {
-                title: "Change Script",
-              },
-            ],
+                {
+                  title: "Change Script",
+                },
+              ],
+            }}
+            defaultLanguage={defaultLanguage}
+          />
+        ))}
+        <Button
+          icon="plus"
+          mode="contained"
+          style={styles.addCommentaryButton}
+          onPress={() => {
+            setShowAddMoreDialog(true);
           }}
-          defaultLanguage={defaultLanguage}
-        />
-      ))}
-      <Button
-        icon="plus"
-        mode="contained"
-        style={styles.addCommentaryButton}
-        onPress={() => {
-          setShowAddMoreDialog(true);
-        }}
-      >
-        <Text style={{ color: theme.colors.surface }}>Add More</Text>
-      </Button>
+        >
+          <Text style={{ color: theme.colors.surface }}>Add More</Text>
+        </Button>
+      </ScrollView>
       <Portal>
         <Modal
           visible={showAddMoreDialog}
@@ -423,7 +445,16 @@ export default function SlokaScreen({ navigation }) {
           </View>
         </Modal>
       </Portal>
-    </ScrollView>
+      <Snackbar
+        visible={snackbar.visible}
+        duration={4000}
+        onDismiss={() => {
+          setSnackbar({ visible: false, text: "" });
+        }}
+      >
+        {snackbar.text}
+      </Snackbar>
+    </View>
   );
 }
 

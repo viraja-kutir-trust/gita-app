@@ -38,8 +38,10 @@ export default function HomeScreen({ navigation }) {
       },
     },
     {
-      label: "Favorites (Coming Soon)",
-      onClick: () => {},
+      label: "Favorites",
+      onClick: () => {
+        navigation.navigate("Favorites");
+      },
     },
     {
       label: "Toggle theme",
@@ -80,39 +82,43 @@ export default function HomeScreen({ navigation }) {
   }, []);
 
   return (
-    <ScrollView style={styles.screen}>
+    <View style={styles.screen}>
       <StatusBar style={theme.dark ? "light" : "dark"} />
-      <VerseCard
-        sloka={randomSloka}
-        title="Today's Sloka"
-        theme={theme}
-        showVerseId
-        showTranslation
-        onAction={() => {
-          dispatch(setVerse(randomSloka));
-          navigation.navigate("Sloka");
-        }}
-        defaultLanguage={defaultLanguage}
-      />
-      <View style={styles.actionsContainer}>
-        {actions.map((action, index) => (
-          <View style={styles.action} key={action.label}>
-            {index === 0 && <Divider style={styles.divider} bold />}
-            <Button
-              mode="text"
-              style={styles.actionButton}
-              contentStyle={{ justifyContent: "flex-start" }}
-              onPress={action.onClick}
-            >
-              <Text style={{ textAlign: "left" }} variant={"bodyLarge"}>
-                {action.label}
-              </Text>
-            </Button>
-            <Divider style={styles.divider} bold />
+      <ScrollView>
+        <View>
+          <VerseCard
+            sloka={randomSloka}
+            title="Today's Sloka"
+            theme={theme}
+            showVerseId
+            showTranslation
+            onAction={() => {
+              dispatch(setVerse(randomSloka));
+              navigation.navigate("Sloka");
+            }}
+            defaultLanguage={defaultLanguage}
+          />
+          <View style={styles.actionsContainer}>
+            {actions.map((action, index) => (
+              <View style={styles.action} key={action.label}>
+                {index === 0 && <Divider style={styles.divider} bold />}
+                <Button
+                  mode="text"
+                  style={styles.actionButton}
+                  contentStyle={{ justifyContent: "flex-start" }}
+                  onPress={action.onClick}
+                >
+                  <Text style={{ textAlign: "left" }} variant={"bodyLarge"}>
+                    {action.label}
+                  </Text>
+                </Button>
+                <Divider style={styles.divider} bold />
+              </View>
+            ))}
           </View>
-        ))}
-      </View>
-    </ScrollView>
+        </View>
+      </ScrollView>
+    </View>
   );
 }
 
@@ -120,10 +126,9 @@ const getStyles = (theme) =>
   StyleSheet.create({
     screen: {
       padding: 10,
-      width: "100%",
-      height: "100%",
+      flex: 1,
       backgroundColor: theme.colors.background,
-      paddingTop: 30,
+      paddingTop: 50,
     },
     cardContainer: {
       margin: 20,

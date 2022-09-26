@@ -103,101 +103,103 @@ export default function SelectVerseScreen(props) {
   }
 
   return (
-    <ScrollView style={styles.screen} stickyHeaderIndices={[1]}>
+    <View style={styles.screen}>
       <StatusBar style={theme.dark ? "light" : "dark"} />
       <ScreenHeader
         navigation={navigation}
         title="Select Verse"
         theme={theme}
       />
-      {selectionComponent(
-        `Chapter ${currentChapter} - ${
-          chapters[currentChapter - 1].name_translation
-        }`,
-        chapters[currentChapter - 1].name_meaning,
-        onChapterLayout,
-        () => {
-          setShowChapters(true);
-        }
-      )}
-      {selectionComponent(
-        `Verse ${currentVerse?.verse_number || 1}`,
-        detectAndTransliterate(currentVerse?.text, defaultLanguage),
-        onVerseLayout,
-        () => {
-          setShowVerses(true);
-        }
-      )}
-      <Menu
-        visible={showChapters}
-        onDismiss={() => setShowChapters(false)}
-        anchor={{ x: chapterLayout.x, y: chapterLayout.y }}
-        style={{
-          ...styles.selectionMenuContainer,
-          width: chapterLayout.width || "auto",
-        }}
-        contentStyle={{ borderRadius: 12, fontFamily: "readex-pro" }}
-      >
-        {chapters.map((chapter, index) => (
-          <View key={chapter.id}>
-            <Menu.Item
-              key={chapter.id}
-              onPress={() => {
-                setCurrentChapter(index + 1);
-                setCurrentVerse(verses[index + 1][1]);
-                setShowChapters(false);
-              }}
-              title={`Chapter ${index + 1} - ${chapter.name_translation}`}
-              style={{ width: "100%", minWidth: "100%", maxWidth: "100%" }}
-              contentStyle={styles.selectionText}
-              titleStyle={styles.selectionText}
-            />
-            {index !== chapters.length - 1 && <Divider id={chapter.id} />}
-          </View>
-        ))}
-      </Menu>
-      <Menu
-        visible={showVerses}
-        onDismiss={() => setShowVerses(false)}
-        anchor={{ x: verseLayout.x, y: verseLayout.y }}
-        style={{
-          ...styles.selectionMenuContainer,
-          width: verseLayout.width || "auto",
-        }}
-        contentStyle={{ borderRadius: 12, fontFamily: "readex-pro" }}
-      >
-        {Object.entries(verses[currentChapter]).map((verse, index) => (
-          <View key={verse[1].id}>
-            <Menu.Item
-              key={verse[1].id}
-              onPress={() => {
-                setCurrentVerse(verse[1]);
-                setShowVerses(false);
-              }}
-              title={`${index + 1} - ${detectAndTransliterate(
-                verse[1].text,
-                defaultLanguage
-              )}`}
-              style={{ width: "100%", minWidth: "100%", maxWidth: "100%" }}
-              contentStyle={styles.selectionText}
-              titleStyle={styles.selectionText}
-            />
-            {index !== chapters.length - 1 && <Divider id={verse[1].id} />}
-          </View>
-        ))}
-      </Menu>
-      <VerseCard
-        sloka={currentVerse}
-        showVerseId
-        theme={theme}
-        showTranslation
-        onAction={() => {
-          dispatch(setVerse(currentVerse));
-          navigation.navigate("Sloka");
-        }}
-        defaultLanguage={defaultLanguage}
-      />
-    </ScrollView>
+      <ScrollView>
+        {selectionComponent(
+          `Chapter ${currentChapter} - ${
+            chapters[currentChapter - 1].name_translation
+          }`,
+          chapters[currentChapter - 1].name_meaning,
+          onChapterLayout,
+          () => {
+            setShowChapters(true);
+          }
+        )}
+        {selectionComponent(
+          `Verse ${currentVerse?.verse_number || 1}`,
+          detectAndTransliterate(currentVerse?.text, defaultLanguage),
+          onVerseLayout,
+          () => {
+            setShowVerses(true);
+          }
+        )}
+        <Menu
+          visible={showChapters}
+          onDismiss={() => setShowChapters(false)}
+          anchor={{ x: chapterLayout.x, y: chapterLayout.height }}
+          style={{
+            ...styles.selectionMenuContainer,
+            width: chapterLayout.width || "auto",
+          }}
+          contentStyle={{ borderRadius: 12, fontFamily: "readex-pro" }}
+        >
+          {chapters.map((chapter, index) => (
+            <View key={chapter.id}>
+              <Menu.Item
+                key={chapter.id}
+                onPress={() => {
+                  setCurrentChapter(index + 1);
+                  setCurrentVerse(verses[index + 1][1]);
+                  setShowChapters(false);
+                }}
+                title={`Chapter ${index + 1} - ${chapter.name_translation}`}
+                style={{ width: "100%", minWidth: "100%", maxWidth: "100%" }}
+                contentStyle={styles.selectionText}
+                titleStyle={styles.selectionText}
+              />
+              {index !== chapters.length - 1 && <Divider id={chapter.id} />}
+            </View>
+          ))}
+        </Menu>
+        <Menu
+          visible={showVerses}
+          onDismiss={() => setShowVerses(false)}
+          anchor={{ x: verseLayout.x, y: verseLayout.height }}
+          style={{
+            ...styles.selectionMenuContainer,
+            width: verseLayout.width || "auto",
+          }}
+          contentStyle={{ borderRadius: 12, fontFamily: "readex-pro" }}
+        >
+          {Object.entries(verses[currentChapter]).map((verse, index) => (
+            <View key={verse[1].id}>
+              <Menu.Item
+                key={verse[1].id}
+                onPress={() => {
+                  setCurrentVerse(verse[1]);
+                  setShowVerses(false);
+                }}
+                title={`${index + 1} - ${detectAndTransliterate(
+                  verse[1].text,
+                  defaultLanguage
+                )}`}
+                style={{ width: "100%", minWidth: "100%", maxWidth: "100%" }}
+                contentStyle={styles.selectionText}
+                titleStyle={styles.selectionText}
+              />
+              {index !== chapters.length - 1 && <Divider id={verse[1].id} />}
+            </View>
+          ))}
+        </Menu>
+        <VerseCard
+          sloka={currentVerse}
+          showVerseId
+          theme={theme}
+          showTranslation
+          onAction={() => {
+            dispatch(setVerse(currentVerse));
+            navigation.navigate("Sloka");
+          }}
+          defaultLanguage={defaultLanguage}
+        />
+      </ScrollView>
+    </View>
   );
 }
 

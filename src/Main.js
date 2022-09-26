@@ -11,6 +11,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SlokaScreen from "./screens/SlokaScreen";
 import SelectVerseScreen from "./screens/SelectVerseScreen";
+import FavoritesScreen from "./screens/FavoritesScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -40,6 +41,13 @@ const Main = () => {
           <Stack.Screen
             name="Select"
             component={SelectVerseScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="Favorites"
+            component={FavoritesScreen}
             options={{
               headerShown: false,
             }}
