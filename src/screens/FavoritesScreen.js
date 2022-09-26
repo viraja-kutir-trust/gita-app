@@ -6,6 +6,7 @@ import Text from "../components/base/Text";
 import VerseBrief from "../components/base/VerseBrief";
 import {
   addOrRemoveFavorite,
+  selectDefaultLanguage,
   selectFavorites,
   selectTheme,
   setVerse,
@@ -14,6 +15,9 @@ import {
 export default function FavoritesScreen({ navigation }) {
   const theme = useSelector(selectTheme);
   const dispatch = useDispatch();
+  const defaultLanguage = useSelector(
+    selectDefaultLanguage
+  ).devanagariToLanguage;
   const styles = getStyles(theme);
   const favorites = useSelector(selectFavorites).filter((fav) => !!fav);
 
@@ -28,6 +32,7 @@ export default function FavoritesScreen({ navigation }) {
               <VerseBrief
                 verse={favorite}
                 theme={theme}
+                defaultLanguage={defaultLanguage}
                 style={{
                   container: { marginHorizontal: 10, marginVertical: 5 },
                 }}

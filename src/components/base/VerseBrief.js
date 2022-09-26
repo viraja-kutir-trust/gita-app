@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { TouchableHighlight, View } from "react-native";
 import { Divider, IconButton, Menu } from "react-native-paper";
+import { detectAndTransliterate } from "../../utils";
 import Text from "./Text";
 
 export default function VerseBrief(props) {
-  const { verse, actions, theme, style, onPress } = props;
+  const { verse, actions, theme, style, onPress, defaultLanguage } = props;
   const styles = getStyles(theme);
   const [showMenu, setShowMenu] = useState(false);
+
+  console.log("Default L: ", defaultLanguage);
 
   return (
     <TouchableHighlight
@@ -14,10 +17,12 @@ export default function VerseBrief(props) {
       style={{ ...styles.touchableHighlight, ...style.container }}
     >
       <View style={styles.container}>
-        <Text
-          style={styles.content}
-          numberOfLines={1}
-        >{`${verse.chapter_number}:${verse.verse_number} - ${verse.text}`}</Text>
+        <Text style={styles.content} numberOfLines={1}>{`${
+          verse.chapter_number
+        }:${verse.verse_number} - ${detectAndTransliterate(
+          verse.text,
+          defaultLanguage
+        )}`}</Text>
         <Menu
           visible={showMenu}
           onDismiss={() => {
