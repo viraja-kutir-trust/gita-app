@@ -40,13 +40,19 @@ export default function SlokaScreen({ navigation }) {
   ).devanagariToLanguage;
   const defaultTranslation = useSelector(selectDefaultTranslation);
   const defaultCommentary = useSelector(selectDefaultCommentary);
-  const moreDefaultTranslators = useSelector(selectMoreTranslators);
-  const moreDefaultCommentators = useSelector(selectMoreCommentators);
+  const moreDefaultTranslators = useSelector(selectMoreTranslators) || [];
+  const moreDefaultCommentators = useSelector(selectMoreCommentators) || [];
   const styles = getStyles(theme);
   const [currentSloka, setCurrentSloka] = useState(selectedVerse);
   const [showAddMoreDialog, setShowAddMoreDialog] = useState(false);
   const [allTranslators, setAllTranslators] = useState([]);
   const [allCommentators, setAllCommentators] = useState([]);
+  console.log(
+    moreDefaultTranslators,
+    moreDefaultCommentators,
+    defaultCommentary,
+    defaultTranslation
+  );
   const [selectedTranslators, setSelectedTranslators] = useState([
     defaultTranslation,
     ...moreDefaultTranslators,

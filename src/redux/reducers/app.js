@@ -37,7 +37,7 @@ const setMoreDefaultTranslators = (state, action) => {
     payload.forEach((author) => {
       if (
         author.id !== state.defaults.translation.id &&
-        !state.defaults.moreTranslators.find(
+        !state.defaults.moreTranslators?.find(
           (translator) => author.id === translator.id
         )
       ) {
@@ -55,7 +55,7 @@ const setMoreDefaultCommentators = (state, action) => {
     payload.forEach((author) => {
       if (
         author.id !== state.defaults.commentary.id &&
-        !state.defaults.moreCommentators.find(
+        !state.defaults.moreCommentators?.find(
           (commentator) => author.id === commentator.id
         )
       ) {
