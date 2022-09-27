@@ -33,12 +33,12 @@ export default function FavoritesScreen({ navigation }) {
               <VerseBrief
                 verse={favorite}
                 theme={theme}
+                key={favorite.id}
                 defaultLanguage={defaultLanguage}
                 style={{
                   container: { marginHorizontal: 10, marginVertical: 5 },
                 }}
                 onPress={() => {
-                  console.log("Hi");
                   dispatch(setVerse(favorite));
                   navigation.navigate("Sloka");
                 }}

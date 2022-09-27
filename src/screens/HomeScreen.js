@@ -14,6 +14,7 @@ import VerseCard from "../components/base/VerseCard";
 import DataAPI from "../gita-data/dataApi";
 import { StatusBar } from "expo-status-bar";
 import seedrandom from "seedrandom";
+import MyBottomNavigation from "../components/base/BottomNavigation";
 
 export default function HomeScreen({ navigation }) {
   const theme = useSelector(selectTheme);
@@ -124,6 +125,7 @@ export default function HomeScreen({ navigation }) {
           </View>
         </View>
       </ScrollView>
+      <MyBottomNavigation theme={theme} />
     </View>
   );
 }
@@ -131,7 +133,6 @@ export default function HomeScreen({ navigation }) {
 const getStyles = (theme) =>
   StyleSheet.create({
     screen: {
-      padding: 10,
       flex: 1,
       backgroundColor: theme.colors.background,
       paddingTop: 50,

@@ -127,12 +127,21 @@ export default function SlokaScreen({ navigation }) {
   }
 
   useEffect(() => {
-    getMoreContents(
-      null,
-      [defaultTranslation, ...moreDefaultTranslators],
-      [defaultCommentary, ...moreDefaultCommentators],
-      currentSloka
-    );
+    async function getFirstSloka() {
+      const firstSloka = await DataAPI.getVerse(1, 1);
+      setCurrentSloka(firstSloka);
+    }
+
+    if (!currentSloka) {
+      getFirstSloka();
+    } else {
+      getMoreContents(
+        null,
+        [defaultTranslation, ...moreDefaultTranslators],
+        [defaultCommentary, ...moreDefaultCommentators],
+        currentSloka
+      );
+    }
   }, [currentSloka, defaultTranslation, defaultCommentary]);
 
   useEffect(() => {
@@ -141,10 +150,6 @@ export default function SlokaScreen({ navigation }) {
       const commentators = await DataAPI.getCommenters();
       setAllTranslators(translators);
       setAllCommentators(commentators);
-    }
-    async function getFirstSloka() {
-      const firstSloka = await DataAPI.getVerse(1, 1);
-      setCurrentSloka(firstSloka);
     }
 
     getAllAuthors();
@@ -283,12 +288,14 @@ export default function SlokaScreen({ navigation }) {
         customActions={[
           <IconButton
             icon="lead-pencil"
+            key="note"
             onPress={() => {
               setShowModifyNote(true);
             }}
           />,
           <IconButton
             icon={isFavorite ? "star" : "star-outline"}
+            key="favorite"
             onPress={() => {
               dispatch(
                 addOrRemoveFavorite({

@@ -24,18 +24,6 @@ const MyBottomNavigation = ({ theme }) => {
   };
   const navigation = useNavigation();
   const route = useRoute();
-  console.log(route);
-  //   const [current, setIndex] = useState(
-  //     allRoutes.findIndex((current) => current.key === route.name)
-  //   );
-
-  const renderScene = BottomNavigation.SceneMap({
-    Home: () => <></>,
-    Search: () => <></>,
-    Sloka: () => <></>,
-    Favorites: () => <></>,
-    Notes: () => <></>,
-  });
 
   return (
     <View
@@ -47,6 +35,8 @@ const MyBottomNavigation = ({ theme }) => {
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
+        borderTopWidth: 1,
+        borderTopColor: theme.colors.tertiary,
       }}
     >
       {Object.values(allRoutes).map((each) => (

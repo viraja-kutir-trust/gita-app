@@ -40,6 +40,7 @@ export default function NotesScreen({ navigation }) {
                 <VerseBrief
                   verse={pseudoVerse}
                   theme={theme}
+                  key={pseudoVerse.id}
                   style={{
                     container: { marginHorizontal: 10, marginVertical: 5 },
                   }}
