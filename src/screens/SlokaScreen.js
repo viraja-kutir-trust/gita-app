@@ -78,6 +78,7 @@ export default function SlokaScreen({ navigation }) {
 
   useEffect(() => {
     setCurrentSloka(selectedVerse);
+    setCurrentNoteText(note);
   }, [selectedVerse]);
 
   async function getMoreContents(
