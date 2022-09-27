@@ -326,7 +326,7 @@ export default function SlokaScreen({ navigation }) {
             />
           </View>
           <View style={{ ...styles.card }}>
-            <Text variant={"bodyMedium"} style={styles.cardContent}>
+            <Text variant={"titleMedium"} style={styles.cardContent}>
               {detectAndTransliterate(currentSloka.text, defaultLanguage)}
             </Text>
             <Text variant={"bodyMedium"} style={styles.cardContent}>

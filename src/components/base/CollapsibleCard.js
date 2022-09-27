@@ -139,12 +139,14 @@ const getStyles = (theme) =>
       flexGrow: 1,
       maxWidth: "80%",
       textAlign: "center",
+      fontSize: 17,
     },
     cardContent: {
       marginHorizontal: 10,
       marginTop: 15,
       textAlign: "center",
       maxWidth: "80%",
+      fontSize: 15,
     },
     collapseIcon: {
       //   position: "absolute",
