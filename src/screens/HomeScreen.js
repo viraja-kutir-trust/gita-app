@@ -44,6 +44,12 @@ export default function HomeScreen({ navigation }) {
       },
     },
     {
+      label: "Notes",
+      onClick: () => {
+        navigation.navigate("Notes");
+      },
+    },
+    {
       label: "Toggle theme",
       onClick: () => {
         dispatch(setTheme(theme.dark ? lightTheme : darkTheme));

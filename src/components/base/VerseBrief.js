@@ -9,8 +9,6 @@ export default function VerseBrief(props) {
   const styles = getStyles(theme);
   const [showMenu, setShowMenu] = useState(false);
 
-  console.log("Default L: ", defaultLanguage);
-
   return (
     <TouchableHighlight
       onPress={onPress}
@@ -19,10 +17,11 @@ export default function VerseBrief(props) {
       <View style={styles.container}>
         <Text style={styles.content} numberOfLines={1}>{`${
           verse.chapter_number
-        }:${verse.verse_number} - ${detectAndTransliterate(
-          verse.text,
+        }:${verse.verse_number} - ${
           defaultLanguage
-        )}`}</Text>
+            ? detectAndTransliterate(verse.text, defaultLanguage)
+            : verse.text
+        }`}</Text>
         <Menu
           visible={showMenu}
           onDismiss={() => {

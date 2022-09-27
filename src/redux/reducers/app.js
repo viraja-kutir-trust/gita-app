@@ -87,6 +87,19 @@ const addOrRemoveFavorite = (state, action) => {
   state.favorites = allFavorites;
 };
 
+const modifyNote = (state, action) => {
+  const currentNotes = { ...state.notes };
+  const {
+    payload: { type, verse, note },
+  } = action;
+  if (type === "remove" || !note) {
+    delete currentNotes[`${verse.chapter_number}:${verse.verse_number}`];
+  } else {
+    currentNotes[`${verse.chapter_number}:${verse.verse_number}`] = note;
+  }
+  state.notes = currentNotes;
+};
+
 export default {
   setTheme,
   toggleTheme,
@@ -97,4 +110,5 @@ export default {
   setMoreDefaultTranslators,
   setMoreDefaultCommentators,
   addOrRemoveFavorite,
+  modifyNote,
 };

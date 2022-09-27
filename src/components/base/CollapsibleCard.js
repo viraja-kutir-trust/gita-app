@@ -90,7 +90,6 @@ export default function CollapsibleCard(props) {
             setScriptLanguage(defaultLanguage);
             closeScriptChoiceDialog();
           }}
-          contentContainerStyle={styles.modalContainer}
           theme={theme}
           showFooterActions
           onSave={closeScriptChoiceDialog}
@@ -155,12 +154,4 @@ const getStyles = (theme) =>
     moreIcon: {},
     menu: {},
     menuItem: {},
-    modalContainer: {
-      backgroundColor: theme.colors.surface,
-      padding: 20,
-      // minWidth: "80%",
-      width: 360,
-      alignSelf: "center",
-      maxHeight: "95%",
-    },
   });

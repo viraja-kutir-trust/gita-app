@@ -35,7 +35,10 @@ export default function Modal(props) {
           setIsVisible(false);
           onClose && onClose();
         }}
-        contentContainerStyle={styles.modalContainer}
+        contentContainerStyle={{
+          ...styles.modalContainer,
+          ...args.contentContainerStyle,
+        }}
       >
         <View style={{ maxHeight: "100%" }}>
           <Text variant={"titleMedium"} style={styles.modalTitle}>

@@ -20,6 +20,7 @@ export const appSlice = createSlice({
       moreCommentators: [],
     },
     favorites: [],
+    notes: {},
   },
   reducers: app,
 });
@@ -34,6 +35,7 @@ export const {
   setMoreDefaultCommentators,
   setMoreDefaultTranslators,
   addOrRemoveFavorite,
+  modifyNote,
 } = appSlice.actions;
 
 export const selectTheme = (state) => state.app.theme;
@@ -47,3 +49,4 @@ export const selectMoreTranslators = (state) =>
 export const selectMoreCommentators = (state) =>
   state.app.defaults.moreCommentators;
 export const selectFavorites = (state) => state.app.favorites;
+export const selectNotes = (state) => state.app.notes;

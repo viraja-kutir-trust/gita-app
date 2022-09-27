@@ -4,18 +4,21 @@ import {
   IconButton,
   Portal,
   Snackbar,
+  TextInput,
 } from "react-native-paper";
 import { ScrollView, StyleSheet, View } from "react-native";
 import Text from "../components/base/Text";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addOrRemoveFavorite,
+  modifyNote,
   selectDefaultCommentary,
   selectDefaultLanguage,
   selectDefaultTranslation,
   selectFavorites,
   selectMoreCommentators,
   selectMoreTranslators,
+  selectNotes,
   selectTheme,
   selectVerse,
   setMoreDefaultCommentators,
@@ -48,6 +51,10 @@ export default function SlokaScreen({ navigation }) {
   const isFavorite = useSelector(selectFavorites)?.find(
     (verse) => verse && selectedVerse && verse.id === selectedVerse.id
   );
+  const note =
+    useSelector(selectNotes)[
+      `${selectedVerse.chapter_number}:${selectedVerse.verse_number}`
+    ];
   const styles = getStyles(theme);
   const [currentSloka, setCurrentSloka] = useState(selectedVerse);
   const [showAddMoreDialog, setShowAddMoreDialog] = useState(false);
@@ -66,6 +73,8 @@ export default function SlokaScreen({ navigation }) {
   const [contents, setContents] = useState([]);
   const [saveSelected, setSaveSelected] = useState(false);
   const [snackbar, setSnackbar] = useState({ visible: false, text: "" });
+  const [showModifyNote, setShowModifyNote] = useState(false);
+  const [currentNoteText, setCurrentNoteText] = useState(note);
 
   useEffect(() => {
     setCurrentSloka(selectedVerse);
@@ -271,6 +280,12 @@ export default function SlokaScreen({ navigation }) {
         theme={theme}
         customActions={[
           <IconButton
+            icon="lead-pencil"
+            onPress={() => {
+              setShowModifyNote(true);
+            }}
+          />,
+          <IconButton
             icon={isFavorite ? "star" : "star-outline"}
             onPress={() => {
               dispatch(
@@ -358,6 +373,32 @@ export default function SlokaScreen({ navigation }) {
             defaultLanguage={defaultLanguage}
           />
         ))}
+        {note && (
+          <CollapsibleCard
+            key={"note"}
+            title={"Note"}
+            content={note}
+            theme={theme}
+            menuProps={{
+              menuItems: [
+                {
+                  title: "Edit",
+                  onPress: () => {
+                    setShowModifyNote(true);
+                  },
+                },
+                {
+                  title: "Remove",
+                  onPress: () => {
+                    dispatch(
+                      modifyNote({ type: "remove", verse: selectedVerse })
+                    );
+                  },
+                },
+              ],
+            }}
+          />
+        )}
         <Button
           icon="plus"
           mode="contained"
@@ -384,7 +425,6 @@ export default function SlokaScreen({ navigation }) {
               ...moreDefaultCommentators,
             ]);
           }}
-          contentContainerStyle={styles.modalContainer}
           showFooterActions={true}
           onSave={() => {
             setShowAddMoreDialog(false);
@@ -443,6 +483,52 @@ export default function SlokaScreen({ navigation }) {
               ))}
             </ScrollView>
           </View>
+        </Modal>
+      </Portal>
+      <Portal>
+        <Modal
+          visible={showModifyNote}
+          title={"Add Notes"}
+          onDismiss={() => {
+            setShowModifyNote(false);
+            setCurrentNoteText(note);
+          }}
+          contentContainerStyle={{
+            width: "98%",
+            minWidth: "98%",
+            marginLeft: 4,
+          }}
+          showFooterActions={true}
+          theme={theme}
+          onClose={() => {
+            setShowModifyNote(false);
+            setCurrentNoteText(note);
+          }}
+          onSave={() => {
+            setShowModifyNote(false);
+            dispatch(
+              modifyNote({
+                type: "edit",
+                verse: selectedVerse,
+                note: currentNoteText,
+              })
+            );
+          }}
+        >
+          <TextInput
+            mode="flat"
+            multiline
+            placeholder="Type here..."
+            style={{
+              minHeight: 150,
+              marginBottom: 20,
+              maxHeight: "85%",
+            }}
+            defaultValue={currentNoteText}
+            onChangeText={(e) => {
+              setCurrentNoteText(e);
+            }}
+          />
         </Modal>
       </Portal>
       <Snackbar
@@ -512,7 +598,7 @@ const getStyles = (theme) =>
       // minWidth: "80%",
       width: 360,
       alignSelf: "center",
-      maxHeight: "95%",
+      maxHeight: "100%",
     },
     modalTitle: {
       textAlign: "center",
