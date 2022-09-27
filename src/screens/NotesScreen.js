@@ -1,6 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import { View, ScrollView } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+import MyBottomNavigation from "../components/base/BottomNavigation";
 import ScreenHeader from "../components/base/ScreenHeader";
 import Text from "../components/base/Text";
 import VerseBrief from "../components/base/VerseBrief";
@@ -73,6 +74,7 @@ export default function NotesScreen({ navigation }) {
           )}
         </View>
       </ScrollView>
+      <MyBottomNavigation theme={theme} />
     </View>
   );
 }

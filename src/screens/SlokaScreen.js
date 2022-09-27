@@ -36,6 +36,7 @@ import { capitalizeFirstLetter, detectAndTransliterate } from "../utils";
 import ListSelectionItem from "../components/base/ListSelectionItem";
 import CollapsibleCard from "../components/base/CollapsibleCard";
 import Modal from "../components/base/Modal";
+import MyBottomNavigation from "../components/base/BottomNavigation";
 
 export default function SlokaScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -538,9 +539,11 @@ export default function SlokaScreen({ navigation }) {
         onDismiss={() => {
           setSnackbar({ visible: false, text: "" });
         }}
+        style={{ marginBottom: 80 }}
       >
         {snackbar.text}
       </Snackbar>
+      <MyBottomNavigation theme={theme} />
     </View>
   );
 }
@@ -548,7 +551,7 @@ export default function SlokaScreen({ navigation }) {
 const getStyles = (theme) =>
   StyleSheet.create({
     screen: {
-      paddingBottom: 20,
+      // paddingBottom: 20,
       flex: 1,
       backgroundColor: theme.colors.background,
     },

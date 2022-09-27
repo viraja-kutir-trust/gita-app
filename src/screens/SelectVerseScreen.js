@@ -19,6 +19,7 @@ import VerseCard from "../components/base/VerseCard";
 import ScreenHeader from "../components/base/ScreenHeader";
 import { StatusBar } from "expo-status-bar";
 import { detectAndTransliterate } from "../utils";
+import MyBottomNavigation from "../components/base/BottomNavigation";
 
 export default function SelectVerseScreen(props) {
   const { navigation } = props;
@@ -199,6 +200,7 @@ export default function SelectVerseScreen(props) {
           defaultLanguage={defaultLanguage}
         />
       </ScrollView>
+      <MyBottomNavigation theme={theme} />
     </View>
   );
 }
