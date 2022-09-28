@@ -29,7 +29,7 @@ const MyBottomNavigation = ({ theme }) => {
     <View
       style={{
         width: "100%",
-        height: 70,
+        height: 80,
         paddingHorizontal: 30,
         paddingVertical: 10,
         flexDirection: "row",
@@ -50,7 +50,7 @@ const MyBottomNavigation = ({ theme }) => {
             style={{
               alignItems: "center",
               justifyContent: "center",
-              paddingBottom: 10,
+              paddingBottom: 20,
             }}
           >
             <IconButton

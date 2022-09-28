@@ -54,7 +54,7 @@ export default function SlokaScreen({ navigation }) {
   );
   const note =
     useSelector(selectNotes)[
-      `${selectedVerse.chapter_number}:${selectedVerse.verse_number}`
+      `${selectedVerse?.chapter_number}:${selectedVerse?.verse_number}`
     ];
   const styles = getStyles(theme);
   const [currentSloka, setCurrentSloka] = useState(selectedVerse);
