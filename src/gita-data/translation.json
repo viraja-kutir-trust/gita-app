@@ -71,6 +71,19 @@
     "description": "1.1 The King Dhritarashtra asked: \"O Sanjaya! What happened on the sacred battlefield of Kurukshetra, when my people gathered against the Pandavas?\"\n",
     "id": 7,
     "lang": "english",
+    "language_id": 4,
+    "verseNumber": 1,
+    "verse_id": 1,
+    "type": "translation"
+  },
+  {
+    "authorName": "Swami Nirvikalpananda",
+    "author_id": 22,
+    "description": "ధృతరాష్ర్రుడు పలికెను : సంజయా! పుణ్యభూమియైన కురుక్షేత్రంలో
+    యుద్ధకాంక్షతో నా పుత్రులైన దుర్యోధనాదులు, పాండు పుత్రులైన యుధిష్టిరాదులు
+    కలసి ఏం చేసారు?",
+    "id": 7,
+    "lang": "telugu",
     "language_id": 1,
     "verseNumber": 1,
     "verse_id": 1,
@@ -154,6 +167,17 @@
     "type": "translation"
   },
   {
+    "authorName": "Swami Nirvikalpananda",
+    "author_id": 22,
+    "description": "సంజయుడు పలికెను : అప్పుడు రాజైన దుర్యోధనుడు వ్యూహాకారంలో ఉన్న పాండవ సైన్యాన్ని చూసి, ద్రోణాచార్యుని వద్దకు వెళ్ళి ఇలా పలికాడు.",
+    "id": 7,
+    "lang": "telugu",
+    "language_id": 4,
+    "verseNumber": 2,
+    "verse_id": 2,
+    "type": "translation"
+  },
+  {
     "authorName": "Swami Ramsukhdas",
     "author_id": 1,
     "description": "।।1.3।। हे आचार्य! आपके बुद्धिमान् शिष्य द्रुपदपुत्र धृष्टद्युम्न के द्वारा व्यूहरचना से खड़ी की हुई पाण्डवों की इस बड़ी भारी सेना को देखिये\n ",
@@ -231,6 +255,17 @@
     "type": "translation"
   },
   {
+    "authorName": "Swami Nirvikalpananda",
+    "author_id": 22,
+    "description": "గురుదేవా! బుద్ధిమంతుడూ, మీ శిష్యుడూ, ద్రుపదపుత్రుడూ అయిన ధృష్టద్యుమ్నుడు ఈ వ్యూహాన్ని విరచించాడు, పాండవుల ఈ విపుల సైన్య సమావేశాన్ని చూడండి!",
+    "id": 7,
+    "lang": "telugu",
+    "language_id": 4,
+    "verseNumber": 3,
+    "verse_id": 3,
+    "type": "translation"
+  },
+  {
     "authorName": "Swami Ramsukhdas",
     "author_id": 1,
     "description": "।।1.4 -- 1.6।। यहाँ (पाण्डवों की सेना में) बड़े-बड़े शूरवीर हैं, जिनके बहुत बड़े-बड़े धनुष हैं तथा जो युद्ध में भीम और अर्जुनके समान हैं। उनमें युयुधान (सात्यकि), राजा विराट और महारथी द्रुपद भी हैं। धृष्टकेतु और चेकितान तथा पराक्रमी काशिराज भी हैं। पुरुजित् और कुन्तिभोज--ये दोनों भाई तथा मनुष्योंमें श्रेष्ठ शैब्य भी हैं। पराक्रमी युधामन्यु और पराक्रमी उत्तमौजा भी हैं। सुभद्रापुत्र अभिमन्यु और द्रौपदी के पाँचों पुत्र भी हैं। ये सब-के-सब महारथी हैं।\n ",
@@ -303,6 +338,17 @@
     "id": 28,
     "lang": "english",
     "language_id": 1,
+    "verseNumber": 4,
+    "verse_id": 4,
+    "type": "translation"
+  },
+  {
+    "authorName": "Swami Nirvikalpananda",
+    "author_id": 22,
+    "description": "ఈ పాండవసేనలో యుద్ధంలో భీమార్జునులతో సరితూగగల సాత్యకి, విరాటరాజు, మహారథుడైన ద్రుపదుడు, శిశుపాలుని పుత్రుడైన ధృష్టకేతువు, యదువంశీయవీరుడైన చేకితానుడు, శక్తిశాలియైన కాశీరాజు, పురుజిత్తు, కుంతిభోజుడు, నరశ్రేష్టుడైన శైబ్యుడు, పరాక్రమశాలియైన యుధామన్యుడు, మహాశక్తిశాలియైన ఉత్తమౌజుడు, సుభద్రాసుతుడైన అభిమన్యుడు, ద్రౌపదీ పుత్రులైన ఉపపాండవులు మొదలైన మహాధనుర్ధరులైన వీరులు ఉన్నారు. వీరందరూ మహారథులు.",
+    "id": 7,
+    "lang": "telugu",
+    "language_id": 4,
     "verseNumber": 4,
     "verse_id": 4,
     "type": "translation"
