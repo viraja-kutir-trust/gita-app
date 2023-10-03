@@ -28,40 +28,48 @@ fontConfig.web = fontConfig.default;
 fontConfig.ios = fontConfig.default;
 fontConfig.android = fontConfig.default;
 
-const commonThemeAspects = (theme) => ({
-  roundess: 2,
-  version: 3,
-  typescale: {
-    ...theme.typescale,
-    displayLarge: { ...theme.typescale.displayLarge, fontFamily: "readex-pro" },
-    displayMedium: {
-      ...theme.typescale.displayMedium,
-      fontFamily: "readex-pro",
+const commonThemeAspects = (theme) => {
+  return {
+    roundess: 2,
+    version: 3,
+    fonts: {
+      ...theme.fonts,
+      displayLarge: {
+        ...theme.fonts.displayLarge,
+        fontFamily: "readex-pro",
+      },
+      displayMedium: {
+        ...theme.fonts.displayMedium,
+        fontFamily: "readex-pro",
+      },
+      displaySmall: {
+        ...theme.fonts.displaySmall,
+        fontFamily: "readex-pro",
+      },
+      headlineLarge: {
+        ...theme.fonts.headlineLarge,
+        fontFamily: "readex-pro",
+      },
+      headlineMedium: {
+        ...theme.fonts.headlineMedium,
+        fontFamily: "readex-pro",
+      },
+      headlineSmall: {
+        ...theme.fonts.headlineSmall,
+        fontFamily: "readex-pro",
+      },
+      titleLarge: { ...theme.fonts.titleLarge, fontFamily: "readex-pro" },
+      titleMedium: { ...theme.fonts.titleMedium, fontFamily: "readex-pro" },
+      titleSmall: { ...theme.fonts.titleSmall, fontFamily: "readex-pro" },
+      labelLarge: { ...theme.fonts.labelLarge, fontFamily: "readex-pro" },
+      labelMedium: { ...theme.fonts.labelMedium, fontFamily: "readex-pro" },
+      labelSmall: { ...theme.fonts.labelSmall, fontFamily: "readex-pro" },
+      bodyLarge: { ...theme.fonts.bodyLarge, fontFamily: "readex-pro" },
+      bodyMedium: { ...theme.fonts.bodyMedium, fontFamily: "readex-pro" },
+      bodySmall: { ...theme.fonts.bodySmall, fontFamily: "readex-pro" },
     },
-    displaySmall: { ...theme.typescale.displaySmall, fontFamily: "readex-pro" },
-    headlineLarge: {
-      ...theme.typescale.headlineLarge,
-      fontFamily: "readex-pro",
-    },
-    headlineMedium: {
-      ...theme.typescale.headlineMedium,
-      fontFamily: "readex-pro",
-    },
-    headlineSmall: {
-      ...theme.typescale.headlineSmall,
-      fontFamily: "readex-pro",
-    },
-    titleLarge: { ...theme.typescale.titleLarge, fontFamily: "readex-pro" },
-    titleMedium: { ...theme.typescale.titleMedium, fontFamily: "readex-pro" },
-    titleSmall: { ...theme.typescale.titleSmall, fontFamily: "readex-pro" },
-    labelLarge: { ...theme.typescale.labelLarge, fontFamily: "readex-pro" },
-    labelMedium: { ...theme.typescale.labelMedium, fontFamily: "readex-pro" },
-    labelSmall: { ...theme.typescale.labelSmall, fontFamily: "readex-pro" },
-    bodyLarge: { ...theme.typescale.bodyLarge, fontFamily: "readex-pro" },
-    bodyMedium: { ...theme.typescale.bodyMedium, fontFamily: "readex-pro" },
-    bodySmall: { ...theme.typescale.bodySmall, fontFamily: "readex-pro" },
-  },
-});
+  };
+};
 
 export const lightTheme = {
   ...LightTheme,

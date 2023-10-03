@@ -6,7 +6,13 @@ import {
   Snackbar,
   TextInput,
 } from "react-native-paper";
-import { ScrollView, StyleSheet, View } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
+import { Keyboard } from "react-native";
 import Text from "../components/base/Text";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -313,7 +319,7 @@ export default function SlokaScreen({ navigation }) {
           />,
         ]}
       />
-      <ScrollView>
+      <ScrollView automaticallyAdjustKeyboardInsets={true}>
         <View style={styles.slokaCardContainer}>
           <View style={{ ...styles.slokaNavigators, left: 2 }}>
             <IconButton
@@ -494,52 +500,57 @@ export default function SlokaScreen({ navigation }) {
           </View>
         </Modal>
       </Portal>
-      <Portal>
-        <Modal
-          visible={showModifyNote}
-          title={"Add Notes"}
-          onDismiss={() => {
-            setShowModifyNote(false);
-            setCurrentNoteText(note);
-          }}
-          contentContainerStyle={{
-            width: "98%",
-            minWidth: "98%",
-            marginLeft: 4,
-          }}
-          showFooterActions={true}
-          theme={theme}
-          onClose={() => {
-            setShowModifyNote(false);
-            setCurrentNoteText(note);
-          }}
-          onSave={() => {
-            setShowModifyNote(false);
-            dispatch(
-              modifyNote({
-                type: "edit",
-                verse: selectedVerse,
-                note: currentNoteText,
-              })
-            );
-          }}
-        >
-          <TextInput
-            mode="flat"
-            multiline
-            placeholder="Type here..."
-            style={{
-              minHeight: 150,
-              marginBottom: 20,
-              maxHeight: "85%",
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <Portal>
+          <Modal
+            visible={showModifyNote}
+            title={"Add Notes"}
+            backdrop="static"
+            onDismiss={() => {
+              setShowModifyNote(false);
+              setCurrentNoteText(note);
             }}
-            defaultValue={currentNoteText}
-            onChangeText={(e) => {
-              setCurrentNoteText(e);
+            contentContainerStyle={{
+              width: "98%",
+              minWidth: "98%",
+              marginLeft: 4,
+              marginBottom: 100,
+              alignSelf: "top",
             }}
-          />
-        </Modal>
-      </Portal>
+            showFooterActions={true}
+            theme={theme}
+            onClose={() => {
+              setShowModifyNote(false);
+              setCurrentNoteText(note);
+            }}
+            onSave={() => {
+              setShowModifyNote(false);
+              dispatch(
+                modifyNote({
+                  type: "edit",
+                  verse: selectedVerse,
+                  note: currentNoteText,
+                })
+              );
+            }}
+          >
+            <TextInput
+              mode="flat"
+              multiline
+              placeholder="Type here..."
+              style={{
+                minHeight: 150,
+                marginBottom: 20,
+                maxHeight: "85%",
+              }}
+              defaultValue={currentNoteText}
+              onChangeText={(e) => {
+                setCurrentNoteText(e);
+              }}
+            />
+          </Modal>
+        </Portal>
+      </TouchableWithoutFeedback>
       <Snackbar
         visible={snackbar.visible}
         duration={4000}
