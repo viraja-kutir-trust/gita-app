@@ -144,7 +144,7 @@ const getStyles = (theme) =>
     cardContent: {
       marginHorizontal: 10,
       marginTop: 15,
-      textAlign: "center",
+      // textAlign: "center",
       maxWidth: "80%",
       fontSize: 15,
     },

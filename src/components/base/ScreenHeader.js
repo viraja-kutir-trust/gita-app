@@ -19,7 +19,8 @@ import Modal from "./Modal";
 import Text from "./Text";
 
 export default function ScreenHeader(props) {
-  const { navigation, title, theme, customActions } = props;
+  const { navigation, title, theme, customActions, disableBackNavigation } =
+    props;
   const styles = getStyles(theme);
   const dispatch = useDispatch();
   const defaultLanguage = useSelector(selectDefaultLanguage);
@@ -59,7 +60,11 @@ export default function ScreenHeader(props) {
 
   return (
     <Appbar.Header>
-      <Appbar.BackAction size={20} onPress={() => navigation.goBack()} />
+      {disableBackNavigation ? (
+        <View style={{ marginRight: 50 }}></View>
+      ) : (
+        <Appbar.BackAction size={20} onPress={() => navigation.goBack()} />
+      )}
       <Appbar.Content titleStyle={{ fontSize: 18 }} title={title} />
       {/* <Appbar.Action> */}
       {customActions?.map((action) => action)}
@@ -80,7 +85,7 @@ export default function ScreenHeader(props) {
             dispatch(setTheme(theme.dark ? lightTheme : darkTheme));
             setHeaderMenuAnchor(null);
           }}
-          title="Toggle Theme"
+          title="Change Theme"
         />
         <Divider />
         <Menu.Item

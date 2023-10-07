@@ -15,6 +15,7 @@ import DataAPI from "../gita-data/dataApi";
 import { StatusBar } from "expo-status-bar";
 import seedrandom from "seedrandom";
 import MyBottomNavigation from "../components/base/BottomNavigation";
+import ScreenHeader from "../components/base/ScreenHeader";
 
 export default function HomeScreen({ navigation }) {
   const theme = useSelector(selectTheme);
@@ -51,7 +52,7 @@ export default function HomeScreen({ navigation }) {
       },
     },
     {
-      label: "Toggle theme",
+      label: "Change Theme",
       onClick: () => {
         dispatch(setTheme(theme.dark ? lightTheme : darkTheme));
       },
@@ -91,6 +92,12 @@ export default function HomeScreen({ navigation }) {
   return (
     <View style={styles.screen}>
       <StatusBar style={theme.dark ? "light" : "dark"} />
+      <ScreenHeader
+        title={"Home"}
+        navigation={navigation}
+        theme={theme}
+        disableBackNavigation
+      />
       <ScrollView>
         <View>
           <VerseCard
@@ -135,7 +142,7 @@ const getStyles = (theme) =>
     screen: {
       flex: 1,
       backgroundColor: theme.colors.background,
-      paddingTop: 50,
+      // paddingTop: 50,
     },
     cardContainer: {
       margin: 20,

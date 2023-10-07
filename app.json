@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Bhagavad-Gita",
+    "name": "Gita All-In-One",
     "slug": "bhagavadgita",
     "version": "2.0.0",
     "orientation": "portrait",
@@ -21,7 +21,8 @@
     "autoIncrement": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.saiteja.bhagavadgita"
+      "bundleIdentifier": "com.saiteja.bhagavadgita",
+      "buildNumber": "2"
     },
     "android": {
       "adaptiveIcon": {
@@ -29,7 +30,7 @@
         "backgroundColor": "#FFF4F2"
       },
       "package": "com.saiteja.bhagavadgita",
-      "versionCode": 4
+      "versionCode": 5
     },
     "web": {
       "favicon": "./assets/favicon.png"
