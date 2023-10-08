@@ -332,10 +332,18 @@ export default function SlokaScreen({ navigation }) {
             />
           </View>
           <View style={{ ...styles.card }}>
-            <Text variant={"titleMedium"} style={styles.cardContent}>
+            <Text
+              variant={"bodyMedium"}
+              style={styles.cardContent}
+              controlledFontSize={true}
+            >
               {detectAndTransliterate(currentSloka.text, defaultLanguage)}
             </Text>
-            <Text variant={"bodyMedium"} style={styles.cardContent}>
+            <Text
+              variant={"bodyMedium"}
+              style={styles.cardContent}
+              controlledFontSize={true}
+            >
               {detectAndTransliterate(
                 currentSloka.transliteration,
                 defaultLanguage
@@ -506,6 +514,7 @@ export default function SlokaScreen({ navigation }) {
             visible={showModifyNote}
             title={"Add Notes"}
             backdrop="static"
+            dismissable={false}
             onDismiss={() => {
               setShowModifyNote(false);
               setCurrentNoteText(note);
@@ -515,7 +524,6 @@ export default function SlokaScreen({ navigation }) {
               minWidth: "98%",
               marginLeft: 4,
               marginBottom: 100,
-              alignSelf: "top",
             }}
             showFooterActions={true}
             theme={theme}
@@ -541,7 +549,7 @@ export default function SlokaScreen({ navigation }) {
               style={{
                 minHeight: 150,
                 marginBottom: 20,
-                maxHeight: "85%",
+                maxHeight: "75%",
               }}
               defaultValue={currentNoteText}
               onChangeText={(e) => {
@@ -557,7 +565,7 @@ export default function SlokaScreen({ navigation }) {
         onDismiss={() => {
           setSnackbar({ visible: false, text: "" });
         }}
-        style={{ marginBottom: 80 }}
+        style={{ marginBottom: 50 }}
       >
         {snackbar.text}
       </Snackbar>

@@ -12,7 +12,6 @@ export default function CollapsibleCard(props) {
   const { title, content, theme, menuProps, defaultLanguage, contentLanguage } =
     props;
   const isHindi = contentLanguage === "hindi";
-  console.log("is hindi? ", isHindi, contentLanguage);
   const styles = getStyles(theme);
   const [isOpen, setIsOpen] = useState(true);
   const [showMenu, setShowMenu] = useState(false);
@@ -76,11 +75,13 @@ export default function CollapsibleCard(props) {
         </Menu>
       </View>
       {isOpen && (
-        <>
-          <Text variant={"bodyMedium"} style={styles.cardContent}>
-            {detectAndTransliterate(content, scriptLanguage)}
-          </Text>
-        </>
+        <Text
+          variant={"bodyMedium"}
+          style={styles.cardContent}
+          controlledFontSize={true}
+        >
+          {detectAndTransliterate(content, scriptLanguage)}
+        </Text>
       )}
       <Portal>
         <Modal
@@ -132,6 +133,7 @@ const getStyles = (theme) =>
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
+      width: "100%",
     },
     cardTitle: {
       color: theme.colors.onPrimaryContainer,
@@ -146,7 +148,7 @@ const getStyles = (theme) =>
       marginTop: 15,
       // textAlign: "center",
       maxWidth: "80%",
-      fontSize: 15,
+      // fontSize: 15,
     },
     collapseIcon: {
       //   position: "absolute",

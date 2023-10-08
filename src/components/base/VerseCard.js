@@ -66,7 +66,11 @@ export default function VerseCard(props) {
               Chapter {sloka.chapter_number}, Verse {verse.verse_number}
             </Text>
           )}
-          <Text style={styles.cardContent} variant="titleMedium">
+          <Text
+            style={styles.cardContent}
+            variant="bodyMedium"
+            controlledFontSize={true}
+          >
             {verse.text}
           </Text>
           {showTranslation && (
@@ -110,7 +114,7 @@ const getStyles = (theme) =>
       marginTop: 8,
     },
     cardContent: {
-      alignSelf: "center",
+      // alignSelf: "center",
       marginTop: 10,
       marginHorizontal: 30,
     },

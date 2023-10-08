@@ -24,135 +24,105 @@ const Main = () => {
   const dispatch = useDispatch();
   //   const styles = getStyles(theme);
 
-  // return (
-  //   <PaperProvider theme={theme}>
-  //     <NavigationContainer>
-  //       <Stack.Navigator>
-  //         <Stack.Screen
-  //           name="Home"
-  //           component={HomeScreen}
-  //           options={{
-  //             headerShown: false,
-  //           }}
-  //         />
-  //         <Stack.Screen
-  //           name="Sloka"
-  //           component={SlokaScreen}
-  //           options={{
-  //             headerShown: false,
-  //           }}
-  //         />
-  //         <Stack.Screen
-  //           name="Select"
-  //           component={SelectVerseScreen}
-  //           options={{
-  //             headerShown: false,
-  //           }}
-  //         />
-  //         <Stack.Screen
-  //           name="Favorites"
-  //           component={FavoritesScreen}
-  //           options={{
-  //             headerShown: false,
-  //           }}
-  //         />
-  //         <Stack.Screen
-  //           name="Notes"
-  //           component={NotesScreen}
-  //           options={{
-  //             headerShown: false,
-  //           }}
-  //         />
-  //       </Stack.Navigator>
-  //     </NavigationContainer>
-  //   </PaperProvider>
-  // );
-
   return (
-    <PaperProvider theme={theme}>
-      <NavigationContainer theme={theme}>
-        <Tab.Navigator
-          initialRouteName="Home"
-          screenOptions={{
-            tabBarActiveBackgroundColor: theme.colors.background,
-            tabBarInactiveBackgroundColor: theme.colors.background,
-            tabBarActiveTintColor: theme.colors.primary,
-            tabBarInactiveTintColor: theme.colors.tertiary,
-            tabBarStyle: {
-              // paddingBottom: 5,
-            },
-          }}
-        >
-          <Tab.Screen
-            name="Home"
-            component={HomeScreen}
-            options={{
-              headerShown: false,
-              // tabBarLabel: 'Home',
-              tabBarIcon: ({ color, size }) => (
-                <MaterialCommunityIcons name="home" color={color} size={size} />
-              ),
+    <View
+      style={{ width: "100%", height: "100%" }}
+      // onLayout={onLayoutRootView}
+      backgroundColor={theme.colors.background}
+    >
+      <PaperProvider theme={theme}>
+        <NavigationContainer theme={theme}>
+          <Tab.Navigator
+            initialRouteName="Home"
+            screenOptions={{
+              tabBarActiveBackgroundColor: theme.colors.background,
+              tabBarInactiveBackgroundColor: theme.colors.background,
+              tabBarActiveTintColor: theme.colors.primary,
+              tabBarInactiveTintColor: theme.colors.tertiary,
+              tabBarStyle: {
+                // paddingBottom: 5,
+              },
             }}
-          />
-          <Tab.Screen
-            name="Select"
-            component={SelectVerseScreen}
-            options={{
-              headerShown: false,
-              // tabBarLabel: 'Home',
-              tabBarIcon: ({ color, size }) => (
-                <MaterialCommunityIcons
-                  name="magnify"
-                  color={color}
-                  size={size}
-                />
-              ),
-            }}
-          />
-          <Tab.Screen
-            name="Sloka"
-            component={SlokaScreen}
-            options={{
-              headerShown: false,
-              // tabBarLabel: 'Home',
-              tabBarIcon: ({ color, size }) => (
-                <MaterialCommunityIcons
-                  name="book-open"
-                  color={color}
-                  size={size}
-                />
-              ),
-            }}
-          />
-          <Tab.Screen
-            name="Favorites"
-            component={FavoritesScreen}
-            options={{
-              headerShown: false,
-              // tabBarLabel: 'Home',
-              tabBarIcon: ({ color, size }) => (
-                <MaterialCommunityIcons name="star" color={color} size={size} />
-              ),
-            }}
-          />
-          <Tab.Screen
-            name="Notes"
-            component={NotesScreen}
-            options={{
-              headerShown: false,
-              // tabBarLabel: 'Home',
-              tabBarIcon: ({ color, size }) => (
-                <MaterialCommunityIcons
-                  name="lead-pencil"
-                  color={color}
-                  size={size}
-                />
-              ),
-            }}
-          />
-        </Tab.Navigator>
-      </NavigationContainer>
-    </PaperProvider>
+          >
+            <Tab.Screen
+              name="Home"
+              component={HomeScreen}
+              options={{
+                headerShown: false,
+                // tabBarLabel: 'Home',
+                tabBarIcon: ({ color, size }) => (
+                  <MaterialCommunityIcons
+                    name="home"
+                    color={color}
+                    size={size}
+                  />
+                ),
+              }}
+            />
+            <Tab.Screen
+              name="Select"
+              component={SelectVerseScreen}
+              options={{
+                headerShown: false,
+                // tabBarLabel: 'Home',
+                tabBarIcon: ({ color, size }) => (
+                  <MaterialCommunityIcons
+                    name="magnify"
+                    color={color}
+                    size={size}
+                  />
+                ),
+              }}
+            />
+            <Tab.Screen
+              name="Sloka"
+              component={SlokaScreen}
+              options={{
+                headerShown: false,
+                // tabBarLabel: 'Home',
+                tabBarIcon: ({ color, size }) => (
+                  <MaterialCommunityIcons
+                    name="book-open"
+                    color={color}
+                    size={size}
+                  />
+                ),
+              }}
+            />
+            <Tab.Screen
+              name="Favorites"
+              component={FavoritesScreen}
+              options={{
+                headerShown: false,
+                // tabBarLabel: 'Home',
+                tabBarIcon: ({ color, size }) => (
+                  <MaterialCommunityIcons
+                    name="star"
+                    color={color}
+                    size={size}
+                  />
+                ),
+              }}
+            />
+            <Tab.Screen
+              name="Notes"
+              component={NotesScreen}
+              options={{
+                headerShown: false,
+                // tabBarLabel: 'Home',
+                tabBarIcon: ({ color, size }) => (
+                  <MaterialCommunityIcons
+                    name="lead-pencil"
+                    color={color}
+                    size={size}
+                  />
+                ),
+              }}
+            />
+          </Tab.Navigator>
+        </NavigationContainer>
+      </PaperProvider>
+    </View>
   );
 };
 // const getStyles = (theme) =>

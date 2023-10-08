@@ -7,9 +7,11 @@ import {
   selectDefaultCommentary,
   selectDefaultLanguage,
   selectDefaultTranslation,
+  selectFontSize,
   setDefaultCommentary,
   setDefaultLanguage,
   setDefaultTranslation,
+  setFontSize,
   setTheme,
 } from "../../redux/slices/app";
 import { darkTheme, lightTheme } from "../../theme";
@@ -26,8 +28,11 @@ export default function ScreenHeader(props) {
   const defaultLanguage = useSelector(selectDefaultLanguage);
   const defaultTranslation = useSelector(selectDefaultTranslation);
   const defaultCommentary = useSelector(selectDefaultCommentary);
+  const fontSize = capitalizeFirstLetter(useSelector(selectFontSize));
+  const [currentFontSize, setNewFontSize] = useState(fontSize);
   const [headerMenuAnchor, setHeaderMenuAnchor] = useState(null);
   const [showModifyDefaults, setShowModifyDefaults] = useState(false);
+  const [showChangeFontSize, setShowChangeFontSize] = useState(false);
   const [allTranslators, setAllTranslators] = useState([]);
   const [allCommentators, setAllCommentators] = useState([]);
   const [selectedTranslator, setSelectedTranslator] =
@@ -59,7 +64,7 @@ export default function ScreenHeader(props) {
   ]);
 
   return (
-    <Appbar.Header>
+    <Appbar.Header mode="center-aligned">
       {disableBackNavigation ? (
         <View style={{ marginRight: 50 }}></View>
       ) : (
@@ -94,6 +99,14 @@ export default function ScreenHeader(props) {
             setHeaderMenuAnchor(null);
           }}
           title="Modify Defaults"
+        />
+        <Divider />
+        <Menu.Item
+          onPress={() => {
+            setShowChangeFontSize(true);
+            setHeaderMenuAnchor(null);
+          }}
+          title="Font Size"
         />
       </Menu>
       {/* </Appbar.Action> */}
@@ -166,6 +179,32 @@ export default function ScreenHeader(props) {
                 (t) => t.authorName === authorName
               );
               setSelectedCommentator(translator);
+            }}
+            theme={theme}
+          />
+        </View>
+      </Modal>
+      <Modal
+        theme={theme}
+        visible={showChangeFontSize}
+        title="Change Font Size"
+        showFooterActions
+        onSave={() => {
+          dispatch(setFontSize(currentFontSize));
+          setShowChangeFontSize(false);
+        }}
+        onClose={() => {
+          setNewFontSize(fontSize);
+          setShowChangeFontSize(false);
+        }}
+      >
+        <View style={{ paddingBottom: 0 }}>
+          <DropDown
+            header={"Font Size"}
+            description={currentFontSize}
+            options={["Small", "Medium", "Large"]}
+            onChange={(newSize) => {
+              setNewFontSize(newSize);
             }}
             theme={theme}
           />

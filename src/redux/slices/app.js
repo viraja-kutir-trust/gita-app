@@ -6,6 +6,7 @@ export const appSlice = createSlice({
   name: "app",
   initialState: {
     theme: lightTheme,
+    fontSize: "Medium",
     selectedVerse: null,
     defaults: {
       language: {
@@ -28,6 +29,7 @@ export const appSlice = createSlice({
 export const {
   setTheme,
   toggleTheme,
+  setFontSize,
   setVerse,
   setDefaultLanguage,
   setDefaultCommentary,
@@ -40,6 +42,7 @@ export const {
 
 export const selectTheme = (state) => state.app.theme;
 export const selectVerse = (state) => state.app.selectedVerse;
+export const selectFontSize = (state) => state.app.fontSize;
 export const selectDefaultLanguage = (state) => state.app.defaults.language;
 export const selectDefaultTranslation = (state) =>
   state.app.defaults.translation;

@@ -10,6 +10,11 @@ const toggleTheme = (state) => {
   return state;
 };
 
+const setFontSize = (state, action) => {
+  state.fontSize = action.payload || "Medium";
+  return state;
+};
+
 const setVerse = (state, action) => {
   state.selectedVerse = action.payload;
   return state;
@@ -103,6 +108,7 @@ const modifyNote = (state, action) => {
 export default {
   setTheme,
   toggleTheme,
+  setFontSize,
   setVerse,
   setDefaultLanguage,
   setDefaultTranslation,
