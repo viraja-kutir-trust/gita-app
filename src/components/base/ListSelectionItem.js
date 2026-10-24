@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { StyleSheet, View, TouchableHighlight } from "react-native";
 import Text from "./Text";
-import CheckIcon from "react-native-vector-icons/FontAwesome";
+import CheckIcon from "@expo/vector-icons/FontAwesome";
 export default function ListSelectionItem(props) {
   const { text, theme, onPress, defaultSelected, forceState } = props;
   const styles = getStyles(theme);

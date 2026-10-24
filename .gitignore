@@ -74,3 +74,12 @@ web-build/
 dist/
 
 # @end expo-cli
+
+/android
+/ios
+# Supersite scraper cache/output
+scripts/.cache/
+scripts/out/
+
+# Side-loadable preview builds
+/release

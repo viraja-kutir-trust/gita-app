@@ -79,6 +79,7 @@ export default function CollapsibleCard(props) {
           variant={"bodyMedium"}
           style={styles.cardContent}
           controlledFontSize={true}
+          selectable={true}
         >
           {detectAndTransliterate(content, scriptLanguage)}
         </Text>

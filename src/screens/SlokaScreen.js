@@ -336,6 +336,7 @@ export default function SlokaScreen({ navigation }) {
               variant={"bodyMedium"}
               style={styles.cardContent}
               controlledFontSize={true}
+              selectable={true}
             >
               {detectAndTransliterate(currentSloka.text, defaultLanguage)}
             </Text>
@@ -343,6 +344,7 @@ export default function SlokaScreen({ navigation }) {
               variant={"bodyMedium"}
               style={styles.cardContent}
               controlledFontSize={true}
+              selectable={true}
             >
               {detectAndTransliterate(
                 currentSloka.transliteration,

@@ -1,0 +1,15 @@
+# Files EAS Build should NOT upload (replaces .gitignore for EAS).
+# Native folders are generated in the cloud from app.json (Continuous Native Generation);
+# the local ones carry side-loading tweaks (".preview" id) and must never reach a store build.
+/android
+/ios
+node_modules/
+.expo/
+web-build/
+dist/
+*.aab
+*.apk
+/release
+scripts/
+App.js.bak
+.DS_Store

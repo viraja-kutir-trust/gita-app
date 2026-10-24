@@ -2,7 +2,6 @@ import { Provider } from "react-redux";
 import { store, persistor } from "./src/redux/store";
 import Main from "./src/Main";
 import { useCallback, useEffect, useState } from "react";
-// import AppLoading from "expo-app-loading";
 import * as SplashScreen from "expo-splash-screen";
 import * as Font from "expo-font";
 import { View, Text } from "react-native";

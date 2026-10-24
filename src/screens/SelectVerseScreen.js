@@ -141,21 +141,20 @@ export default function SelectVerseScreen(props) {
           contentStyle={{ borderRadius: 12, fontFamily: "readex-pro" }}
         >
           {chapters.map((chapter, index) => (
-            <View key={chapter.id}>
-              <Menu.Item
-                key={chapter.id}
-                onPress={() => {
-                  setCurrentChapter(index + 1);
-                  setCurrentVerse(verses[index + 1][1]);
-                  setShowChapters(false);
-                }}
-                title={`Chapter ${index + 1} - ${chapter.name_translation}`}
-                style={{ width: "100%", minWidth: "100%", maxWidth: "100%" }}
-                contentStyle={styles.selectionText}
-                titleStyle={styles.selectionText}
-              />
-              {index !== chapters.length - 1 && <Divider id={chapter.id} />}
-            </View>
+            <Menu.Item
+              key={chapter.id}
+              onPress={() => {
+                setCurrentChapter(index + 1);
+                setCurrentVerse(verses[index + 1][1]);
+                setShowChapters(false);
+              }}
+              title={`Chapter ${index + 1} - ${chapter.name_translation}`}
+              style={{ width: "100%", minWidth: "100%", maxWidth: "100%" }}
+              contentStyle={{
+                ...styles.selectionText,
+              }}
+              titleStyle={styles.selectionText}
+            />
           ))}
         </Menu>
         <Menu
@@ -169,23 +168,20 @@ export default function SelectVerseScreen(props) {
           contentStyle={{ borderRadius: 12, fontFamily: "readex-pro" }}
         >
           {Object.entries(verses[currentChapter]).map((verse, index) => (
-            <View key={verse[1].id}>
-              <Menu.Item
-                key={verse[1].id}
-                onPress={() => {
-                  setCurrentVerse(verse[1]);
-                  setShowVerses(false);
-                }}
-                title={`${index + 1} - ${detectAndTransliterate(
-                  verse[1].text,
-                  defaultLanguage
-                )}`}
-                style={{ width: "100%", minWidth: "100%", maxWidth: "100%" }}
-                contentStyle={styles.selectionText}
-                titleStyle={styles.selectionText}
-              />
-              {index !== chapters.length - 1 && <Divider id={verse[1].id} />}
-            </View>
+            <Menu.Item
+              key={verse[1].id}
+              onPress={() => {
+                setCurrentVerse(verse[1]);
+                setShowVerses(false);
+              }}
+              title={`${index + 1} - ${detectAndTransliterate(
+                verse[1].text,
+                defaultLanguage
+              )}`}
+              style={{ width: "100%", minWidth: "100%", maxWidth: "100%" }}
+              contentStyle={styles.selectionText}
+              titleStyle={styles.selectionText}
+            />
           ))}
         </Menu>
         <VerseCard
@@ -225,7 +221,6 @@ const getStyles = (theme) =>
       flex: 1,
       flexDirection: "row",
       alignItems: "center",
-      //   height: 40,
       marginLeft: 10,
     },
     selectionTextParent: {
@@ -234,8 +229,6 @@ const getStyles = (theme) =>
       height: 40,
     },
     selectionMenuContainer: {
-      //   marginTop: 12,
-      //   marginLeft: 13,
       borderRadius: 12,
     },
     selectionText: {
@@ -243,5 +236,10 @@ const getStyles = (theme) =>
       width: "100%",
       minWidth: "100%",
       maxWidth: "100%",
+    },
+    bottomBorder: {
+      paddingBottom: 8, // Added padding between text and bottom border
+      borderBottomWidth: 1,
+      borderBottomColor: theme.colors.primaryContainer,
     },
   });

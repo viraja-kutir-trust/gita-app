@@ -70,11 +70,16 @@ export default function VerseCard(props) {
             style={styles.cardContent}
             variant="bodyMedium"
             controlledFontSize={true}
+            selectable={true}
           >
             {verse.text}
           </Text>
           {showTranslation && (
-            <Text style={styles.cardContent} variant="bodyMedium">
+            <Text
+              style={styles.cardContent}
+              variant="bodyMedium"
+              selectable={true}
+            >
               {translation}
             </Text>
           )}

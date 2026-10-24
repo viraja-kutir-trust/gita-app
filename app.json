@@ -2,27 +2,21 @@
   "expo": {
     "name": "Gita All-In-One",
     "slug": "bhagavadgita",
-    "version": "2.0.0",
+    "version": "3.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
     "owner": "sai-teja",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "autoIncrement": true,
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.saiteja.bhagavadgita",
-      "buildNumber": "3"
+      "buildNumber": "15",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -30,7 +24,7 @@
         "backgroundColor": "#FFF4F2"
       },
       "package": "com.saiteja.bhagavadgita",
-      "versionCode": 6
+      "versionCode": 15
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -39,6 +33,41 @@
       "eas": {
         "projectId": "297e7f32-ffed-4980-bb49-3bcb970ea95d"
       }
+    },
+    "plugins": [
+      "expo-font",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-feather.png",
+          "imageWidth": 170,
+          "resizeMode": "contain",
+          "backgroundColor": "#FBF7F1",
+          "dark": {
+            "image": "./assets/splash-feather.png",
+            "backgroundColor": "#0E0E10"
+          }
+        }
+      ],
+      "expo-status-bar",
+      [
+        "expo-sqlite",
+        {
+          "enableFTS": true
+        }
+      ],
+      "expo-asset",
+      "expo-router",
+      [
+        "expo-audio",
+        {
+          "enableBackgroundPlayback": false
+        }
+      ]
+    ],
+    "scheme": "gita",
+    "experiments": {
+      "typedRoutes": false
     }
   }
 }

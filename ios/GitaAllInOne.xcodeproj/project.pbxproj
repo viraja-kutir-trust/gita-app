@@ -3,36 +3,35 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
-		96905EF65AED1B983A6B3ABC /* libPods-GitaAllInOne.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 58EEBF8E8E6FB1BC6CAF49B5 /* libPods-GitaAllInOne.a */; };
-		B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */; };
+		67EC603D40DE0F19F0940E3F /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A48B976EC3FD37BC08A1C07 /* ExpoModulesProvider.swift */; };
+		9D1BEE0204484C667F52BB8B /* libPods-GitaAllInOne.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD0F7F0637AB87C338BB4216 /* libPods-GitaAllInOne.a */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
-		DD44D91F5C524E6D98B1CE89 /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = D046925DD89D4E49A149DCFD /* noop-file.swift */; };
+		E076921E6C36B56DA16101FE /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 0FF8321BC783D54961F4D114 /* PrivacyInfo.xcprivacy */; };
+		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
+		F11748442D0307B40044C1D9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748432D0307B40044C1D9 /* SceneDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
+		0FF8321BC783D54961F4D114 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = GitaAllInOne/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* GitaAllInOne.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GitaAllInOne.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = GitaAllInOne/AppDelegate.h; sourceTree = "<group>"; };
-		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = GitaAllInOne/AppDelegate.mm; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = GitaAllInOne/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = GitaAllInOne/Info.plist; sourceTree = "<group>"; };
-		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = GitaAllInOne/main.m; sourceTree = "<group>"; };
-		58EEBF8E8E6FB1BC6CAF49B5 /* libPods-GitaAllInOne.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-GitaAllInOne.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		6C2E3173556A471DD304B334 /* Pods-GitaAllInOne.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GitaAllInOne.debug.xcconfig"; path = "Target Support Files/Pods-GitaAllInOne/Pods-GitaAllInOne.debug.xcconfig"; sourceTree = "<group>"; };
-		7A4D352CD337FB3A3BF06240 /* Pods-GitaAllInOne.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GitaAllInOne.release.xcconfig"; path = "Target Support Files/Pods-GitaAllInOne/Pods-GitaAllInOne.release.xcconfig"; sourceTree = "<group>"; };
+		1A48B976EC3FD37BC08A1C07 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-GitaAllInOne/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		937CA8BBD0BCE93B0656F690 /* Pods-GitaAllInOne.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GitaAllInOne.debug.xcconfig"; path = "Target Support Files/Pods-GitaAllInOne/Pods-GitaAllInOne.debug.xcconfig"; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = GitaAllInOne/SplashScreen.storyboard; sourceTree = "<group>"; };
+		AD0F7F0637AB87C338BB4216 /* libPods-GitaAllInOne.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-GitaAllInOne.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
+		EC13202F9CE5C5D041E01886 /* Pods-GitaAllInOne.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GitaAllInOne.release.xcconfig"; path = "Target Support Files/Pods-GitaAllInOne/Pods-GitaAllInOne.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-GitaAllInOne/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
-		D046925DD89D4E49A149DCFD /* noop-file.swift */ = {isa = PBXFileReference; name = "noop-file.swift"; path = "GitaAllInOne/noop-file.swift"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.swift; explicitFileType = undefined; includeInIndex = 0; };
+		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = GitaAllInOne/AppDelegate.swift; sourceTree = "<group>"; };
+		F11748432D0307B40044C1D9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SceneDelegate.swift; path = GitaAllInOne/SceneDelegate.swift; sourceTree = "<group>"; };
+		F11748442D0722820044C1D9 /* GitaAllInOne-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "GitaAllInOne-Bridging-Header.h"; path = "GitaAllInOne/GitaAllInOne-Bridging-Header.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -40,7 +39,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				96905EF65AED1B983A6B3ABC /* libPods-GitaAllInOne.a in Frameworks */,
+				9D1BEE0204484C667F52BB8B /* libPods-GitaAllInOne.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -50,15 +49,14 @@
 		13B07FAE1A68108700A75B9A /* GitaAllInOne */ = {
 			isa = PBXGroup;
 			children = (
+				F11748412D0307B40044C1D9 /* AppDelegate.swift */,
+				F11748432D0307B40044C1D9 /* SceneDelegate.swift */,
+				F11748442D0722820044C1D9 /* GitaAllInOne-Bridging-Header.h */,
 				BB2F792B24A3F905000567C9 /* Supporting */,
-				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
-				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
-				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
-				13B07FB71A68108700A75B9A /* main.m */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
-				D046925DD89D4E49A149DCFD /* noop-file.swift */,
+				0FF8321BC783D54961F4D114 /* PrivacyInfo.xcprivacy */,
 			);
 			name = GitaAllInOne;
 			sourceTree = "<group>";
@@ -67,9 +65,27 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				58EEBF8E8E6FB1BC6CAF49B5 /* libPods-GitaAllInOne.a */,
+				AD0F7F0637AB87C338BB4216 /* libPods-GitaAllInOne.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		390BC014E36EAB06B6D8CCE4 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				937CA8BBD0BCE93B0656F690 /* Pods-GitaAllInOne.debug.xcconfig */,
+				EC13202F9CE5C5D041E01886 /* Pods-GitaAllInOne.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		4BBD3728A7A76ECF5E0A8CBF /* ExpoModulesProviders */ = {
+			isa = PBXGroup;
+			children = (
+				C6A637213E6517D6AA8B07A4 /* GitaAllInOne */,
+			);
+			name = ExpoModulesProviders;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -86,8 +102,8 @@
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
-				D65327D7A22EEC0BE12398D9 /* Pods */,
-				D7E4C46ADA2E9064B798F356 /* ExpoModulesProviders */,
+				390BC014E36EAB06B6D8CCE4 /* Pods */,
+				4BBD3728A7A76ECF5E0A8CBF /* ExpoModulesProviders */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -102,14 +118,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		92DBD88DE9BF7D494EA9DA96 /* GitaAllInOne */ = {
-			isa = PBXGroup;
-			children = (
-				FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */,
-			);
-			name = GitaAllInOne;
-			sourceTree = "<group>";
-		};
 		BB2F792B24A3F905000567C9 /* Supporting */ = {
 			isa = PBXGroup;
 			children = (
@@ -119,21 +127,12 @@
 			path = GitaAllInOne/Supporting;
 			sourceTree = "<group>";
 		};
-		D65327D7A22EEC0BE12398D9 /* Pods */ = {
+		C6A637213E6517D6AA8B07A4 /* GitaAllInOne */ = {
 			isa = PBXGroup;
 			children = (
-				6C2E3173556A471DD304B334 /* Pods-GitaAllInOne.debug.xcconfig */,
-				7A4D352CD337FB3A3BF06240 /* Pods-GitaAllInOne.release.xcconfig */,
+				1A48B976EC3FD37BC08A1C07 /* ExpoModulesProvider.swift */,
 			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
-		D7E4C46ADA2E9064B798F356 /* ExpoModulesProviders */ = {
-			isa = PBXGroup;
-			children = (
-				92DBD88DE9BF7D494EA9DA96 /* GitaAllInOne */,
-			);
-			name = ExpoModulesProviders;
+			name = GitaAllInOne;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -144,12 +143,14 @@
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "GitaAllInOne" */;
 			buildPhases = (
 				08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */,
-				FD10A7F022414F080027D42C /* Start Packager */,
+				B35D544495BF50591A7EDEFE /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */,
+				D724933A2C7F429D9353844F /* [Expo Dev Launcher] Strip Local Network Keys for Release */,
+				9499B40CA3C50867231244EC /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -199,6 +200,7 @@
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
+				E076921E6C36B56DA16101FE /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -207,17 +209,20 @@
 /* Begin PBXShellScriptBuildPhase section */
 		00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
+				"$(SRCROOT)/.xcode.env",
+				"$(SRCROOT)/.xcode.env.local",
 			);
 			name = "Bundle React Native code and images";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [[ -f \"$PODS_ROOT/../.xcode.env\" ]]; then\n  source \"$PODS_ROOT/../.xcode.env\"\nfi\nif [[ -f \"$PODS_ROOT/../.xcode.env.local\" ]]; then\n  source \"$PODS_ROOT/../.xcode.env.local\"\nfi\n\n# The project root by default is one level up from the ios directory\nexport PROJECT_ROOT=\"$PROJECT_DIR\"/..\n\nif [[ \"$CONFIGURATION\" = *Debug* ]]; then\n  export SKIP_BUNDLING=1\nfi\nif [[ -z \"$ENTRY_FILE\" ]]; then\n  # Set the entry JS file using the bundler's entry resolution.\n  export ENTRY_FILE=\"$(\"$NODE_BINARY\" -e \"require('expo/scripts/resolveAppEntry')\" $PROJECT_ROOT ios relative | tail -n 1)\"\nfi\n\n`\"$NODE_BINARY\" --print \"require('path').dirname(require.resolve('react-native/package.json')) + '/scripts/react-native-xcode.sh'\"`\n\n";
+			shellScript = "if [[ -f \"$SRCROOT/.xcode.env\" ]]; then\n  source \"$SRCROOT/.xcode.env\"\nfi\nif [[ -f \"$SRCROOT/.xcode.env.local\" ]]; then\n  source \"$SRCROOT/.xcode.env.local\"\nfi\n\n# The project root by default is one level up from the ios directory\nexport PROJECT_ROOT=\"$PROJECT_DIR\"/..\n\nif [[ \"$CONFIGURATION\" = *Debug* ]]; then\n  export SKIP_BUNDLING=1\nfi\nif [[ -z \"$ENTRY_FILE\" ]]; then\n  # Set the entry JS file using the bundler's entry resolution.\n  export ENTRY_FILE=\"$(\"$NODE_BINARY\" -e \"require('expo/scripts/resolveAppEntry')\" \"$PROJECT_ROOT\" ios absolute | tail -n 1)\"\nfi\n\nif [[ -z \"$CLI_PATH\" ]]; then\n  # Use Expo CLI\n  export CLI_PATH=\"$(\"$NODE_BINARY\" --print \"require.resolve('@expo/cli', { paths: [require.resolve('expo/package.json')] })\")\"\nfi\nif [[ -z \"$BUNDLE_COMMAND\" ]]; then\n  # Default Expo CLI command for bundling\n  export BUNDLE_COMMAND=\"export:embed\"\nfi\n\n# Source .xcode.env.updates if it exists to allow\n# SKIP_BUNDLING to be unset if needed\nif [[ -f \"$SRCROOT/.xcode.env.updates\" ]]; then\n  source \"$SRCROOT/.xcode.env.updates\"\nfi\n# Source local changes to allow overrides\n# if needed\nif [[ -f \"$SRCROOT/.xcode.env.local\" ]]; then\n  source \"$SRCROOT/.xcode.env.local\"\nfi\n\n\"`\"$NODE_BINARY\" --print \"require('path').dirname(require.resolve('react-native/package.json')) + '/scripts/react-native-xcode.sh'\"`\"\n\n";
 		};
 		08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -249,38 +254,101 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-GitaAllInOne/Pods-GitaAllInOne-resources.sh",
 				"${PODS_CONFIGURATION_BUILD_DIR}/EXConstants/EXConstants.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/EXUpdates/EXUpdates.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/AccessibilityResources.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/EXConstants/ExpoConstants_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/ExpoFileSystem/ExpoFileSystem_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/ExpoSystemUI/ExpoSystemUI_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/RNCAsyncStorage/RNCAsyncStorage_resources.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/React-cxxreact/React-cxxreact_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/React-timing/React-timing_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/expo-dev-launcher/EXDevLauncher.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/expo-dev-menu/EXDevMenu.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EXConstants.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EXUpdates.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AccessibilityResources.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoConstants_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoFileSystem_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoSystemUI_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RNCAsyncStorage_resources.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/React-cxxreact_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/React-timing_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EXDevLauncher.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EXDevMenu.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GitaAllInOne/Pods-GitaAllInOne-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		FD10A7F022414F080027D42C /* Start Packager */ = {
+		9499B40CA3C50867231244EC /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-GitaAllInOne/Pods-GitaAllInOne-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/ExpoFileSystem/ExpoFileSystem.framework/ExpoFileSystem",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/ExpoFont/ExpoFont.framework/ExpoFont",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/ExpoModulesCore/ExpoModulesCore.framework/ExpoModulesCore",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/ExpoModulesJSI/ExpoModulesJSI.framework/ExpoModulesJSI",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/ExpoModulesWorklets/ExpoModulesWorklets.framework/ExpoModulesWorklets",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/React-Core-prebuilt/React.framework/React",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/ReactNativeDependencies/ReactNativeDependencies.framework/ReactNativeDependencies",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermesvm.framework/hermesvm",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ExpoFileSystem.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ExpoFont.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ExpoModulesCore.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ExpoModulesJSI.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ExpoModulesWorklets.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/React.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReactNativeDependencies.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermesvm.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GitaAllInOne/Pods-GitaAllInOne-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B35D544495BF50591A7EDEFE /* [Expo] Configure project */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
 			);
 			inputPaths = (
+				"$(SRCROOT)/.xcode.env",
+				"$(SRCROOT)/.xcode.env.local",
+				"$(SRCROOT)/GitaAllInOne/GitaAllInOne.entitlements",
+				"$(SRCROOT)/Pods/Target Support Files/Pods-GitaAllInOne/expo-configure-project.sh",
 			);
-			name = "Start Packager";
+			name = "[Expo] Configure project";
 			outputFileListPaths = (
 			);
+			outputPaths = (
+				"$(SRCROOT)/Pods/Target Support Files/Pods-GitaAllInOne/ExpoModulesProvider.swift",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-GitaAllInOne/expo-configure-project.sh\"\n";
+		};
+		D724933A2C7F429D9353844F /* [Expo Dev Launcher] Strip Local Network Keys for Release */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[Expo Dev Launcher] Strip Local Network Keys for Release";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [[ -f \"$PODS_ROOT/../.xcode.env\" ]]; then\n  source \"$PODS_ROOT/../.xcode.env\"\nfi\nif [[ -f \"$PODS_ROOT/../.xcode.env.local\" ]]; then\n  source \"$PODS_ROOT/../.xcode.env.local\"\nfi\n\nexport RCT_METRO_PORT=\"${RCT_METRO_PORT:=8081}\"\necho \"export RCT_METRO_PORT=${RCT_METRO_PORT}\" > `$NODE_BINARY --print \"require('path').dirname(require.resolve('react-native/package.json')) + '/scripts/.packager.env'\"`\nif [ -z \"${RCT_NO_LAUNCH_PACKAGER+xxx}\" ] ; then\n  if nc -w 5 -z localhost ${RCT_METRO_PORT} ; then\n    if ! curl -s \"http://localhost:${RCT_METRO_PORT}/status\" | grep -q \"packager-status:running\" ; then\n      echo \"Port ${RCT_METRO_PORT} already in use, packager is either not running or not running correctly\"\n      exit 2\n    fi\n  else\n    open `$NODE_BINARY --print \"require('path').dirname(require.resolve('react-native/package.json')) + '/scripts/launchPackager.command'\"` || echo \"Can't start packager automatically\"\n  fi\nfi\n";
-			showEnvVarsInLog = 0;
+			shellScript = "# Strip dev-launcher-specific local network permission keys from release builds.\n# This only removes _expo._tcp Bonjour services and the dev-launcher usage description.\n# Other Bonjour services and custom descriptions are preserved for production use.\n#\n# Detect debug builds via the DEBUG compile condition rather than the configuration name,\n# so custom debug configurations (e.g. \"Dev\", \"Staging\") that define DEBUG keep the keys.\ncase \" $SWIFT_ACTIVE_COMPILATION_CONDITIONS \" in\n  *\" DEBUG \"*) IS_DEBUG_BUILD=1 ;;\n  *) IS_DEBUG_BUILD=0 ;;\nesac\n\nif [ \"$IS_DEBUG_BUILD\" != \"1\" ]; then\n  PLIST_PATH=\"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\n  if [ -f \"$PLIST_PATH\" ]; then\n    # Check if NSBonjourServices exists\n    if /usr/libexec/PlistBuddy -c \"Print :NSBonjourServices\" \"$PLIST_PATH\" >/dev/null 2>&1; then\n      # Get the count of services\n      COUNT=$(/usr/libexec/PlistBuddy -c \"Print :NSBonjourServices\" \"$PLIST_PATH\" 2>/dev/null | grep \"^    \" | wc -l | tr -d ' ')\n\n      # Remove _expo._tcp\n      for ((i=COUNT-1; i>=0; i--)); do\n        SERVICE=$(/usr/libexec/PlistBuddy -c \"Print :NSBonjourServices:$i\" \"$PLIST_PATH\" 2>/dev/null || echo \"\")\n        if echo \"$SERVICE\" | grep -q \"_expo._tcp\"; then\n          /usr/libexec/PlistBuddy -c \"Delete :NSBonjourServices:$i\" \"$PLIST_PATH\" 2>/dev/null || true\n        fi\n      done\n\n      # If the array is now empty, remove it entirely\n      REMAINING=$(/usr/libexec/PlistBuddy -c \"Print :NSBonjourServices\" \"$PLIST_PATH\" 2>/dev/null | grep \"^    \" | wc -l | tr -d ' ')\n      if [ \"$REMAINING\" -eq \"0\" ]; then\n        /usr/libexec/PlistBuddy -c \"Delete :NSBonjourServices\" \"$PLIST_PATH\" 2>/dev/null || true\n      fi\n    fi\n\n    # Only delete the description if it matches the dev-launcher default text\n    DESC=$(/usr/libexec/PlistBuddy -c \"Print :NSLocalNetworkUsageDescription\" \"$PLIST_PATH\" 2>/dev/null || echo \"\")\n    if echo \"$DESC\" | grep -q \"Expo Dev Launcher\"; then\n      /usr/libexec/PlistBuddy -c \"Delete :NSLocalNetworkUsageDescription\" \"$PLIST_PATH\" 2>/dev/null || true\n    fi\n  fi\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -289,10 +357,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
-				13B07FC11A68108700A75B9A /* main.m in Sources */,
-				B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */,
-				DD44D91F5C524E6D98B1CE89 /* noop-file.swift in Sources */,
+				F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */,
+				F11748442D0307B40044C1D9 /* SceneDelegate.swift in Sources */,
+				67EC603D40DE0F19F0940E3F /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -301,10 +368,11 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6C2E3173556A471DD304B334 /* Pods-GitaAllInOne.debug.xcconfig */;
+			baseConfigurationReference = 937CA8BBD0BCE93B0656F690 /* Pods-GitaAllInOne.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = GitaAllInOne/GitaAllInOne.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -312,44 +380,57 @@
 					"FB_SONARKIT_ENABLED=1",
 				);
 				INFOPLIST_FILE = GitaAllInOne/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 13.4;
+				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.saiteja.bhagavadgita";
-				PRODUCT_NAME = "GitaAllInOne";
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
+				PRODUCT_BUNDLE_IDENTIFIER = com.saiteja.bhagavadgita;
+				PRODUCT_NAME = GitaAllInOne;
+				SWIFT_OBJC_BRIDGING_HEADER = "GitaAllInOne/GitaAllInOne-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				VERSIONING_SYSTEM = "apple-generic";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				CODE_SIGN_ENTITLEMENTS = GitaAllInOne/GitaAllInOne.entitlements;
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7A4D352CD337FB3A3BF06240 /* Pods-GitaAllInOne.release.xcconfig */;
+			baseConfigurationReference = EC13202F9CE5C5D041E01886 /* Pods-GitaAllInOne.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = GitaAllInOne/GitaAllInOne.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = GitaAllInOne/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 13.4;
+				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.saiteja.bhagavadgita";
-				PRODUCT_NAME = "GitaAllInOne";
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
+				PRODUCT_BUNDLE_IDENTIFIER = com.saiteja.bhagavadgita;
+				PRODUCT_NAME = GitaAllInOne;
+				SWIFT_OBJC_BRIDGING_HEADER = "GitaAllInOne/GitaAllInOne-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
-				VERSIONING_SYSTEM = "apple-generic";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				CODE_SIGN_ENTITLEMENTS = GitaAllInOne/GitaAllInOne.entitlements;
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
 		};
@@ -358,7 +439,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -400,12 +481,27 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
-				LIBRARY_SEARCH_PATHS = "\"$(inherited)\"";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					/usr/lib/swift,
+					"$(inherited)",
+				);
+				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-DRCT_REMOVE_LEGACY_ARCH=1",
+				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(inherited)",
+					"-DRCT_REMOVE_LEGACY_ARCH=1",
+				);
+				PODFILE_DIR = "$(SRCROOT)";
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
+				USE_HERMES = true;
 			};
 			name = Debug;
 		};
@@ -414,7 +510,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -449,11 +545,25 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
-				LIBRARY_SEARCH_PATHS = "\"$(inherited)\"";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					/usr/lib/swift,
+					"$(inherited)",
+				);
+				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-DRCT_REMOVE_LEGACY_ARCH=1",
+				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(inherited)",
+					"-DRCT_REMOVE_LEGACY_ARCH=1",
+				);
+				PODFILE_DIR = "$(SRCROOT)";
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				USE_HERMES = true;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
