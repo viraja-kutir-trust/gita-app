@@ -36,7 +36,7 @@ SplashScreen.setOptions?.({ fade: true, duration: 250 });
 
 export const unstable_settings = { anchor: "(tabs)" };
 
-function Navigator({ revealed }) {
+function Navigator({ revealed, openVerse }) {
   const { c, name } = useTheme();
   const router = useRouter();
   const onboarded = useSelector((s) => s.settings.onboarded);
@@ -48,6 +48,12 @@ function Navigator({ revealed }) {
     // Opens without animation underneath the fading intro, so the intro dissolves straight into the tour.
     router.push("/welcome");
   }, [revealed, onboarded, router]);
+  // The reader tapped the splash line: open that verse (not on first launch, where the tour opens instead).
+  useEffect(() => {
+    if (!revealed || !onboarded || !openVerse) return;
+    const [ch, v] = openVerse.split(".");
+    router.push(`/verse/${ch}/${v}`);
+  }, [revealed, onboarded, openVerse, router]);
   const header = {
     headerTintColor: c.accent,
     headerTitleStyle: Platform.OS === "ios" ? { color: c.ink } : { ...UI.semibold, color: c.ink },
@@ -114,6 +120,7 @@ export default function RootLayout() {
 
   const [introDone, setIntroDone] = useState(false);
   const [revealed, setRevealed] = useState(false);
+  const [openVerse, setOpenVerse] = useState(null);
 
   // Fonts gate the first render (expo's documented pattern) so no text is ever drawn
   // with a fallback font. Then the animated Intro takes over from the native splash
@@ -127,9 +134,9 @@ export default function RootLayout() {
           <ThemeProvider>
             <GitaProvider onReady={onDbReady}>
               <AudioProvider>
-                <Navigator revealed={revealed} />
+                <Navigator revealed={revealed} openVerse={openVerse} />
               </AudioProvider>
-              {introDone ? null : <Intro ready={dbReady && hydrated} onReveal={() => setRevealed(true)} onDone={() => setIntroDone(true)} />}
+              {introDone ? null : <Intro ready={dbReady && hydrated} onReveal={() => setRevealed(true)} onDone={() => setIntroDone(true)} onOpen={setOpenVerse} />}
             </GitaProvider>
           </ThemeProvider>
         </Provider>

@@ -49,7 +49,7 @@ export default function Library() {
               <View style={{ flexDirection: "row", alignItems: "baseline", gap: 6 }}>
                 <T style={{ ...UI.bold, fontSize: 30, lineHeight: 36, color: c.ink }}>{progress.total}</T>
                 <T v="headline" muted style={{ ...UI.medium }}>
-                  of 701 verses
+                  {progress.total === 1 ? "verse read" : "verses read"}
                 </T>
               </View>
             </View>

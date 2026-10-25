@@ -18,7 +18,7 @@ export default function Chapters() {
       <Screen contentStyle={{ paddingTop: 6, gap: 12 }}>
         <View style={{ paddingHorizontal: 20, gap: 8 }}>
           <T v="subhead" muted>
-            {progress.total} of 701 verses read · {Math.round(progress.fraction * 100)}%
+            {progress.total} {progress.total === 1 ? "verse" : "verses"} read · {Math.round(progress.fraction * 100)}%
           </T>
           <ProgressBar value={progress.fraction} label="Whole Gita progress" />
         </View>

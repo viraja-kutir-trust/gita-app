@@ -17,7 +17,7 @@ Study the Bhagavad Gita deeply
 
 ## Promotional text (170) — can be changed any time without review
 ```
-All 701 verses with every word explained, a dozen translations and the great commentaries — Śaṅkara, Rāmānuja, Madhva, Sivananda — free, offline and without ads.
+All verses with every word explained, a dozen translations and the great commentaries — Śaṅkara, Rāmānuja, Madhva, Sivananda — free, offline and without ads.
 ```
 
 ## Keywords (100, comma-separated, no spaces after commas)
@@ -51,7 +51,7 @@ Your favourites and notes from the previous version are carried over automatical
 Gita All-In-One is a free, ad-free companion for studying the Śrīmad Bhagavad Gītā — verse by verse, word by word, with the commentaries of the great teachers.
 
 READ EVERY VERSE PROPERLY
-All 701 verses, laid out as they are meant to be read: two lines for the anuṣṭubh verses, four for the longer triṣṭubh verses, the speaker shown separately and the verse number in your script's own numerals. Each verse comes with its transliteration and your chosen translation. Swipe to move to the next verse.
+All verses, laid out as they are meant to be read: two lines for the anuṣṭubh verses, four for the longer triṣṭubh verses, the speaker shown separately and the verse number in your script's own numerals. Each verse comes with its transliteration and your chosen translation. Swipe to move to the next verse.
 
 UNDERSTAND EVERY WORD
 Tap any word in a verse to see its meaning, its root, and its grammar — case, number, gender, tense — and step through the verse word by word. Word-by-word meanings can come from Swami Sivananda, Swami Swarupananda (1909) or Swami Mukundananda; grammatical analysis is from the Digital Corpus of Sanskrit.

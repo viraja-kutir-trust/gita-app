@@ -17,7 +17,7 @@ Study the Bhagavad Gita: every word explained, Śaṅkara & great commentaries
 Gita All-In-One is a free, ad-free companion for studying the Śrīmad Bhagavad Gītā — verse by verse, word by word, with the commentaries of the great teachers.
 
 READ EVERY VERSE PROPERLY
-All 701 verses, laid out as they are meant to be read: two lines for anuṣṭubh verses, four for the longer triṣṭubh verses, the speaker shown separately and the verse number in your script's numerals. Each verse comes with its transliteration and your chosen translation. Swipe to move to the next verse.
+All verses, laid out as they are meant to be read: two lines for anuṣṭubh verses, four for the longer triṣṭubh verses, the speaker shown separately and the verse number in your script's numerals. Each verse comes with its transliteration and your chosen translation. Swipe to move to the next verse.
 
 UNDERSTAND EVERY WORD
 Tap any word in a verse to see its meaning, its root, and its grammar — case, number, gender, tense — and step through the verse word by word. Word-by-word meanings from Swami Sivananda, Swami Swarupananda (1909) or Swami Mukundananda; grammar from the Digital Corpus of Sanskrit.

@@ -135,7 +135,7 @@ function Hello() {
         </T>
       </View>
       <T v="body" muted style={{ textAlign: "center", lineHeight: 24 }}>
-        All 701 verses with the words explained, a dozen translations and the great commentaries — from Śaṅkarācārya to Swami Sivananda — free, offline and without ads.
+        All verses with the words explained, a dozen translations and the great commentaries — from Śaṅkarācārya to Swami Sivananda — free, offline and without ads.
       </T>
       <T v="callout" muted style={{ textAlign: "center" }}>
         A one-minute tour shows you how to study with it.
