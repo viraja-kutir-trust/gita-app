@@ -12,6 +12,7 @@ import { useVerse } from "../../../data/gita";
 import { CHAPTERS, parseVerseKey, VERSE_COUNTS } from "../../../lib/names";
 import { useProgress } from "../../../lib/progress";
 import { scriptFont, toScript } from "../../../lib/script";
+import { useNoteShare } from "../../../ui/noteShare";
 
 const HEADER = { title: "Library" };
 
@@ -109,7 +110,7 @@ export default function Library() {
             ))}
           {tab === "notes" &&
             (noteKeys.length ? (
-              noteKeys.map((k, i) => <VerseRow key={k} k={k} last={i === noteKeys.length - 1} onPress={() => open(k)} subtitle={notes[k].text} />)
+              noteKeys.map((k, i) => <NoteRow key={k} k={k} last={i === noteKeys.length - 1} onPress={() => open(k)} text={notes[k].text} />)
             ) : (
               <Empty title="No notes yet" body="Add a reflection from any verse page." icon="note" />
             ))}
@@ -164,7 +165,27 @@ export default function Library() {
   );
 }
 
-function VerseRow({ k, onPress, last, subtitle }) {
+/** A note in the list; long-press to copy or share it with its verse. */
+function NoteRow({ k, onPress, last, text }) {
+  const [menu, setMenu] = useState(false);
+  const shareNote = useNoteShare(k);
+  return (
+    <>
+      <VerseRow k={k} last={last} onPress={onPress} subtitle={text} onLongPress={() => setMenu(true)} accessibilityHint="Long-press to copy or share" />
+      <ActionMenu
+        visible={menu}
+        title={`Your note on ${k}`}
+        items={[
+          { label: "Copy", icon: "copy", onPress: () => shareNote.copy(text) },
+          { label: "Share", icon: "share", onPress: () => shareNote.share(text) },
+        ]}
+        onClose={() => setMenu(false)}
+      />
+    </>
+  );
+}
+
+function VerseRow({ k, onPress, last, subtitle, onLongPress, accessibilityHint }) {
   const { c } = useTheme();
   const script = useSelector((s) => s.settings.script);
   const { chapter, verse } = parseVerseKey(k);
@@ -174,7 +195,9 @@ function VerseRow({ k, onPress, last, subtitle }) {
     <ListRow
       last={last}
       onPress={onPress}
+      onLongPress={onLongPress}
       accessibilityLabel={`Verse ${k}`}
+      accessibilityHint={accessibilityHint}
       title={
         <T v="footnoteStrong" accent numberOfLines={1}>
           {k} · {CHAPTERS[chapter]?.name}

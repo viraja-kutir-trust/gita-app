@@ -2,81 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import { AccessibilityInfo, Animated, Easing, Pressable, StyleSheet, Text, useColorScheme, View } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
 import { fonts, UI } from "./theme";
+import { launchLine } from "../lib/lines";
 
 // Must match the native splash in app.json (expo-splash-screen plugin) so the
 // hand-off is seamless: same background, same feather size and position.
 const BG = { light: "#FBF7F1", dark: "#0E0E10" };
 const FEATHER = 170;
 
-// Well-loved lines of the Gita, one picked at random each launch. The Sanskrit is
-// quoted as it stands in the verse (refs use this edition's numbering, so 13.28
-// is the verse many editions number 13.27); the English is a short plain rendering.
-const LINES = [
-  { sa: "कर्मण्येवाधिकारस्ते मा फलेषु कदाचन", en: "Your right is to action alone, never to its fruits", ref: "2.47" },
-  { sa: "मा कर्मफलहेतुर्भूः", en: "Let not the fruit of action be your motive", ref: "2.47" },
-  { sa: "योगः कर्मसु कौशलम्", en: "Yoga is skill in action", ref: "2.50" },
-  { sa: "समत्वं योग उच्यते", en: "Evenness of mind is called yoga", ref: "2.48" },
-  { sa: "योगस्थः कुरु कर्माणि", en: "Established in yoga, do your work", ref: "2.48" },
-  { sa: "क्लैब्यं मा स्म गमः पार्थ", en: "Do not yield to weakness, Partha", ref: "2.3" },
-  { sa: "मात्रास्पर्शास्तु कौन्तेय शीतोष्णसुखदुःखदाः", en: "Heat and cold, pleasure and pain, come from the touch of the senses", ref: "2.14" },
-  { sa: "आगमापायिनोऽनित्यास्तांस्तितिक्षस्व भारत", en: "They come and go, they do not last; endure them", ref: "2.14" },
-  { sa: "नासतो विद्यते भावो नाभावो विद्यते सतः", en: "The unreal never is; the real never ceases to be", ref: "2.16" },
-  { sa: "अविनाशि तु तद्विद्धि येन सर्वमिदं ततम्", en: "Know That which pervades all this to be imperishable", ref: "2.17" },
-  { sa: "न जायते म्रियते वा कदाचित्", en: "It is never born, and it never dies", ref: "2.20" },
-  { sa: "वासांसि जीर्णानि यथा विहाय", en: "As one casts off worn-out clothes and puts on new", ref: "2.22" },
-  { sa: "नैनं छिन्दन्ति शस्त्राणि नैनं दहति पावकः", en: "Weapons cannot cut it, fire cannot burn it", ref: "2.23" },
-  { sa: "जातस्य हि ध्रुवो मृत्युः", en: "For the born, death is certain", ref: "2.27" },
-  { sa: "सुखदुःखे समे कृत्वा लाभालाभौ जयाजयौ", en: "Hold pleasure and pain, gain and loss, victory and defeat alike", ref: "2.38" },
-  { sa: "ध्यायतो विषयान्पुंसः सङ्गस्तेषूपजायते", en: "Dwelling on objects of the senses, attachment is born", ref: "2.62" },
-  { sa: "प्रसादे सर्वदुःखानां हानिरस्योपजायते", en: "In serenity, all sorrow comes to an end", ref: "2.65" },
-  { sa: "या निशा सर्वभूतानां तस्यां जागर्ति संयमी", en: "In what is night for all beings, the self-controlled stay awake", ref: "2.69" },
-  { sa: "नियतं कुरु कर्म त्वं कर्म ज्यायो ह्यकर्मणः", en: "Do your duty; action is better than inaction", ref: "3.8" },
-  { sa: "लोकसङ्ग्रहमेवापि सम्पश्यन्कर्तुमर्हसि", en: "Act with the welfare of the world in view", ref: "3.20" },
-  { sa: "यद्यदाचरति श्रेष्ठस्तत्तदेवेतरो जनः", en: "Whatever the great do, others follow", ref: "3.21" },
-  { sa: "श्रेयान्स्वधर्मो विगुणः", en: "Better one's own dharma, though imperfect", ref: "3.35" },
-  { sa: "स्वधर्मे निधनं श्रेयः", en: "Better to fall in one's own dharma", ref: "3.35" },
-  { sa: "यदा यदा हि धर्मस्य ग्लानिर्भवति भारत", en: "Whenever dharma declines, O Bharata", ref: "4.7" },
-  { sa: "परित्राणाय साधूनां विनाशाय च दुष्कृताम्", en: "To protect the good and to end wrongdoing", ref: "4.8" },
-  { sa: "सम्भवामि युगे युगे", en: "I come into being, age after age", ref: "4.8" },
-  { sa: "ब्रह्मार्पणं ब्रह्म हविः", en: "The offering is Brahman, the oblation is Brahman", ref: "4.24" },
-  { sa: "न हि ज्ञानेन सदृशं पवित्रमिह विद्यते", en: "Nothing in this world purifies like knowledge", ref: "4.38" },
-  { sa: "श्रद्धावाँल्लभते ज्ञानम्", en: "One full of faith gains knowledge", ref: "4.39" },
-  { sa: "संशयात्मा विनश्यति", en: "The doubting mind perishes", ref: "4.40" },
-  { sa: "पण्डिताः समदर्शिनः", en: "The wise see all with an equal eye", ref: "5.18" },
-  { sa: "उद्धरेदात्मनात्मानं नात्मानमवसादयेत्", en: "Lift yourself by yourself; do not let yourself sink", ref: "6.5" },
-  { sa: "आत्मैव ह्यात्मनो बन्धुरात्मैव रिपुरात्मनः", en: "The self alone is the self's friend, and the self alone its foe", ref: "6.5" },
-  { sa: "यो मां पश्यति सर्वत्र सर्वं च मयि पश्यति", en: "One who sees Me everywhere, and sees everything in Me", ref: "6.30" },
-  { sa: "चञ्चलं हि मनः कृष्ण", en: "The mind is restless indeed, Krishna", ref: "6.34" },
-  { sa: "अभ्यासेन तु कौन्तेय वैराग्येण च गृह्यते", en: "By practice and by dispassion, the mind is held", ref: "6.35" },
-  { sa: "न हि कल्याणकृत्कश्चिद्दुर्गतिं तात गच्छति", en: "No one who does good ever comes to grief", ref: "6.40" },
-  { sa: "मयि सर्वमिदं प्रोतं सूत्रे मणिगणा इव", en: "All this is strung on Me, like pearls on a thread", ref: "7.7" },
-  { sa: "वासुदेवः सर्वमिति", en: "Vasudeva is all that is", ref: "7.19" },
-  { sa: "मामनुस्मर युध्य च", en: "Remember Me, and fight", ref: "8.7" },
-  { sa: "योगक्षेमं वहाम्यहम्", en: "I bring what they lack and keep what they have", ref: "9.22" },
-  { sa: "पत्रं पुष्पं फलं तोयं यो मे भक्त्या प्रयच्छति", en: "A leaf, a flower, a fruit, water: whatever is offered with love", ref: "9.26" },
-  { sa: "न मे भक्तः प्रणश्यति", en: "My devotee never perishes", ref: "9.31" },
-  { sa: "अहमात्मा गुडाकेश सर्वभूताशयस्थितः", en: "I am the Self, seated in the heart of all beings", ref: "10.20" },
-  { sa: "दिवि सूर्यसहस्रस्य भवेद्युगपदुत्थिता", en: "If the light of a thousand suns rose at once in the sky", ref: "11.12" },
-  { sa: "कालोऽस्मि लोकक्षयकृत्प्रवृद्धः", en: "I am Time, the destroyer of worlds", ref: "11.32" },
-  { sa: "निमित्तमात्रं भव सव्यसाचिन्", en: "Be only the instrument, O Arjuna", ref: "11.33" },
-  { sa: "त्यागाच्छान्तिरनन्तरम्", en: "From letting go, peace follows at once", ref: "12.12" },
-  { sa: "अद्वेष्टा सर्वभूतानां मैत्रः करुण एव च", en: "Hating no being, friendly and compassionate", ref: "12.13" },
-  { sa: "समं सर्वेषु भूतेषु तिष्ठन्तं परमेश्वरम्", en: "The Supreme Lord, dwelling equally in all beings", ref: "13.28" },
-  { sa: "ऊर्ध्वमूलमधःशाखमश्वत्थं प्राहुरव्ययम्", en: "Roots above, branches below: the eternal ashvattha tree", ref: "15.1" },
-  { sa: "ममैवांशो जीवलोके जीवभूतः सनातनः", en: "The living self in this world is an eternal part of Me", ref: "15.7" },
-  { sa: "अहिंसा सत्यमक्रोधस्त्यागः शान्तिरपैशुनम्", en: "Non-violence, truth, freedom from anger, letting go, peace", ref: "16.2" },
-  { sa: "कामः क्रोधस्तथा लोभस्तस्मादेतत्त्रयं त्यजेत्", en: "Desire, anger and greed: let these three go", ref: "16.21" },
-  { sa: "श्रद्धामयोऽयं पुरुषः", en: "A person is made of their faith", ref: "17.3" },
-  { sa: "ॐ तत्सदिति निर्देशो ब्रह्मणस्त्रिविधः स्मृतः", en: "Om Tat Sat: the threefold name of Brahman", ref: "17.23" },
-  { sa: "स्वे स्वे कर्मण्यभिरतः संसिद्धिं लभते नरः", en: "Devoted to one's own work, one reaches perfection", ref: "18.45" },
-  { sa: "ईश्वरः सर्वभूतानां हृद्देशेऽर्जुन तिष्ठति", en: "The Lord dwells in the heart of all beings", ref: "18.61" },
-  { sa: "मन्मना भव मद्भक्तः", en: "Fix your mind on Me, be devoted to Me", ref: "18.65" },
-  { sa: "सर्वधर्मान्परित्यज्य मामेकं शरणं व्रज", en: "Let go of all dharmas; take refuge in Me alone", ref: "18.66" },
-  { sa: "अहं त्वा सर्वपापेभ्यो मोक्षयिष्यामि मा शुचः", en: "I will free you from all sins; do not grieve", ref: "18.66" },
-  { sa: "नष्टो मोहः स्मृतिर्लब्धा", en: "My delusion is gone; I remember who I am", ref: "18.73" },
-  { sa: "करिष्ये वचनं तव", en: "I will do as you say", ref: "18.73" },
-  { sa: "यत्र योगेश्वरः कृष्णो यत्र पार्थो धनुर्धरः", en: "Where there is Krishna, lord of yoga, and Arjuna, the archer", ref: "18.78" },
-];
 
 /**
  * Launch screen shown over the app while saved settings and the database load.
@@ -87,7 +19,7 @@ const LINES = [
 export default function Intro({ ready, onReveal, onDone, onOpen, minMs = 4500 }) {
   const scheme = useColorScheme() === "dark" ? "dark" : "light";
   const dark = scheme === "dark";
-  const line = useRef(LINES[Math.floor(Math.random() * LINES.length)]).current;
+  const line = useRef(launchLine()).current; // the same verse Today opens with
   const t0 = useRef(Date.now()).current;
   const [slow, setSlow] = useState(false);
   const [leaving, setLeaving] = useState(false);

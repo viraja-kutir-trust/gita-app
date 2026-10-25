@@ -19,6 +19,7 @@ import { orderCommentaries, pickTranslation, plainText, previewOf, describeText 
 import { blocksPropsFor } from "../../../lib/translate";
 import CardMenu, { TranslationNote } from "../../../ui/CardMenu";
 import useCardTranslation from "../../../ui/useCardTranslation";
+import { noteCite } from "../../../ui/noteShare";
 import { markRead, setLast, setSetting, toggleBookmark, togglePinnedCommentator, unmarkRead } from "../../../state/store";
 
 const PAGES = Array.from({ length: TOTAL_VERSES }, (_, i) => i + 1);
@@ -222,16 +223,15 @@ const VersePage = memo(function VersePage({ i, width, bottomPad, barBottom, acti
   const meanings = wTx.value || [];
   const coms = useMemo(() => orderCommentaries(commentaries, s.pinnedCommentators), [commentaries, s.pinnedCommentators]);
   const pinnedComs = coms.filter((t) => s.pinnedCommentators.includes(t.authorId)).slice(0, 2);
-  const openWord = (tokenIdx) => router.push(`/word/${chapter}/${v}/${tokenMap ? tokenMap[tokenIdx] ?? 0 : 0}`);
-  // Padaccheda words → word-by-word entries; a padaccheda word glossed in parts opens them together.
+  // A word of the verse or padaccheda → its word-by-word entries; a word printed with
+  // sandhi (or glossed in parts) opens all of them together.
+  const openEntries = ([first = 0, ...rest] = []) => router.push(`/word/${chapter}/${v}/${first}${rest.length ? `?with=${rest.join(",")}` : ""}`);
+  const openWord = (tokenIdx) => openEntries(tokenMap?.[tokenIdx]);
   const padMap = useMemo(
     () => (showPad && words?.meanings?.length ? mapPadacchedaToMeanings(padacchedaItems(study, v), words.meanings, words.words) : null),
     [showPad, study, v, words]
   );
-  const openPadWord = (k) => {
-    const [first = 0, ...rest] = padMap?.[k] || [];
-    router.push({ pathname: `/word/${chapter}/${v}/${first}`, params: rest.length ? { with: rest.join(",") } : {} });
-  };
+  const openPadWord = (k) => openEntries(padMap?.[k]);
   const collapsedMap = useSelector((st) => st.settings.collapsedSections);
   const jump = (k) => {
     expandSection(dispatch, collapsedMap, k);
@@ -376,7 +376,22 @@ const VersePage = memo(function VersePage({ i, width, bottomPad, barBottom, acti
       </Section>
 
       {/* Note */}
-      <Section id="note" onLayout={mark("note")} style={styles.section} title="Your note">
+      <Section
+        id="note"
+        onLayout={mark("note")}
+        style={styles.section}
+        title="Your note"
+        menu={
+          note ? (
+            <CardMenu
+              title="Your note"
+              text={() => note.text}
+              cite={noteCite(`${chapter}.${v}`, verse, s.script)}
+              extra={[{ label: "Edit note", icon: "note", onPress: () => router.push(`/note/${chapter}/${v}`) }]}
+            />
+          ) : null
+        }
+      >
         <Card tone="muted" style={{ borderRadius: 16, padding: 14 }} onPress={() => router.push(`/note/${chapter}/${v}`)} accessibilityLabel={note ? "Edit your note" : "Add a note"}>
           {note ? (
             <T v="body" color={c.ink}>

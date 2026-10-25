@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
-import { TOTAL_VERSES, VERSE_COUNTS, fromBookIndex } from "./names";
+import { TOTAL_VERSES, VERSE_COUNTS } from "./names";
+import { launchLine } from "./lines";
 
 export function dayKey(d = new Date()) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
@@ -51,12 +52,8 @@ export function useProgress() {
 }
 
 /** Same verse for everyone on a given date. */
-export function verseOfTheDay(date = new Date()) {
-  const key = dayKey(date);
-  let h = 2166136261;
-  for (let i = 0; i < key.length; i++) {
-    h ^= key.charCodeAt(i);
-    h = Math.imul(h, 16777619);
-  }
-  return fromBookIndex((Math.abs(h) % TOTAL_VERSES) + 1);
+/** The verse Today opens with: the verse of the line shown on this launch's splash. */
+export function verseOfTheDay() {
+  const [chapter, verse] = launchLine().ref.split(".").map(Number);
+  return { chapter, verse };
 }

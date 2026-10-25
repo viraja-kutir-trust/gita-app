@@ -285,14 +285,16 @@ export function SearchField({ value, onChangeText, placeholder, style, autoFocus
   );
 }
 
-export function ListRow({ title, subtitle, onPress, right, left, last, titleStyle, subtitleLines = 1, accessibilityLabel }) {
+export function ListRow({ title, subtitle, onPress, onLongPress, right, left, last, titleStyle, subtitleLines = 1, accessibilityLabel, accessibilityHint }) {
   const { c } = useTheme();
   return (
     <Pressable
       onPress={onPress}
-      disabled={!onPress}
+      onLongPress={onLongPress}
+      disabled={!onPress && !onLongPress}
       accessibilityRole={onPress ? "button" : undefined}
       accessibilityLabel={accessibilityLabel}
+      accessibilityHint={accessibilityHint}
       style={({ pressed }) => [
         styles.row,
         { backgroundColor: pressed ? c.surface2 : "transparent" },

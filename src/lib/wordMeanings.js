@@ -53,10 +53,50 @@ const teToDev = (te) => Sanscript.t(te || "", "telugu", "devanagari");
 // drop virāma, visarga, anusvāra/candrabindu, avagraha, hyphens and spaces.
 const key = (s) => (s || "").replace(/[्ःंँऽ\-\s]/g, "");
 
-/** Link each gloss to the DCS words it covers (greedy, in order). */
+// Pausal form without its final visarga/anusvāra, letters only (saṅgaḥ → sanga).
+const pausal = (x) => plain(x).replace(/[hm]$/, "");
+
+/**
+ * Link each gloss to the DCS words it covers. First exact matches: the gloss's words
+ * (karma-phala-hetuḥ) spell out a run of DCS words in their pausal form. Then, for
+ * the rest, a loose match on the printed forms that tolerates sandhi at the ends.
+ */
 function linkToDcs(items, words) {
-  let p = 0;
   const used = new Set();
+  const wk = words.map((w) => pausal(w.unsandhied || w.form));
+  const exact = (it, from) => {
+    const t = (it.termIast || "").split(/[\s-]+/).map(pausal).join("");
+    if (!t) return [];
+    for (const [a, b] of [[from, words.length], [0, from]]) {
+      for (let j = a; j < b; j++) {
+        if (used.has(words[j].idx) || !t.startsWith(wk[j])) continue;
+        const out = [];
+        let acc = "";
+        for (let k = j; k < words.length && out.length < 6 && !used.has(words[k].idx); k++) {
+          if (!t.startsWith(acc + wk[k])) break;
+          acc += wk[k];
+          out.push(words[k].idx);
+          if (acc === t) return out;
+        }
+      }
+    }
+    return [];
+  };
+  const links = items.map(() => null);
+  let p = 0;
+  items.forEach((it, n) => {
+    if (it.implied) return;
+    const out = exact(it, p);
+    if (!out.length) return;
+    out.forEach((i) => used.add(i));
+    links[n] = out;
+    p = words.findIndex((w) => w.idx === out[out.length - 1]) + 1;
+  });
+  return looseLink(items, words, used, links);
+}
+
+function looseLink(items, words, used, links) {
+  let p = 0;
   const match = (t, from) => {
     const out = [];
     let acc = "";
@@ -70,10 +110,15 @@ function linkToDcs(items, words) {
         if (acc.length >= t.length - 1) break;
       } else if (out.length) break;
     }
-    return out;
+    // Only when the words found spell (nearly) the whole term, not just its start.
+    return Math.abs(acc.length - t.length) <= 2 ? out : [];
   };
-  return items.map((it) => {
+  return items.map((it, n) => {
     if (it.implied) return { ...it, dcsIdx: [] }; // a word the reader supplies, not in the verse
+    if (links[n]) {
+      p = words.findIndex((w) => w.idx === links[n][links[n].length - 1]) + 1;
+      return { ...it, dcsIdx: links[n] };
+    }
     const t = key(it.termDev);
     // Glosses mostly follow the verse; a prose-order (anvaya) list jumps around, so look again from the start.
     let out = match(t, p);
@@ -151,15 +196,15 @@ const TAP_PUNCT = /^[।॥|]+$/;
 const iastLen = (s) => (s || "").replace(/[^a-zāīūṛṝḷḹṃṁḥṅñṭḍṇśṣ]/gi, "").length;
 
 /**
- * For each surface word of the verse (as printed, with sandhi), the index of the
- * word-by-word entry to open. Goes through the grammar rows, which follow the
- * verse: the token's position picks the verse word, and the entry linked to that
- * word is opened, whatever order the source lists its words in (a prose-order
- * anvaya list included). Falls back to proportional position where no link exists.
+ * For each surface word of the verse (as printed, with sandhi), the word-by-word
+ * entries to open, in verse order. A word printed with sandhi holds several words
+ * (karmaṇyevādhikāraste = karmaṇi eva adhikāraḥ te), and all of them open together.
+ * Goes through the grammar rows, which follow the verse, so it works whatever order
+ * the source lists its words in (a prose-order anvaya list included).
  */
 export function mapTokensToMeanings(iastLines, meanings, words) {
   const toks = iastLines.flatMap((l) => l.replace(/[|।॥]/g, " ").split(/\s+/)).filter((t) => t && !TAP_PUNCT.test(t));
-  return matchTokens(toks, meanings, words).map((x) => x.k);
+  return matchTokens(toks, meanings, words).map((x) => x.ks);
 }
 
 /**
@@ -184,9 +229,9 @@ export function mapPadacchedaToMeanings(items, meanings, words) {
       const whole = keys.findIndex((ws) => ps.every((p) => matchRank(plain(p), ws)));
       if (whole >= 0) return [whole];
     }
-    // Text matches are certain; a guess only stands in when nothing matched.
-    const sure = [...new Set(mine.filter((x) => x.sure).map((x) => x.k))];
-    return sure.length ? sure : mine.length ? [mine[0].k] : [];
+    // Text and grammar matches are certain; a guess only stands in when nothing matched.
+    const sure = [...new Set(mine.filter((x) => x.sure).flatMap((x) => x.ks))];
+    return sure.length ? sure : mine.length ? mine[0].ks.slice(0, 1) : [];
   });
 }
 
@@ -225,7 +270,80 @@ function matchRank(tp, ws) {
   return best;
 }
 
-/** [{k: entry index, sure: matched by its text}] for each IAST token, in verse order. */
+/**
+ * Which grammar rows (indexes into `words`) each token holds. Sandhi only changes a
+ * few letters where words meet, so the letters of the verse words, read in order,
+ * are aligned with the letters of the tokens; each word goes to the token most of
+ * its letters landed in. Text on one side only costs nothing at either end: the
+ * speaker ("śrībhagavān uvāca") the grammar lists but the printed lines don't, or
+ * a padaccheda that also covers a neighbouring half-verse.
+ */
+function wordsPerToken(toks, words) {
+  const S = [];
+  toks.forEach((t, ti) => {
+    for (const ch of plain(t)) S.push([ch, ti]);
+  });
+  const D = [];
+  words.forEach((w, wi) => {
+    for (const ch of plain(w.form || w.unsandhied)) D.push([ch, wi]);
+  });
+  const n = D.length;
+  const m = S.length;
+  const out = toks.map(() => []);
+  if (!n || !m) return out;
+  // Overlap alignment: +2 a matching letter, -1 a mismatch or a skipped letter.
+  const W = m + 1;
+  const score = new Int32Array((n + 1) * W);
+  const move = new Uint8Array((n + 1) * W); // 1 pair letters, 2 skip a word letter, 3 skip a token letter
+  for (let i = 1; i <= n; i++) {
+    for (let j = 1; j <= m; j++) {
+      const diag = score[(i - 1) * W + j - 1] + (D[i - 1][0] === S[j - 1][0] ? 2 : -1);
+      const up = score[(i - 1) * W + j] - 1;
+      const left = score[i * W + j - 1] - 1;
+      let best = diag;
+      let mv = 1;
+      if (up > best) (best = up), (mv = 2);
+      if (left > best) (best = left), (mv = 3);
+      score[i * W + j] = best;
+      move[i * W + j] = mv;
+    }
+  }
+  // Best end on the last row or column; whatever lies beyond it is unpaired.
+  let bi = n;
+  let bj = 0;
+  for (let j = 1; j <= m; j++) if (score[n * W + j] > score[bi * W + bj]) (bi = n), (bj = j);
+  for (let i = 1; i <= n; i++) if (score[i * W + m] > score[bi * W + bj]) (bi = i), (bj = m);
+  const votes = words.map(() => new Map());
+  let i = bi;
+  let j = bj;
+  let near = S[Math.max(0, bj - 1)][1];
+  const pending = [];
+  while (i > 0 && j > 0) {
+    const mv = move[i * W + j];
+    if (mv === 1) {
+      const wi = D[i - 1][1];
+      near = S[j - 1][1];
+      votes[wi].set(near, (votes[wi].get(near) || 0) + 1);
+      i--;
+      j--;
+    } else if (mv === 2) {
+      pending.push([D[i - 1][1], near]); // a letter with no partner: stays with its neighbour
+      i--;
+    } else j--;
+  }
+  for (const [wi, t] of pending) if (!votes[wi].size) votes[wi].set(t, 0.5);
+  votes.forEach((v, wi) => {
+    let tok = -1;
+    let most = -1;
+    v.forEach((c, t) => {
+      if (c > most || (c === most && t < tok)) (tok = t), (most = c);
+    });
+    if (tok >= 0) out[tok].push(wi);
+  });
+  return out;
+}
+
+/** [{ks: entry indexes, sure: matched by text or grammar}] for each IAST token, in verse order. */
 function matchTokens(toks, meanings, words) {
   const spans = [];
   let at = 0;
@@ -248,10 +366,11 @@ function matchTokens(toks, meanings, words) {
     return Math.max(0, meanings.length - 1);
   });
 
-  // 1. The entry whose term is written inside the tapped word (earliest first, so a
-  //    sandhi cluster like matsthānītyupadhāraya opens its first word).
+  // The entry whose term is written inside the tapped word (earliest first), for
+  // tokens whose verse words have no linked entry.
   const entryWords = entryKeys(meanings);
-  const byText = toks.map((t) => {
+  const byRank = [];
+  const byText = toks.map((t, ti) => {
     const tp = plain(t);
     let best = -1;
     let rank = null;
@@ -263,9 +382,10 @@ function matchTokens(toks, meanings, words) {
         rank = r;
       }
     });
+    byRank[ti] = rank;
     return best;
   });
-  if (!words?.length || !meanings.some((m) => m.dcsIdx?.length)) return byText.map((k, i) => (k >= 0 ? { k, sure: true } : { k: byPosition[i], sure: false }));
+  if (!words?.length || !meanings.some((m) => m.dcsIdx?.length)) return byText.map((k, i) => (k >= 0 ? { ks: [k], sure: true } : { ks: [byPosition[i]], sure: false }));
 
   // Grammar rows laid out along the verse.
   const wl = words.map((w) => iastLen(w.form));
@@ -278,15 +398,27 @@ function matchTokens(toks, meanings, words) {
   }
   const entryOf = new Map();
   meanings.forEach((m, k) => (m.dcsIdx || []).forEach((i) => entryOf.has(i) || entryOf.set(i, k)));
+  const held = wordsPerToken(toks, words);
   return spans.map(([a, b], ti) => {
+    // 1. Every entry linked to a verse word this token holds (all words of a sandhi).
+    const linked = [...new Set(held[ti].map((wi) => entryOf.get(words[wi].idx)).filter((k) => k !== undefined))];
+    // A verse word here with no linked entry: add the entry whose term is written in
+    // the token (matsthānītyupadhāraya → mat-sthāni, besides iti and upadhāraya).
+    const gap = held[ti].some((wi) => !entryOf.has(words[wi].idx));
+    if (gap && byText[ti] >= 0 && !linked.includes(byText[ti])) {
+      if (byRank[ti]?.[0] === 0) linked.unshift(byText[ti]);
+      else linked.push(byText[ti]);
+    }
+    if (linked.length) return { ks: linked, sure: true };
     // Verse words inside this token, those starting in it first.
     const inside = words
       .map((w, j) => ({ w, s: wSpans[j], over: Math.min(b, wSpans[j][1]) - Math.max(a, wSpans[j][0]) }))
       .filter((x) => x.over > 0)
       .sort((x, y) => (x.s[0] >= a ? 0 : 1) - (y.s[0] >= a ? 0 : 1) || x.s[0] - y.s[0]);
-    if (byText[ti] >= 0) return { k: byText[ti], sure: true };
-    // 2. The entry linked to the verse word at this position; 3. position alone.
-    for (const x of inside) if (entryOf.has(x.w.idx)) return { k: entryOf.get(x.w.idx), sure: false };
-    return { k: byPosition[ti], sure: false };
+    // 2. The entry whose term is written in the token; 3. the entry linked to the verse
+    //    word at this position; 4. position alone.
+    if (byText[ti] >= 0) return { ks: [byText[ti]], sure: true };
+    for (const x of inside) if (entryOf.has(x.w.idx)) return { ks: [entryOf.get(x.w.idx)], sure: false };
+    return { ks: [byPosition[ti]], sure: false };
   });
 }

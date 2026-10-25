@@ -113,19 +113,20 @@ export default function WordSheet() {
   const { data: verse } = useVerse(chapter, v);
   const { data: words } = useWordMeanings(verse);
   const [i, setI] = useState(Number(params.idx) || 0);
-  // Entries opened together with `idx` (a padaccheda word the list glosses in parts).
+  // Entries opened together with `idx`, in verse order (the words of a sandhi, or a
+  // padaccheda word the list glosses in parts).
   const [also, setAlso] = useState(() => String(params.with || "").split(",").filter(Boolean).map(Number));
   const tx = useCardTranslation({ key: verse && words ? `${verse.id}:${words.source}` : null, lang: words?.lang || "english", source: words?.meanings, kind: "meanings" });
   const meanings = tx.value || [];
-  const ids = [...new Set([Math.min(i, meanings.length - 1), ...also])].filter((k) => k >= 0 && k < meanings.length).sort((a, b) => a - b);
+  const ids = [...new Set([Math.min(i, meanings.length - 1), ...also])].filter((k) => k >= 0 && k < meanings.length);
   const m = ids.length > 1 ? combineEntries(ids.map((k) => meanings[k])) : meanings[Math.min(i, meanings.length - 1)];
+  const first = ids.length ? Math.min(...ids) : i;
+  const last = ids.length ? Math.max(...ids) : i;
   const step = (d) => {
-    const from = d < 0 ? ids[0] : ids[ids.length - 1];
+    const from = d < 0 ? first : last;
     setAlso([]);
     setI(Math.max(0, Math.min(meanings.length - 1, (from ?? i) + d)));
   };
-  const first = ids[0] ?? i;
-  const last = ids[ids.length - 1] ?? i;
   const grammar = useMemo(() => {
     if (!m || !words) return [];
     return (m.dcsIdx || []).map((di) => words.words.find((w) => w.idx === di)).filter(Boolean);
@@ -151,7 +152,7 @@ export default function WordSheet() {
       <View style={styles.countRow}>
         <View style={{ width: 32 }} />
         <T v="caption" muted style={{ textAlign: "center", flex: 1 }}>
-          {ids.length > 1 ? `Words ${ids.map((k) => k + 1).join(" + ")} of ${meanings.length}` : `Word ${first + 1} of ${meanings.length}`} in {chapter}.{v}
+          {ids.length > 1 ? `Words ${[...ids].sort((a, b) => a - b).map((k) => k + 1).join(", ")} of ${meanings.length}` : `Word ${first + 1} of ${meanings.length}`} in {chapter}.{v}
         </T>
         <CardMenu
           title={`${m.termIast} · ${wordSourceInfo(words.source).name}`}

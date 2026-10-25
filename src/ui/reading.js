@@ -408,11 +408,16 @@ function NotesRow({ items, onOpen, c, size }) {
 
 function SelectableText({ children, style, onSelection, c }) {
   const [k, setK] = useState(0);
+  const [h, setH] = useState(0);
+  // iOS draws the field's lines at the font's own line height (taller than our
+  // lineHeight for the Indic fonts), while React Native sizes it by lineHeight, so
+  // long paragraphs lost their last lines. A scrollable field reports the height of
+  // the text as drawn; the field is set to that, so it never actually scrolls.
   return (
     <TextInput
       key={k}
       multiline
-      scrollEnabled={false}
+      scrollEnabled
       // iOS keeps selection on a non-editable field; Android needs it "editable"
       // with the keyboard suppressed, and any typed change is discarded.
       editable={Platform.OS !== "ios"}
@@ -422,7 +427,11 @@ function SelectableText({ children, style, onSelection, c }) {
       selectionColor={c.accent + "55"}
       onChangeText={() => setK((x) => x + 1)}
       onSelectionChange={(e) => onSelection(e.nativeEvent.selection.start, e.nativeEvent.selection.end)}
-      style={[style, { padding: 0, paddingTop: 0, paddingBottom: 0, margin: 0, textAlignVertical: "top" }]}
+      onContentSizeChange={(e) => {
+        const next = Math.ceil(e.nativeEvent.contentSize.height);
+        if (Math.abs(next - h) > 1) setH(next);
+      }}
+      style={[style, styles.field, h ? { height: h } : null]}
       accessibilityHint="Select words to highlight, copy or add to your note"
     >
       {children}
@@ -556,5 +565,6 @@ const styles = StyleSheet.create({
   measure: { position: "absolute", top: 0, left: 0, width: 10000, alignItems: "flex-start" },
   quote: { borderRadius: 14, paddingVertical: 12, paddingHorizontal: 14 },
   notesRow: { flexDirection: "row", flexWrap: "wrap", alignItems: "center", gap: 8, paddingTop: 10, borderTopWidth: StyleSheet.hairlineWidth },
+  field: { padding: 0, paddingTop: 0, paddingBottom: 0, margin: 0, textAlignVertical: "top" },
   notePill: { minWidth: 30, paddingHorizontal: 9, paddingVertical: 3, borderRadius: 13, overflow: "hidden", textAlign: "center" },
 });
