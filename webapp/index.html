@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Gita All-In-One</title>
+    <link rel="icon" href="/favicon.png" />
+    <script>
+      // Paint the reader's theme before the app loads (no white flash in dark mode).
+      try {
+        var s = JSON.parse(JSON.parse(localStorage.getItem("persist:gita-v3") || "{}").settings || "{}");
+        var t = s.theme && s.theme !== "auto" ? s.theme : matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

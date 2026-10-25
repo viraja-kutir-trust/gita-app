@@ -1,0 +1,245 @@
+/* ---------------------------------------------------------------- sloka */
+.sloka {
+  color: var(--ink);
+}
+.sloka-speaker {
+  color: var(--accent);
+  margin-bottom: 8px;
+  letter-spacing: 0.01em;
+}
+.sloka-line {
+  white-space: nowrap;
+  line-height: 1.72;
+}
+.sloka-inner {
+  display: inline-block;
+}
+.sloka-num {
+  font-size: 0.7em;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.sloka .w {
+  display: inline;
+  border-radius: 6px;
+  padding: 0 2px;
+  margin: 0 -2px;
+  color: inherit;
+  font: inherit;
+  line-height: inherit;
+  transition: background 0.12s, color 0.12s;
+  box-decoration-break: clone;
+}
+.sloka .w:hover,
+.pad .w:hover {
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+}
+.sloka .w.on,
+.pad .w.on {
+  background: var(--accent-soft-2);
+  color: var(--accent-ink);
+}
+.sloka-iast {
+  margin-top: 18px;
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+/* ---------------------------------------------------------------- prose (translations, commentaries) */
+.prose {
+  font-size: calc(var(--size, 18px));
+  line-height: 1.7;
+  color: var(--ink);
+  font-optical-sizing: auto;
+  hyphens: manual;
+  overflow-wrap: break-word;
+}
+.prose[lang="en"] {
+  line-height: 1.68;
+}
+.prose p {
+  margin: 0 0 0.85em;
+}
+.prose p:last-child {
+  margin-bottom: 0;
+}
+.prose .pratika {
+  font-weight: 650;
+}
+.prose-h {
+  font-family: var(--font-ui);
+  font-size: 0.78em;
+  font-weight: 650;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 1.5em 0 0.6em;
+}
+.prose-h:first-child {
+  margin-top: 0;
+}
+.prose-label {
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 0.85em;
+  color: var(--muted);
+}
+.prose-quote {
+  margin: 1.1em 0;
+  padding: 14px 18px;
+  border-left: 3px solid var(--accent-soft-2);
+  background: var(--sunken);
+  border-radius: 0 10px 10px 0;
+  text-align: center;
+  white-space: pre-line;
+}
+.prose-quote figcaption {
+  margin-top: 6px;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: var(--muted);
+}
+.prose .hl {
+  border-radius: 3px;
+  cursor: pointer;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+.hl-yellow {
+  background: var(--hl-yellow);
+}
+.hl-green {
+  background: var(--hl-green);
+}
+.hl-blue {
+  background: var(--hl-blue);
+}
+.hl-pink {
+  background: var(--hl-pink);
+}
+.prose .mark {
+  background: var(--mark);
+  border-radius: 3px;
+}
+.prose .mark.current {
+  background: var(--mark-current);
+  color: var(--on-accent);
+}
+.fn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  margin: 0 2px;
+  padding: 0 5px;
+  border-radius: 9px;
+  vertical-align: super;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 650;
+  line-height: 1;
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+.fn:hover {
+  background: var(--accent-soft-2);
+}
+.fn-pop {
+  padding: 12px 14px;
+}
+.fn-pop-head {
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.fn-pop-body {
+  font-size: 15px;
+  line-height: 1.6;
+  max-height: 50vh;
+  overflow-y: auto;
+}
+.prose-notes {
+  margin-top: 1.2em;
+  border-top: 1px solid var(--border);
+  padding-top: 0.8em;
+  font-size: 0.85em;
+  color: var(--ink-2);
+}
+.prose-notes summary {
+  cursor: pointer;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 550;
+  color: var(--muted);
+}
+.prose-notes ol {
+  margin: 0.6em 0 0;
+  padding-left: 1.6em;
+}
+.prose-notes li {
+  margin-bottom: 0.4em;
+}
+
+/* ---------------------------------------------------------------- selection toolbar */
+.sel-bar {
+  position: fixed;
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 5px;
+  border-radius: 12px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
+  animation: pop 0.12s var(--ease);
+}
+.sel-colors {
+  display: flex;
+  gap: 6px;
+  padding: 0 6px;
+}
+.sel-dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  transition: transform 0.1s;
+}
+.sel-dot:hover {
+  transform: scale(1.12);
+}
+.sel-dot.on {
+  box-shadow: 0 0 0 2px var(--bg-elev), 0 0 0 4px var(--accent);
+}
+.sel-sep {
+  width: 1px;
+  height: 22px;
+  background: var(--border);
+  margin: 0 4px;
+}
+.sel-act {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 9px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 550;
+  color: var(--ink-2);
+}
+.sel-act:hover {
+  background: var(--hover);
+  color: var(--ink);
+}
+.sel-act svg {
+  color: var(--muted);
+}

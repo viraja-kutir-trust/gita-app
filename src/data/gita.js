@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { Platform } from "react-native";
 import { useSelector } from "react-redux";
 import { GITA_DB_VERSION, openGitaDb } from "../gita-data/db";
 import { DEFAULT_WORD_SOURCE, getWordMeanings } from "../lib/wordMeanings";
@@ -24,6 +25,7 @@ function start() {
     .then((api) => {
       resolveReady(api);
       // Free the space used by older bundled database versions.
+      if (Platform.OS === "web") return;
       import("expo-sqlite").then((SQLite) => {
         for (let v = 1; v < GITA_DB_VERSION; v++) SQLite.deleteDatabaseAsync(`gita-v${v}.db`).catch(() => {});
       });

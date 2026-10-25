@@ -9,7 +9,13 @@
     "web": "expo start --web",
     "build": "expo export --platform web",
     "start:iphone": "expo start --go",
-    "apk": "cd android && ./gradlew assembleRelease -PreactNativeArchitectures=arm64-v8a,armeabi-v7a"
+    "apk": "cd android && ./gradlew assembleRelease -PreactNativeArchitectures=arm64-v8a,armeabi-v7a",
+    "desktop:install": "npm --prefix webapp install && npm --prefix electron install",
+    "desktop:dev": "npm --prefix electron run dev",
+    "desktop:mac": "npm --prefix electron run dist:mac",
+    "desktop:win": "npm --prefix electron run dist:win",
+    "webapp": "npm --prefix webapp run dev",
+    "webapp:build": "npm --prefix webapp run build:web"
   },
   "dependencies": {
     "@expo-google-fonts/inter": "^0.4.2",

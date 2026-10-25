@@ -1,0 +1,67 @@
+{
+  "name": "gita-all-in-one-desktop",
+  "productName": "Gita All-In-One",
+  "version": "3.0.0",
+  "description": "Bhagavad Gita — all-in-one study app (desktop)",
+  "author": "Sai Teja",
+  "license": "UNLICENSED",
+  "private": true,
+  "main": "main.js",
+  "devDependencies": {
+    "electron": "^45.0.0",
+    "electron-builder": "^26.0.12"
+  },
+  "scripts": {
+    "dev": "GITA_DEV_URL=${GITA_DEV_URL:-http://localhost:5173} electron .",
+    "export": "node scripts/export-web.js",
+    "start": "electron .",
+    "dist:mac": "npm run export && electron-builder --mac dmg --arm64 --x64",
+    "dist:win": "npm run export && electron-builder --win nsis --x64",
+    "dist": "npm run export && electron-builder --mac dmg --arm64 --x64 --win nsis --x64",
+    "dist:mac:unsigned": "npm run export && electron-builder --mac dmg --arm64 --x64 -c.mac.identity=null"
+  },
+  "build": {
+    "appId": "com.saiteja.bhagavadgita.desktop",
+    "productName": "Gita All-In-One",
+    "copyright": "Non-profit; texts © their respective sources (see Sources & credits in the app)",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build-resources"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "web/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "../assets/db/gita.db",
+        "to": "gita.db"
+      }
+    ],
+    "icon": "../assets/icon.png",
+    "asar": true,
+    "mac": {
+      "category": "public.app-category.books",
+      "target": [
+        "dmg"
+      ],
+      "darkModeSupport": true,
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false
+    },
+    "dmg": {
+      "artifactName": "Gita-All-In-One-${version}-mac-${arch}.${ext}"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "artifactName": "Gita-All-In-One-Setup-${version}-${arch}.${ext}"
+    }
+  }
+}

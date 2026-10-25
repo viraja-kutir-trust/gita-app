@@ -1,0 +1,30 @@
+{
+  "name": "gita-webapp",
+  "private": true,
+  "version": "3.0.0",
+  "description": "Desktop/web UI for Gita All-In-One (runs in the Electron app and in browsers)",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build:web": "GITA_TARGET=web vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@fontsource-variable/inter": "^5.3.0",
+    "@fontsource-variable/source-serif-4": "^5.3.1",
+    "@indic-transliteration/sanscript": "^1.2.7",
+    "@reduxjs/toolkit": "^2.9.0",
+    "@sqlite.org/sqlite-wasm": "^3.54.1-build1",
+    "lucide-react": "^1.61.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-redux": "^9.2.0",
+    "react-router-dom": "^7.18.4",
+    "redux-persist": "^6.0.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.1.2",
+    "vite": "^8.3.5"
+  }
+}

@@ -1,0 +1,123 @@
+/* Design tokens. Three reading themes; every text/background pair used for body
+   text meets WCAG AA. Accent is the app's saffron-brown. */
+:root {
+  --font-ui: "Inter Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --font-serif: "Source Serif 4 Variable", "Iowan Old Style", Georgia, serif;
+  --font-deva: "Tiro Devanagari Sanskrit", "Noto Serif Devanagari", "Kohinoor Devanagari", serif;
+  --font-deva-italic: "Tiro Devanagari Sanskrit Italic", "Tiro Devanagari Sanskrit", serif;
+  --font-telugu: "Noto Serif Telugu", serif;
+  --font-kannada: "Noto Serif Kannada", serif;
+  --font-tamil: "Noto Serif Tamil", serif;
+  --font-malayalam: "Noto Serif Malayalam", serif;
+  --font-bengali: "Noto Serif Bengali", serif;
+  --font-gujarati: "Noto Serif Gujarati", serif;
+
+  --sidebar-w: 264px;
+  --panel-w: 360px;
+  --topbar-h: 52px;
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 14px;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --scale: 1; /* reading text size (Settings) */
+}
+
+:root,
+[data-theme="light"] {
+  color-scheme: light;
+  --bg: #fbfaf8;
+  --bg-elev: #ffffff;
+  --sidebar: #f5f3ef;
+  --sunken: #f3f1ec;
+  --hover: rgba(40, 30, 20, 0.045);
+  --active: rgba(40, 30, 20, 0.08);
+  --border: #e8e4dd;
+  --border-strong: #d8d2c8;
+  --ink: #1d1b18;
+  --ink-2: #47423b;
+  --muted: #736d64;
+  --faint: #a29b90;
+  --accent: #a4470e;
+  --accent-hover: #8b3c0b;
+  --accent-ink: #7c3509;
+  --accent-soft: #f8eee5;
+  --accent-soft-2: #f1dcc9;
+  --on-accent: #ffffff;
+  --success: #2f7a4d;
+  --mark: #f6dfc4;
+  --mark-current: #a4470e;
+  --hl-yellow: #fbe7a1;
+  --hl-green: #d3ecd0;
+  --hl-blue: #d4e3f7;
+  --hl-pink: #f6d5e1;
+  --shadow-sm: 0 1px 2px rgba(30, 20, 10, 0.06);
+  --shadow-md: 0 2px 6px rgba(30, 20, 10, 0.06), 0 8px 24px rgba(30, 20, 10, 0.06);
+  --shadow-lg: 0 12px 40px rgba(30, 20, 10, 0.16), 0 2px 8px rgba(30, 20, 10, 0.08);
+  --scrim: rgba(25, 20, 15, 0.32);
+}
+
+[data-theme="sepia"] {
+  color-scheme: light;
+  --bg: #f6efe2;
+  --bg-elev: #fbf6ec;
+  --sidebar: #efe6d5;
+  --sunken: #eee4d2;
+  --hover: rgba(70, 45, 15, 0.055);
+  --active: rgba(70, 45, 15, 0.09);
+  --border: #e3d6c0;
+  --border-strong: #d4c3a7;
+  --ink: #33281d;
+  --ink-2: #4f4133;
+  --muted: #6e5d4a;
+  --faint: #9c8a73;
+  --accent: #9a4a12;
+  --accent-hover: #7e3c0d;
+  --accent-ink: #6e3005;
+  --accent-soft: #f2e1cd;
+  --accent-soft-2: #e9cdaf;
+  --on-accent: #ffffff;
+  --success: #2e6b45;
+  --mark: #ecd2b3;
+  --mark-current: #9a4a12;
+  --hl-yellow: #f3df98;
+  --hl-green: #d2e2c3;
+  --hl-blue: #d1ddea;
+  --hl-pink: #efd0d6;
+  --shadow-sm: 0 1px 2px rgba(60, 40, 15, 0.08);
+  --shadow-md: 0 2px 6px rgba(60, 40, 15, 0.07), 0 8px 24px rgba(60, 40, 15, 0.08);
+  --shadow-lg: 0 12px 40px rgba(60, 40, 15, 0.18), 0 2px 8px rgba(60, 40, 15, 0.08);
+  --scrim: rgba(50, 35, 15, 0.3);
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #161618;
+  --bg-elev: #1e1e21;
+  --sidebar: #1b1b1e;
+  --sunken: #131315;
+  --hover: rgba(255, 255, 255, 0.05);
+  --active: rgba(255, 255, 255, 0.085);
+  --border: #2b2b30;
+  --border-strong: #3a3a40;
+  --ink: #ecE9e4;
+  --ink-2: #c8c4bd;
+  --muted: #9b968e;
+  --faint: #6f6b65;
+  --accent: #e49a5a;
+  --accent-hover: #efab6f;
+  --accent-ink: #f0b680;
+  --accent-soft: rgba(228, 154, 90, 0.12);
+  --accent-soft-2: rgba(228, 154, 90, 0.22);
+  --on-accent: #1d1206;
+  --success: #6cc08e;
+  --mark: rgba(228, 154, 90, 0.28);
+  --mark-current: #e49a5a;
+  --hl-yellow: rgba(240, 205, 90, 0.3);
+  --hl-green: rgba(120, 200, 120, 0.26);
+  --hl-blue: rgba(110, 160, 240, 0.3);
+  --hl-pink: rgba(240, 120, 170, 0.28);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.35), 0 10px 28px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.4);
+  --scrim: rgba(0, 0, 0, 0.5);
+}

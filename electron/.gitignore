@@ -1,0 +1,4 @@
+node_modules/
+# build outputs: the web export and the installers
+web/
+dist/
