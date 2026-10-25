@@ -1,0 +1,91 @@
+# Nirvikalpananda parse report
+
+- 1: note 1 of page 22 runs on to page 23
+- 1: note 1 of page 22 runs on to page 23
+- 1: note 1 of page 22 runs on to page 23
+- 1: note 1 of page 22 runs on to page 23
+- 1: note 1 of page 22 runs on to page 23
+- 1: note 1 of page 22 runs on to page 23
+- 1: note 1 of page 22 runs on to page 23
+- 1: unit ['పాఞ్చజన్యం హృషీకేశః దేవదత్తం ధ'] has no closing verse number
+- 2: unit ['యతతో హ్యపి కౌన్తేయ పురుషస్య వి'] has no closing verse number
+- 2.[72]: note 2 found on the next page (46)
+- 2.[72]: note 3 found on the next page (46)
+- 2.[72]: note 4 found on the next page (46)
+- 2 closing: note 5 found on the next page (46)
+- 3: unit ['యే మే మతమిదం నిత్యమనుతిష్ఠన్తి'] has no closing verse number
+- 3: unit ['ఇన్ద్రియస్యేన్ద్రియస్యార్థే రా'] has no closing verse number
+- 3: unit ['శ్రేయాన్స్వధర్మో విగుణః పరధర్మ'] has no closing verse number
+- 3: unit ['ఆవృతం జ్ఞానమేతేన జ్ఞానినో నిత్'] has no closing verse number
+- 4: unit ['అపరే నియతాహారాః ప్రాణాన్ప్రాణే'] has no closing verse number
+- 5: note 1 of page 14 runs on to page 15
+- 5: note 1 of page 14 runs on to page 15
+- 5: note 1 of page 14 runs on to page 15
+- 5: unit ['శక్నోతీ హైవ యః సోఢుం ప్రాక్శరీ'] has no closing verse number
+- 6: unit ['యోగీ యుఞ్జీత సతతమాత్మానం రహసి '] has no closing verse number
+- 8: note 3 of page 16 runs on to page 17
+- 8: note 3 of page 16 runs on to page 17
+- 8: note 3 of page 16 runs on to page 17
+- 8: note 3 of page 16 runs on to page 17
+- 8: note 2 of page 18 runs on to page 19
+- 8: note 2 of page 18 runs on to page 19
+- 8: note 2 of page 18 runs on to page 19
+- 8: note 2 of page 18 runs on to page 19
+- 8: note 2 of page 18 runs on to page 19
+- 8: note 2 of page 18 runs on to page 19
+- 8: note 2 of page 18 runs on to page 19
+- 9: note 1 of page 17 runs on to page 18
+- 9: note 1 of page 17 runs on to page 18
+- 9: unit ['ఇదం తు తే గుహ్యతమం ప్రవక్ష్యామ'] has no closing verse number
+- 9: unit ['ప్రకృతిం స్వామవష్టభ్య విసృజామి'] has no closing verse number
+- 9: unit ['సమోఽహం సర్వభూతేషు న మే ద్వేష్య'] has no closing verse number
+- 9.[33]: note 5 found on the next page (22)
+- 10: unit ['అక్షరాణా మకారోఽస్మి ద్వంద్వస్స'] has no closing verse number
+- 10: unit ['నాన్తోఽస్తి మమ దివ్యానాం విభూత'] has no closing verse number
+- 11: unit ['న వేద యజ్ఞాధ్యయనైర్న దానైః'] has no closing verse number
+- 11.[2]: marker 4 on page 2 has no footnote
+- 13: note 1 of page 24 runs on to page 25
+- 13: note 1 of page 24 runs on to page 25
+- 13: note 1 of page 24 runs on to page 25
+- 13: note 1 of page 24 runs on to page 25
+- 13.[2]: note 3 found on the next page (3)
+- 13.[2]: note 4 found on the next page (3)
+- 15 p7: footnote 5 has no marker in the book; kept with 15.7
+- 16: note 1 of page 10 runs on to page 11
+- 16: note 1 of page 10 runs on to page 11
+- 18: note 1 of page 27 runs on to page 28
+- 18: note 1 of page 27 runs on to page 28
+- 18: note 1 of page 27 runs on to page 28
+- 18: note 1 of page 27 runs on to page 28
+- 18: note 1 of page 27 runs on to page 28
+- 18: note 1 of page 27 runs on to page 28
+- 18: note 1 of page 28 runs on to page 29
+- 18: note 1 of page 28 runs on to page 29
+- 18: note 1 of page 28 runs on to page 29
+- 18: note 1 of page 28 runs on to page 29
+- 18: note 1 of page 28 runs on to page 29
+- 18: note 1 of page 28 runs on to page 29
+- 18: note 1 of page 28 runs on to page 29
+- 18: note 1 of page 28 runs on to page 29
+- 18: note 1 of page 30 runs on to page 31
+- 18: note 1 of page 30 runs on to page 31
+- 18: note 1 of page 30 runs on to page 31
+- 18: note 1 of page 30 runs on to page 31
+- 18: note 1 of page 30 runs on to page 31
+- 18: note 1 of page 30 runs on to page 31
+- 18: note 1 of page 30 runs on to page 31
+- 18: note 1 of page 30 runs on to page 31
+- 18: note 1 of page 30 runs on to page 31
+- 18: note 1 of page 30 runs on to page 31
+- 18: note 1 of page 30 runs on to page 31
+- 18: note 1 of page 30 runs on to page 31
+- 18: note 1 of page 30 runs on to page 31
+- 18: note 2 of page 46 runs on to page 47
+- 18: note 2 of page 46 runs on to page 47
+- 18: note 2 of page 46 runs on to page 47
+- 18: note 2 of page 46 runs on to page 47
+- 18: unit ['మచ్చిత్త స్సర్వదుర్గాణి మత్ ప్'] has no closing verse number
+- 18: unit ['న చ తస్మాత్ మనుష్యేషు కశ్చిన్మ'] has no closing verse number
+- 18.[73]: note 3 found on the next page (47)
+- 18 p5: footnote 2 has no marker in the book; kept with 18.7
+- 18 p43: footnote 2 has no marker in the book; kept with 18.69

@@ -8,7 +8,10 @@ import { fonts, useTheme } from "../../../ui/theme";
 import { useTexts, useVerse, useWordMeanings } from "../../../data/gita";
 import { authorName, LANGS } from "../../../lib/names";
 import { toScript } from "../../../lib/script";
-import { orderTranslations } from "../../../lib/texts";
+import { orderTranslations, plainText } from "../../../lib/texts";
+import { blocksPropsFor } from "../../../lib/translate";
+import CardMenu, { TranslationNote } from "../../../ui/CardMenu";
+import useCardTranslation from "../../../ui/useCardTranslation";
 import { setSetting, toggleHiddenTranslator } from "../../../state/store";
 
 const STOP = new Set(["the", "a", "an", "of", "in", "on", "to", "and", "or", "by", "with", "for", "from", "at", "is", "be", "your", "my", "his", "their", "its", "all", "one", "who", "not", "never", "only", "certainly", "indeed", "o"]);
@@ -130,50 +133,83 @@ export default function Compare() {
             ) : null}
           </View>
         }
-        renderItem={({ item: t }) => {
-          const hidden = s.hiddenTranslators.includes(t.authorId);
-          const primary = s.primaryTranslatorId === t.authorId;
-          return (
-            <View style={[styles.card, { backgroundColor: c.surface, opacity: manage && hidden ? 0.5 : 1 }]}>
-              <Pressable
-                onPress={() => setFolded((f) => ({ ...f, [t.id]: !f[t.id] }))}
-                accessibilityRole="button"
-                accessibilityState={{ expanded: !folded[t.id] }}
-                style={styles.between}
-              >
-                <Icon name={folded[t.id] ? "chevronRight" : "chevronDown"} size={12} color={c.muted} />
-                <T v="footnoteStrong" muted numberOfLines={1} style={{ flexShrink: 1, flex: 1 }}>
-                  {authorName(t.authorId, t.authorName)} · {LANGS[t.lang]?.label || t.lang}
-                  {t.license && /public/i.test(t.license) ? " · public domain" : ""}
-                </T>
-                {primary && !manage ? (
-                  <T v="caption" accent>
-                    Shown first
-                  </T>
-                ) : null}
-              </Pressable>
-              {(!manage || !hidden) && !folded[t.id] ? <Blocks blocks={t.blocks} lang={t.lang} size={16 * s.fontScale} terms={terms} /> : null}
-              {manage ? (
-                <View style={styles.manage}>
-                  <Pressable onPress={() => dispatch(setSetting({ primaryTranslatorId: t.authorId }))} style={styles.manageBtn} accessibilityRole="button">
-                    <Icon name={primary ? "checkCircle" : "check"} size={16} color={primary ? c.accent : c.muted} />
-                    <T v="footnoteStrong" color={primary ? c.accent : c.ink2}>
-                      {primary ? "Shown first" : "Show first"}
-                    </T>
-                  </Pressable>
-                  {!primary ? (
-                    <Pressable onPress={() => dispatch(toggleHiddenTranslator(t.authorId))} style={styles.manageBtn} accessibilityRole="button">
-                      <T v="footnoteStrong" color={c.ink2}>
-                        {hidden ? "Show in list" : "Hide"}
-                      </T>
-                    </Pressable>
-                  ) : null}
-                </View>
-              ) : null}
-            </View>
-          );
-        }}
+        renderItem={({ item: t }) => (
+          <CompareCard
+            t={t}
+            chapter={chapter}
+            v={v}
+            manage={manage}
+            folded={!!folded[t.id]}
+            onFold={() => setFolded((f) => ({ ...f, [t.id]: !f[t.id] }))}
+            terms={terms}
+          />
+        )}
       />
+    </View>
+  );
+}
+
+/** One translator's rendering, with its ⋯ menu (translate, copy, share, make default). */
+function CompareCard({ t, chapter, v, manage, folded, onFold, terms }) {
+  const dispatch = useDispatch();
+  const { c } = useTheme();
+  const s = useSelector((st) => st.settings);
+  const tx = useCardTranslation({ key: t.id, lang: t.lang, source: t.blocks });
+  const hidden = s.hiddenTranslators.includes(t.authorId);
+  const primary = s.primaryTranslatorId === t.authorId;
+  const name = authorName(t.authorId, t.authorName);
+  return (
+    <View style={[styles.card, { backgroundColor: c.surface, opacity: manage && hidden ? 0.5 : 1 }]}>
+      <View style={styles.between}>
+        <Pressable onPress={onFold} accessibilityRole="button" accessibilityState={{ expanded: !folded }} style={[styles.between, { flex: 1 }]}>
+          <Icon name={folded ? "chevronRight" : "chevronDown"} size={12} color={c.muted} />
+          <T v="footnoteStrong" muted numberOfLines={1} style={{ flexShrink: 1, flex: 1 }}>
+            {name} · {LANGS[t.lang]?.label || t.lang}
+            {t.license && /public/i.test(t.license) ? " · public domain" : ""}
+          </T>
+          {primary && !manage ? (
+            <T v="caption" accent>
+              Shown first
+            </T>
+          ) : null}
+        </Pressable>
+        {!manage ? (
+          <View style={{ marginVertical: -6, marginRight: -6 }}>
+            <CardMenu
+              title={`${name} · ${LANGS[t.lang]?.label || t.lang}`}
+              tx={tx}
+              text={() => plainText(tx.value)}
+              cite={`— ${name}, Bhagavad Gita ${chapter}.${v}`}
+              extra={primary ? [] : [{ label: "Make default translation", icon: "star", onPress: () => dispatch(setSetting({ primaryTranslatorId: t.authorId })) }]}
+            />
+          </View>
+        ) : null}
+      </View>
+      {(!manage || !hidden) && !folded ? (
+        tx.to ? (
+          <Blocks blocks={tx.value} {...blocksPropsFor(tx.to)} size={16 * s.fontScale} />
+        ) : (
+          <Blocks blocks={t.blocks} lang={t.lang} size={16 * s.fontScale} terms={terms} teluguScript={s.teluguScript === "follow" ? s.script : "te"} />
+        )
+      ) : null}
+      {!folded ? <TranslationNote tx={tx} /> : null}
+      {manage ? (
+        <View style={styles.manage}>
+          <Pressable onPress={() => dispatch(setSetting({ primaryTranslatorId: t.authorId }))} style={styles.manageBtn} accessibilityRole="button">
+            <Icon name={primary ? "checkCircle" : "check"} size={16} color={primary ? c.accent : c.muted} />
+            <T v="footnoteStrong" color={primary ? c.accent : c.ink2}>
+              {primary ? "Shown first" : "Show first"}
+            </T>
+          </Pressable>
+          {!primary ? (
+            <Pressable onPress={() => dispatch(toggleHiddenTranslator(t.authorId))} style={styles.manageBtn} accessibilityRole="button">
+              <T v="footnoteStrong" color={c.ink2}>
+                {hidden ? "Show in list" : "Hide"}
+              </T>
+            </Pressable>
+          ) : null}
+        </View>
+      ) : null}
     </View>
   );
 }

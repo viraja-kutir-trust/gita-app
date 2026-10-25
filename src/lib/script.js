@@ -41,6 +41,26 @@ export function toScript(text, key) {
   return out;
 }
 
+const teCache = new Map();
+
+/**
+ * Telugu text (Swami Nirvikalpananda's book) → chosen script. "te" returns it as
+ * printed; footnote markers and punctuation pass through unchanged.
+ */
+export function fromTelugu(text, key) {
+  if (!text || key === "te") return text;
+  const s = scriptByKey[key] || scriptByKey.dv;
+  const ck = key + "\u0000" + text;
+  let out = teCache.get(ck);
+  if (out === undefined) {
+    out = Sanscript.t(text, "telugu", s.scheme);
+    if (key === "ro") out = out.replace(/\|\|/g, "॥").replace(/\|/g, "।");
+    if (teCache.size > 4000) teCache.clear();
+    teCache.set(ck, out);
+  }
+  return out;
+}
+
 const DEVA_DIGITS = "०१२३४५६७८९";
 
 /** Verse number in the chosen script's digits ("४७", "౪౭", "47"). */

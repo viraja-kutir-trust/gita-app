@@ -11,7 +11,7 @@ import { setSetting } from "../state/store";
  */
 const NONE = {};
 
-export default function Section({ id, title, right, onRightPress, children, style, onLayout }) {
+export default function Section({ id, title, right, onRightPress, menu, children, style, onLayout }) {
   const { c } = useTheme();
   const dispatch = useDispatch();
   const collapsedMap = useSelector((s) => s.settings.collapsedSections) || NONE;
@@ -36,6 +36,7 @@ export default function Section({ id, title, right, onRightPress, children, styl
             {title}
           </T>
         </Pressable>
+        <View style={styles.end}>
         {right ? (
           onRightPress ? (
             <Pressable onPress={onRightPress} hitSlop={10} accessibilityRole="button" style={styles.right}>
@@ -59,6 +60,8 @@ export default function Section({ id, title, right, onRightPress, children, styl
             </View>
           )
         ) : null}
+        {menu && !collapsed ? menu : null}
+        </View>
       </View>
       {collapsed ? null : <View style={{ gap: 8 }}>{children}</View>}
     </View>
@@ -73,5 +76,6 @@ export function expandSection(dispatch, collapsedMap, id) {
 const styles = StyleSheet.create({
   head: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 12, minHeight: 32 },
   titleBtn: { flexDirection: "row", alignItems: "center", gap: 6, flexShrink: 1, paddingVertical: 4 },
-  right: { flexShrink: 0, maxWidth: "55%", alignItems: "flex-end" },
+  end: { flexDirection: "row", alignItems: "center", gap: 2, flexShrink: 0, maxWidth: "60%", marginRight: -6 },
+  right: { flexShrink: 1, alignItems: "flex-end", paddingRight: 6 },
 });

@@ -2,7 +2,8 @@ import { memo, useMemo, useState } from "react";
 import { Platform, StyleSheet, Text, TextInput, View } from "react-native";
 import { fonts, useTheme, UI } from "./theme";
 import { T } from "./components";
-import { scriptDigits, scriptFont, toScript } from "../lib/script";
+import { fromTelugu, scriptDigits, scriptFont, toScript } from "../lib/script";
+import FootnoteSheet from "./FootnoteSheet";
 
 // ---------------------------------------------------------------- sloka
 const PUNCT = /^[।॥|]+$/;
@@ -11,30 +12,6 @@ const PUNCT = /^[।॥|]+$/;
 export function lineTokens(line) {
   // Split on ordinary spaces only: non-breaking spaces glue "॥ n ॥" to the last word.
   return line.split(/[ \t\n]+/).filter(Boolean);
-}
-
-/**
- * Map each surface word of the verse (as printed, with sandhi) to the first
- * entry of the word-by-word list it covers, using proportional lengths of the
- * IAST text. Good enough to open the right word; arrows walk the rest.
- */
-export function mapTokensToMeanings(iastLines, meanings) {
-  const toks = iastLines.flatMap((l) => l.replace(/[|।॥]/g, " ").split(/\s+/)).filter((t) => t && !PUNCT.test(t));
-  const len = (s) => s.replace(/[^a-zāīūṛṝḷṃṁḥṅñṭḍṇśṣ]/gi, "").length;
-  const ml = meanings.map((m) => len(m.termIast || ""));
-  const out = [];
-  let j = 0;
-  let mEnd = 0;
-  let tEnd = 0;
-  for (const t of toks) {
-    tEnd += len(t);
-    out.push(Math.min(j, Math.max(0, meanings.length - 1)));
-    while (j < meanings.length && mEnd + ml[j] / 2 <= tEnd) {
-      mEnd += ml[j];
-      j++;
-    }
-  }
-  return out;
 }
 
 function withVerseNumber(line, n, script) {
@@ -149,7 +126,6 @@ const LANG_FONT = {
 };
 
 const DEVA_RUN = /[ऀ-ॿ꣠-ꣿ]+(?:[\s‌‍]+[ऀ-ॿ꣠-ꣿ]+)*/g;
-const HAS_DEVA = /[ऀ-ॿ꣠-ꣿ]/;
 
 export function convertDeva(text, script) {
   if (!script || script === "dv" || !text) return text;
@@ -163,9 +139,12 @@ function escapeRe(s) {
 /** Plain text of one block (what selections and highlights are measured against). */
 export function blockPlain(b) {
   if (!b) return "";
+  if (b.type === "footnotes") return "";
   const raw = b.type === "verse_quote" ? b.lines.join("\n") : b.text || "";
-  return raw.replace(/[⟦⟧]/g, "");
+  return raw.replace(/[⟦⟧]/g, "").replace(NOTE_MARK, "");
 }
+
+const NOTE_MARK = /⁽(\d+)⁾/g;
 
 /** Where a saved highlight sits in a block's plain text: [start, end] or null. */
 export function locateHighlight(plain, h) {
@@ -185,6 +164,18 @@ export function locateHighlight(plain, h) {
  * selection in the displayed (possibly transliterated) text maps back exactly.
  */
 function buildRuns(raw, { terms, counter, currentMatch, hlRanges }) {
+  // Footnote markers ⁽n⁾ are not part of the text: note where they sit, then drop them.
+  const notes = [];
+  if (raw.includes("⁽")) {
+    let out = "";
+    let at = 0;
+    for (const m of raw.matchAll(NOTE_MARK)) {
+      out += raw.slice(at, m.index);
+      notes.push([out.replace(/[⟦⟧]/g, "").length, Number(m[1])]);
+      at = m.index + m[0].length;
+    }
+    raw = out + raw.slice(at);
+  }
   let plain = "";
   const bold = [];
   const re = /⟦([^⟧]*)⟧/g;
@@ -212,6 +203,7 @@ function buildRuns(raw, { terms, counter, currentMatch, hlRanges }) {
     }
   }
   const edges = new Set([0, plain.length]);
+  for (const [p] of notes) edges.add(p);
   for (const [a, b] of bold) edges.add(a).add(b);
   for (const [a, b] of marks) edges.add(a).add(b);
   for (const r of hlRanges || []) edges.add(r.start).add(r.end);
@@ -226,23 +218,23 @@ function buildRuns(raw, { terms, counter, currentMatch, hlRanges }) {
     const hl = inside(hlRanges || []);
     runs.push({ start: a, end: b, src: plain.slice(a, b), bold: !!inside(bold), mark: !!mk, current: mk ? mk[2] === currentMatch : false, hl: hl ? hl.color : null });
   }
-  return { plain, runs };
+  return { plain, runs, notes };
 }
 
 /** Display offset → plain-text offset, through script conversion. */
-function toSourceOffset(runs, script, labelLen, d) {
+function toSourceOffset(runs, conv, labelLen, d) {
   let disp = labelLen;
   for (const r of runs) {
-    const shown = convertDeva(r.src, script);
+    const shown = conv(r.src);
     if (d <= disp + shown.length) {
       const into = d - disp;
-      if (script === "dv" || !HAS_DEVA.test(r.src)) return r.start + Math.min(into, r.src.length);
+      if (shown === r.src) return r.start + Math.min(into, r.src.length);
       // Converted run: find the shortest source prefix whose rendering covers `into` characters.
       let lo = 0;
       let hi = r.src.length;
       while (lo < hi) {
         const mid = (lo + hi) >> 1;
-        if (convertDeva(r.src.slice(0, mid), script).length >= into) hi = mid;
+        if (conv(r.src.slice(0, mid)).length >= into) hi = mid;
         else lo = mid + 1;
       }
       return r.start + lo;
@@ -272,22 +264,41 @@ function runStyle(r, c, hlColors) {
  * One block of text. Plain <Text> when read-only; when `onSelect` is given it is
  * a read-only text field, the one React Native view that reports which
  * characters the reader selected, so partial highlights work without native code.
+ * A paragraph with footnote markers stays plain <Text> so the numbers can be tapped.
  */
-function BlockText({ label, runs, style, script, c, hlColors, onSelect, resetKey }) {
-  const labelShown = label ? `${convertDeva(label, script)} — ` : "";
+function BlockText({ label, runs, notes = [], onNote, style, conv, c, hlColors, onSelect, resetKey }) {
+  const labelShown = label ? `${conv(label)} — ` : "";
+  const size = style?.fontSize || 17;
+  const marker = (n, key) => (
+    <Text
+      key={key}
+      onPress={onNote ? () => onNote(n) : undefined}
+      accessibilityRole="button"
+      accessibilityLabel={`Footnote ${n}`}
+      style={{ ...UI.semibold, fontFamily: undefined, fontSize: Math.round(size * 0.8), color: c.accent, backgroundColor: c.accentSoft }}
+    >
+      {`\u2002${n}\u2002`}
+    </Text>
+  );
   const children = [
     labelShown ? (
       <Text key="l" style={{ ...UI.semibold }}>
         {labelShown}
       </Text>
     ) : null,
-    ...runs.map((r, i) => (
-      <Text key={i} style={runStyle(r, c, hlColors)}>
-        {convertDeva(r.src, script)}
-      </Text>
-    )),
   ];
-  if (!onSelect) return <Text style={style}>{children}</Text>;
+  runs.forEach((r, i) => {
+    for (const [p, n] of notes) if (p === r.start && !runs.some((q) => q.end === p)) children.push(marker(n, `m${i}-${n}`));
+    children.push(
+      <Text key={i} style={runStyle(r, c, hlColors)}>
+        {conv(r.src)}
+      </Text>
+    );
+    for (const [p, n] of notes) if (p === r.end) children.push(marker(n, `m${i}-${n}`));
+  });
+  if (!runs.length) for (const [, n] of notes) children.push(marker(n, `m-${n}`));
+  // Web: a <textarea> cannot hold styled children, so no partial selection there.
+  if (!onSelect || notes.length || Platform.OS === "web") return <Text style={style}>{children}</Text>;
   return (
     <SelectableText
       key={resetKey}
@@ -295,13 +306,35 @@ function BlockText({ label, runs, style, script, c, hlColors, onSelect, resetKey
       c={c}
       onSelection={(a, b) => {
         if (a === b) return onSelect(null);
-        const s0 = toSourceOffset(runs, script, labelShown.length, Math.max(a, labelShown.length));
-        const s1 = toSourceOffset(runs, script, labelShown.length, Math.max(b, labelShown.length));
+        const s0 = toSourceOffset(runs, conv, labelShown.length, Math.max(a, labelShown.length));
+        const s1 = toSourceOffset(runs, conv, labelShown.length, Math.max(b, labelShown.length));
         onSelect(s1 > s0 ? { start: s0, end: s1 } : null);
       }}
     >
       {children}
     </SelectableText>
+  );
+}
+
+/** "Notes 1 2 3" under a passage; each number opens the note in a bottom sheet. */
+function NotesRow({ items, onOpen, c, size }) {
+  return (
+    <View style={[styles.notesRow, { borderTopColor: c.line }]}>
+      <T v="footnoteStrong" muted>
+        {items.length === 1 ? "Footnote" : "Footnotes"}
+      </T>
+      {items.map((f, i) => (
+        <Text
+          key={f.n}
+          onPress={() => onOpen(i)}
+          accessibilityRole="button"
+          accessibilityLabel={`Open footnote ${f.n}`}
+          style={[styles.notePill, { ...UI.semibold, fontSize: Math.round(size * 0.8), color: c.accent, backgroundColor: c.accentSoft }]}
+        >
+          {f.n}
+        </Text>
+      ))}
+    </View>
   );
 }
 
@@ -355,16 +388,35 @@ export const Blocks = memo(function Blocks({
   highlights,
   onSelectText,
   resetKey = 0,
+  teluguScript = "te",
+  font,
 }) {
   const { c } = useTheme();
+  const [openNote, setOpenNote] = useState(null);
   const hlColors = highlightPalette(c);
-  const baseFont = script !== "dv" && (lang === "sanskrit" || lang === "hindi") ? scriptFont(script) : LANG_FONT[lang] || fonts.serif;
+  const teConv = lang === "telugu" && teluguScript !== "te";
+  const conv = (t) => (teConv ? fromTelugu(t, teluguScript) : convertDeva(t, script));
+  const noteItems = (blocks || []).filter((b) => b.type === "footnotes").flatMap((b) => b.items || []);
+  const openByNumber = (n) => {
+    const k = noteItems.findIndex((f) => f.n === n);
+    if (k >= 0) setOpenNote(k);
+  };
+  const baseFont = font
+    ? font
+    : teConv
+    ? scriptFont(teluguScript)
+    : script !== "dv" && (lang === "sanskrit" || lang === "hindi")
+      ? scriptFont(script)
+      : LANG_FONT[lang] || fonts.serif;
   const lh = Math.round(size * (lang === "english" ? 1.6 : 1.75));
   const counter = { n: 0 };
   const items = (blocks || []).map((b, i) => {
+    if (b.type === "footnotes") {
+      return b.items?.length ? <NotesRow key={i} items={b.items} onOpen={setOpenNote} c={c} size={size} /> : null;
+    }
     const start = counter.n;
     const raw = b.type === "verse_quote" ? b.lines.join("\n") : b.text || "";
-    const plainForHl = raw.replace(/[⟦⟧]/g, "");
+    const plainForHl = raw.replace(/[⟦⟧]/g, "").replace(NOTE_MARK, "");
     const hlRanges = (highlights || [])
       .filter((h) => h.block === i)
       .map((h) => {
@@ -372,7 +424,7 @@ export const Blocks = memo(function Blocks({
         return r ? { start: r[0], end: r[1], color: h.color || "blue" } : null;
       })
       .filter(Boolean);
-    const { plain, runs } = buildRuns(raw, { terms, counter, currentMatch, hlRanges });
+    const { plain, runs, notes } = buildRuns(raw, { terms, counter, currentMatch, hlRanges });
     const select = onSelectText
       ? (sel) => {
           if (!sel) return onSelectText(null);
@@ -384,11 +436,11 @@ export const Blocks = memo(function Blocks({
       : undefined;
     let el;
     if (b.type === "heading") {
-      el = <BlockText runs={runs} script={script} c={c} hlColors={hlColors} onSelect={select} resetKey={resetKey} style={{ ...UI.semibold, fontSize: Math.round(size * 0.95), lineHeight: lh, color: c.accent, marginTop: i ? 8 : 0 }} />;
+      el = <BlockText runs={runs} conv={conv} c={c} hlColors={hlColors} onSelect={select} resetKey={resetKey} style={{ ...UI.semibold, fontSize: Math.round(size * 0.95), lineHeight: lh, color: c.accent, marginTop: i ? 8 : 0 }} />;
     } else if (b.type === "verse_quote") {
       el = (
         <View style={[styles.quote, { backgroundColor: c.surface2 }]}>
-          <BlockText runs={runs} script={script} c={c} hlColors={hlColors} onSelect={select} resetKey={resetKey} style={{ fontFamily: scriptFont(script), fontSize: size, lineHeight: lh, color: c.ink, textAlign: "center" }} />
+          <BlockText runs={runs} conv={conv} c={c} hlColors={hlColors} onSelect={select} resetKey={resetKey} style={{ fontFamily: scriptFont(script), fontSize: size, lineHeight: lh, color: c.ink, textAlign: "center" }} />
           {b.ref ? (
             <T v="caption" muted style={{ textAlign: "center", marginTop: 4 }}>
               {b.ref}
@@ -397,7 +449,20 @@ export const Blocks = memo(function Blocks({
         </View>
       );
     } else {
-      el = <BlockText label={b.label} runs={runs} script={script} c={c} hlColors={hlColors} onSelect={select} resetKey={resetKey} style={{ fontFamily: baseFont, fontSize: size, lineHeight: lh, color: c.ink }} />;
+      el = (
+        <BlockText
+          label={b.label}
+          runs={runs}
+          notes={notes}
+          onNote={openByNumber}
+          conv={conv}
+          c={c}
+          hlColors={hlColors}
+          onSelect={select}
+          resetKey={resetKey}
+          style={{ fontFamily: baseFont, fontSize: size, lineHeight: lh, color: c.ink }}
+        />
+      );
     }
     const hasCurrent = currentMatch >= start && currentMatch < counter.n;
     if (hasCurrent) onMatchBlock?.(i);
@@ -407,10 +472,19 @@ export const Blocks = memo(function Blocks({
       </View>
     );
   });
-  return <View style={{ gap: Math.round(size * 0.8) }}>{items}</View>;
+  return (
+    <View style={{ gap: Math.round(size * 0.8) }}>
+      {items}
+      {noteItems.length ? (
+        <FootnoteSheet notes={noteItems} index={openNote} onIndex={setOpenNote} onClose={() => setOpenNote(null)} fontFamily={baseFont} size={size} render={conv} />
+      ) : null}
+    </View>
+  );
 });
 
 const styles = StyleSheet.create({
   speaker: { marginBottom: 4, textAlign: "center" },
   quote: { borderRadius: 14, paddingVertical: 12, paddingHorizontal: 14 },
+  notesRow: { flexDirection: "row", flexWrap: "wrap", alignItems: "center", gap: 8, paddingTop: 10, borderTopWidth: StyleSheet.hairlineWidth },
+  notePill: { minWidth: 30, paddingHorizontal: 9, paddingVertical: 3, borderRadius: 13, overflow: "hidden", textAlign: "center" },
 });

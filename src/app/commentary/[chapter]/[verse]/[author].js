@@ -11,7 +11,10 @@ import { fonts, useTheme } from "../../../../ui/theme";
 import { useTexts, useVerse } from "../../../../data/gita";
 import { langLabel } from "../../../../lib/names";
 import { scriptByKey, toScript } from "../../../../lib/script";
-import { describeText, orderCommentaries } from "../../../../lib/texts";
+import { describeText, orderCommentaries, plainText } from "../../../../lib/texts";
+import { blocksPropsFor } from "../../../../lib/translate";
+import CardMenu, { TranslationNote } from "../../../../ui/CardMenu";
+import useCardTranslation from "../../../../ui/useCardTranslation";
 import { setSetting, togglePinnedCommentator } from "../../../../state/store";
 
 export default function CommentaryReader() {
@@ -199,6 +202,9 @@ const Page = memo(function Page({ text, width, terms, match, script, size, botto
   const matchBlock = useRef(-1);
   const d = describeText(text);
   const selection = useTextSelection({ textId: text.id, verseKey, authorName: d.name, authorId: text.authorId, kind: "commentary" });
+  const dispatch = useDispatch();
+  const pinned = useSelector((st) => st.settings.pinnedCommentators.includes(text.authorId));
+  const tx = useCardTranslation({ key: text.id, lang: text.lang, source: text.blocks });
 
   useEffect(() => {
     if (!active || !terms || !terms.length) return;
@@ -216,7 +222,25 @@ const Page = memo(function Page({ text, width, terms, match, script, size, botto
 
   return (
     <View style={{ width }}>
-      <ScrollView ref={scrollRef} style={{ width }} contentContainerStyle={{ padding: 22, paddingBottom: bottomPad }} keyboardShouldPersistTaps="handled">
+      <ScrollView ref={scrollRef} style={{ width }} contentContainerStyle={{ padding: 22, paddingTop: 10, paddingBottom: bottomPad }} keyboardShouldPersistTaps="handled">
+        <View style={styles.pageHead}>
+          <T v="caption" muted numberOfLines={1} style={{ flexShrink: 1 }}>
+            {d.name} · {langLabel(text.lang)}
+          </T>
+          <CardMenu
+            title={`${d.name} · ${langLabel(text.lang)}`}
+            tx={tx}
+            text={() => plainText(tx.value)}
+            cite={`— ${d.name}, on Bhagavad Gita ${verseKey}`}
+            extra={[{ label: pinned ? "Unpin commentator" : "Pin commentator to the top", icon: pinned ? "pinFill" : "pin", onPress: () => dispatch(togglePinnedCommentator(text.authorId)) }]}
+          />
+        </View>
+        {tx.to ? (
+          <View style={{ gap: 12 }}>
+            <TranslationNote tx={tx} />
+            <Blocks blocks={tx.value} {...blocksPropsFor(tx.to)} size={size} />
+          </View>
+        ) : (
         <Blocks
           blocks={text.blocks}
           lang={text.lang}
@@ -234,6 +258,8 @@ const Page = memo(function Page({ text, width, terms, match, script, size, botto
           onSelectText={selection.onSelectText}
           resetKey={selection.resetKey}
         />
+        )}
+        {tx.to ? null : <TranslationNote tx={tx} style={{ marginTop: 12 }} />}
         <T v="caption" muted style={{ marginTop: 24 }}>
           Select any words to highlight them, copy, or add them to your note.
         </T>
@@ -249,6 +275,7 @@ const Page = memo(function Page({ text, width, terms, match, script, size, botto
 });
 
 const styles = StyleSheet.create({
+  pageHead: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 8, marginBottom: 6, marginRight: -8 },
   peek: { marginHorizontal: 16, marginTop: 8, paddingHorizontal: 14, minHeight: 44, borderRadius: 14, flexDirection: "row", alignItems: "center", gap: 10 },
   findRow: { flexDirection: "row", alignItems: "center", gap: 8, marginHorizontal: 16, marginTop: 10 },
   bar: { position: "absolute", left: 12, right: 12, height: 58, borderRadius: 29, flexDirection: "row", alignItems: "center", paddingHorizontal: 6, gap: 4 },

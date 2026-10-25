@@ -1,0 +1,179 @@
+# Reviewed corrections of Sanskrit words in the padaccheda and the word-by-word terms.
+# unit	field (padaccheda | term | *)	book word (word#n = its n-th occurrence)	corrected (gita.db reading)	note
+# Each was checked against the verse in gita.db (the blueprint); the book's word is logged in dataset/corrections.md.
+1.4-6	*	కాశీరాజః	కాశిరాజః	DB kāśirājaḥ
+1.4-6	term	సంతి	సంతి	supplied verb, not in the verse: kept
+1.4-6	term	సన్తి	సన్తి	supplied verb, not in the verse: kept
+1.19	*	అభ్యనునాదయన్	వ్యనునాదయన్	DB vyanunādayan
+1.28-30	*	ఇమాన్	ఇమమ్	DB dṛṣṭvemaṃ svajanaṃ … yuyutsuṃ samupasthitam
+1.28-30	*	స్వజనాన్	స్వజనమ్	DB singular
+1.28-30	*	యుయుత్సూన్	యుయుత్సుమ్	DB singular
+1.28-30	*	సముపస్థితాన్	సముపస్థితమ్	DB singular
+1.40	padaccheda	స్సనాతనాః	సనాతనాః	sandhi doubling left in the word
+1.41	term	అధర్మఅభిభవాత్	అధర్మ–అభిభవాత్	compound members, as elsewhere in the book
+2.2	padaccheda	అకీర్తకరమ్	అకీర్తికరమ్	DB akīrtikaram
+2.5	term	రుధిరప్రధిగ్ధాన్	రుధిరప్రదిగ్ధాన్	DB rudhirapradigdhān
+2.8	*	బుద్ధమ్	ఋద్ధమ్	ఋ typed with the glyphs of బు; DB ṛddham
+2.8	term	సురాణామసి	సురాణామ్ అపి	DB surāṇām api
+2.24	padaccheda	స్సర్వగతః	సర్వగతః	sandhi doubling
+2.26	term	నిత్యమృతం	నిత్యమృతం	the book glosses nityaṃ … mṛtam together: kept
+2.35	term	మహరథాః	మహారథాః	DB mahārathāḥ
+2.38	term	సుఖేదుఃఖే	సుఖదుఃఖే	DB sukhaduḥkhe
+2.42-44	padaccheda	బహుళామ్	బహులామ్	DB bahulām
+2.53	term	అవాప్స్యతి	అవాప్స్యసి	DB avāpsyasi
+2.53	term	స్థాప్యతి	స్థాస్యతి	DB sthāsyati
+3.1	term	జ్యాయాసీ	జ్యాయసీ	DB jyāyasī
+3.26	*	యోజయేత్	జోషయేత్	DB joṣayet (the book's reading yojayet is now the noted variant)
+3.34	term	ఆగచ్చేత్	ఆగచ్ఛేత్	DB āgacchet
+3.36	*	వారేష్ణయ	వార్ష్ణేయ	DB vārṣṇeya
+4.24	padaccheda	బహ్మ	బ్రహ్మ	DB brahma
+4.31	term	నాస్తి	న అస్తి	DB nāyaṃ loko 'sti
+4.40	term	అశ్రద్ధధానః	అశ్రద్దధానః	DB aśraddadhānaḥ
+4.41	term	సంచ్ఛిన్న	సంఛిన్న	DB saṃchinna
+4.42	term	ఛిత్వా	ఛిత్త్వా	DB chittvā
+5.2	padaccheda	నిశ్శ్రేయసకరౌ	నిఃశ్రేయసకరౌ	DB niḥśreyasakarau
+5.6	term	అధిగఛ్ఛతి	అధిగచ్ఛతి	DB adhigacchati
+5.21	term	బాహ్యస్పర్షేషు	బాహ్యస్పర్శేషు	DB bāhyasparśeṣu
+5.24	padaccheda	అన్తస్సుఖః	అన్తఃసుఖః	DB antaḥsukhaḥ
+6.4	*	అనుషజ్జ్యతే	అనుషజ్జతే	DB anuṣajjate
+6.7	*	అవమానయోః	అపమానయోః	DB mānāpamānayoḥ
+6.7	term	జిత్తాత్మనః	జితాత్మనః	DB jitātmanaḥ
+6.11-12	term	చేల	చైల	DB cailājina
+6.16	term	అసశ్నతః	అనశ్నతః	DB anaśnataḥ
+6.17	padaccheda	యుక్తస్వస్న	యుక్తస్వప్న	DB yuktasvapna
+6.19	padaccheda	యుఞతః	యుఞ్జతః	DB yuñjataḥ
+6.36	*	అసంశయత	అసంయత	DB asaṃyatātmanā
+6.38	term	ఉభయవిభ్రష్ఠః	ఉభయవిభ్రష్టః	DB ubhayavibhraṣṭaḥ
+6.39	padaccheda	స్సంశయస్య	సంశయస్య	sandhi doubling
+6.40	padaccheda	కళ్యాణ	కల్యాణ	DB kalyāṇa
+7.6	padaccheda	ప్రళయః	ప్రలయః	DB pralayaḥ
+7.11	padaccheda	అస్మి#1	చ, అహమ్	DB balavatāṃ cāham (the book's asmi is now the noted variant)
+7.11	term	అస్మి#1	చ అహమ్	DB cāham
+8.5	*	కళేబరమ్	కలేవరమ్	DB kalevaram
+8.5	*	కలేబరమ్	కలేవరమ్	DB kalevaram
+8.6	*	కళేబరమ్	కలేవరమ్	DB kalevaram
+8.6	*	కలేబరమ్	కలేవరమ్	DB kalevaram
+8.19	term	భూత్వభూత్వా	భూత్వా భూత్వా	DB bhūtvā bhūtvā
+8.28	*	తపస్సు	తపఃసు	DB tapaḥsu
+9.6	padaccheda	స్సర్వత్రగః	సర్వత్రగః	sandhi doubling
+9.33	term	త్వం	త్వం	supplied pronoun: kept
+10.10	term	బుద్ది	బుద్ధి	DB buddhi
+10.12-13	padaccheda	త్త్వామ్	త్వామ్	DB tvām
+10.16	term	తిష్టసి	తిష్ఠసి	DB tiṣṭhasi
+10.27	term	ఉచ్ఛైః	ఉచ్చైః	DB uccaiḥ
+10.40	term	విస్తారః	విస్తరః	DB vistaraḥ
+11.15	term	ఋషిన్	ఋషీన్	DB ṛṣīn
+11.19	term	తేజపా	తేజసా	DB svatejasā
+11.23	padaccheda	దంష్ట్రాకరాళమ్	దంష్ట్రాకరాలమ్	DB daṃṣṭrākarālam
+11.25	padaccheda	కరాళాని	కరాలాని	DB karālāni
+11.26-27	padaccheda	దంష్ట్రాకరాళాని	దంష్ట్రాకరాలాని	DB daṃṣṭrākarālāni
+11.26-27	term	సహాయోధ	సహ యోధ	DB saha … yodhamukhyaiḥ
+11.33	term	విహతాః	నిహతాః	DB nihatāḥ
+11.36	term	సర్వేచ	సర్వే చ	DB sarve ca
+11.36	term	హృషికేశ	హృషీకేశ	DB hṛṣīkeśa
+11.41-42	padaccheda	అపహాస	అవహాస	DB avahāsa
+11.46	term	చతుర్భుజేవ	చతుర్భుజేన	DB caturbhujena
+12.2	term	శ్రద్దయా	శ్రద్ధయా	DB śraddhayā
+12.3-4	term	ధృవమ్	ధ్రువమ్	DB dhruvam
+12.12	term	కర్మఫలత్యాగాః	కర్మఫలత్యాగః	DB karmaphalatyāgaḥ
+12.18-19	*	అవమానయోః	అపమానయోః	DB mānāpamānayoḥ
+12.18-19	padaccheda	శ్శత్రౌ	శత్రౌ	sandhi doubling
+12.20	*	శ్రద్ధధానాః	శ్రద్దధానాః	DB śraddadhānāḥ
+13.5	term	బ్రహ్మస్రూత్ర	బ్రహ్మసూత్ర	DB brahmasūtra
+13.5	term	వివిదైః	వివిధైః	DB vividhaiḥ
+13.6-7	term	ఇంధ్రియాణి	ఇంద్రియాణి	DB indriyāṇi
+13.10	padaccheda	సమచిత్తత్త్వమ్	సమచిత్తత్వమ్	DB samacittatvam
+13.10	term	అనిష్ఠ	అనిష్ట	DB iṣṭāniṣṭa
+13.18	*	ధిష్ఠితమ్	విష్ఠితమ్	DB viṣṭhitam
+13.18	*	ధిష్ఠితం	విష్ఠితం	DB viṣṭhitam
+13.33	term	సౌక్ష్మాత్	సౌక్ష్మ్యాత్	DB saukṣmyāt
+14.2	padaccheda	ప్రళయే	ప్రలయే	DB pralaye
+14.14	padaccheda	ప్రళయమ్	ప్రలయమ్	DB pralayam
+14.15	padaccheda	ప్రళయమ్	ప్రలయమ్	DB pralayam
+14.18	padaccheda	తిష్టంతి	తిష్ఠంతి	DB tiṣṭhanti
+14.25	*	అవమానయోః	అపమానయోః	DB mānāpamānayoḥ
+15.2	*	విషయప్రవాళాః	విషయప్రవాలాః	DB viṣayapravālāḥ
+15.2	*	ప్రవాళాః	ప్రవాలాః	DB pravālāḥ
+15.5	padaccheda	వ్విముక్తాః	విముక్తాః	sandhi doubling
+15.5	padaccheda	స్సుఖదుఃఖసంజ్ఞైః	సుఖదుఃఖసంజ్ఞైః	sandhi doubling
+15.12	term	అగ్నౌచ	అగ్నౌ చ	DB agnau
+16.2	term	అలోలుప్త్యమ్	అలోలుప్త్వమ్	DB aloluptvam
+16.10	term	దుష్ఫూరమ్	దుష్పూరమ్	DB duṣpūram
+16.13	padaccheda	ఇదమ్#2	ఇమమ్	DB labdham imaṃ prāpsye
+16.13	term	ఇదమ్#2	ఇమమ్	DB imaṃ … manoratham
+17.9	padaccheda	అతిఉష్ణ	అతి–ఉష్ణ	compound members (DB atyuṣṇa)
+17.11	*	దిష్టః	దృష్టః	DB vidhidṛṣṭaḥ
+17.17	padaccheda	అఫలాకాంక్షిబిః	అఫలాకాంక్షిభిః	DB aphalākāṅkṣibhiḥ
+17.21	padaccheda	ఉద్ధిశ్య	ఉద్దిశ్య	DB uddiśya
+18.3	term	అపరేచ	అపరే చ	DB apare ca
+18.13	*	ఇమాని	ఏతాని	DB pañcaitāni (the book's imāni is now the noted variant)
+18.20	term	స్వాత్త్వికమ్	సాత్త్వికమ్	DB sāttvikam
+18.24	padaccheda	బహుళ	బహుల	DB bahula
+18.74	term	అధ్భుతమ్	అద్భుతమ్	DB adbhutam
+1.12	*	నినద్య	వినద్య	DB vinadyoccaiḥ
+2.35	padaccheda	మన్యంతే	మంస్యంతే	DB maṃsyante
+2.35	term	మన్యన్తే	మంస్యన్తే	DB maṃsyante
+3.22	term	నాస్తి	న అస్తి	DB na me pārthāsti
+11.21	term	త్వాహి	త్వాం హి	DB tvāṃ hi
+11.41-42	padaccheda	భోజననేషు	భోజనేషు	DB bhojaneṣu
+18.72	padaccheda	ప్రణష్టః	ప్రనష్టః	DB pranaṣṭaḥ
+# --- terms checked against the verified padaccheda (and the padaccheda words they exposed)
+1.12	term	అస్య	తస్య	DB tasya
+1.28-30	term	గాండీవః	గాండీవమ్	DB gāṇḍīvaṃ
+1.41	term	వార్ష్ణేయే	వార్ష్ణేయ	DB vārṣṇeya
+1.45	padaccheda	వ్యవసితా	వ్యవసితాః	unsandhied form (vyavasitā vayam)
+2.1	term	కృపయావిష్టం	కృపయా ఆవిష్టమ్	DB kṛpayāviṣṭam
+2.5	term	భైక్ష్యమపి	భైక్ష్యమ్ అపి	as in the padaccheda
+2.8	term	శోషణమ్	శోషణమ్	the book glosses ut-śoṣaṇam in parts: kept
+2.29	term	శ్రుత్వాపి	శ్రుత్వా అపి	as in the padaccheda
+2.38	term	యుద్ధాత్	యుద్ధాయ	DB yuddhāya
+2.40	padaccheda	ఇహా	ఇహ	DB neha
+2.41	padaccheda	బహుశాఖా	బహుశాఖాః	unsandhied form (bahuśākhā hy)
+2.45	padaccheda	నిర్ద్వంద్వ	నిర్ద్వంద్వః	unsandhied form (nirdvandvo)
+2.55	padtoken	స్థితః ప్రజ్ఞః	స్థితప్రజ్ఞః	DB sthitaprajñastadā
+2.58	term	ఇంన్ద్రియార్థేభ్యః	ఇన్ద్రియార్థేభ్యః	DB indriyārthebhyaḥ
+2.61	padaccheda	యుక్త	యుక్తః	unsandhied form (yukta āsīta)
+3.6	padaccheda	ఇంన్ద్రియార్థాన్	ఇన్ద్రియార్థాన్	DB indriyārthān
+3.23	term	పార్థః	పార్థ	DB pārtha (vocative)
+3.37	term	మహాపాప్మాః	మహాపాప్మా	DB mahāpāpmā
+4.20	term	అభిప్రవృత్తోపి	అభిప్రవృత్తః అపి	as in the padaccheda
+4.23	term	గతసంఙ్గస్య	గతసఙ్గస్య	DB gatasaṅgasya
+4.35	term	అథ	అథో	DB atho
+4.39	padaccheda	అచిరేణా	అచిరేణ	DB acireṇa
+5.23	term	సుఖి	సుఖీ	DB sukhī
+6.15	term	యోగి	యోగీ	DB yogī
+6.16	term	అత్యశ్నతః	అతి అశ్నతః	as in the padaccheda
+6.18	term	ఆత్మన్యేవ	ఆత్మని ఏవ	as in the padaccheda
+7.22	term	తస్యాః	తస్యాః	tasyā rādhanam reading of the gloss: kept
+8.7	term	అసంశయః	అసంశయమ్	DB asaṃśayam
+8.12-13	term	అస్థితః	ఆస్థితః	DB āsthitaḥ
+9.10	term	ఇదమ్	ఇదమ్	supplied word: kept
+9.15	padaccheda	యజన్త	యజన్తః	unsandhied form (yajanto)
+9.30	padaccheda	సాధు	సాధుః	unsandhied form (sādhur eva)
+10.6	term	ఏషామ్	యేషామ్	DB yeṣāṃ
+10.8	term	భజంతి	భజంతే	DB bhajante
+10.9	padaccheda	మచ్చిత్తా	మచ్చిత్తాః	unsandhied form (maccittā madgata)
+11.1	term	అర్జున	అర్జునః	speaker (arjunaḥ uvāca)
+11.26-27	padaccheda	త్వరమాణా	త్వరమాణాః	unsandhied form (tvaramāṇā viśanti)
+11.51	term	ఉవాచా	ఉవాచ	uvāca
+12.3-4	term	అ–నిర్దేశ్యమ్	అ–నిర్దేశ్యమ్	the book's analysis a-nirdeśyam: kept
+12.13-14	padaccheda	కరుణ	కరుణః	unsandhied form (karuṇa eva)
+13.6-7	term	అవ్యక్త	అవ్యక్తమ్	DB avyaktam
+13.21	term	కరణ	కారణ	DB kāryakāraṇa
+13.22	term	సంఙ్గః	సఙ్గః	DB guṇasaṅgaḥ
+13.23	term	ఆనుమన్తా	అనుమన్తా	DB anumantā
+14.12	term	ఆశమః	అశమః	DB aśamaḥ
+14.16	term	దుఃఖము	దుఃఖమ్	DB duḥkham
+14.23	term	ఏవమ్	ఏవ	DB ity eva
+15.4	padtoken	పదమ్; తత్	పదమ్, తత్	DB tataḥ padaṃ tat
+15.4	term	తత్పదమ్	తత్ పదమ్	DB padaṃ tat
+16.17	padaccheda	నామయజ్ఞై	నామయజ్ఞైః	unsandhied form (nāmayajñais te)
+18.4	term	త్రివిధం	త్రివిధః	DB trividhaḥ
+18.18	term	త్రివిధాః	త్రివిధా	DB trividhā karmacodanā
+18.72	term	ధనఞ్జయా	ధనఞ్జయ	DB dhanañjaya
+18.77	term	అత్యద్భుతమ్	అతి అద్భుతమ్	as in the padaccheda
+# --- endings hidden by sandhi, reviewed against DCS's grammatical forms
+2.9	*	పరన్తపః	పరన్తప	DB guḍākeśaḥ parantapa (vocative)
+3.12	padaccheda	స్తేన	స్తేనః	unsandhied form (stena eva)
+8.9-10	padaccheda	య	యః	unsandhied form (anusmared yaḥ)
+12.15	padaccheda	య	యః	unsandhied form (ca yaḥ)

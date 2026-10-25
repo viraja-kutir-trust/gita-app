@@ -20,11 +20,13 @@
  * Texts (translations / commentaries) are stored as a JSON array of blocks:
  *   {type: "paragraph", text, label?} | {type: "heading", text}
  *   | {type: "verse_quote", lines: [], text, ref?, meter?}
- * Inside `text`, ⟦…⟧ marks a pratīka (word quoted from the verse) -> render bold.
+ *   | {type: "footnotes", items: [{n, text, unanchored?}]}
+ * Inside `text`, ⟦…⟧ marks a pratīka (word quoted from the verse) -> render bold,
+ * and ⁽n⁾ marks footnote n of the same body.
  */
 import * as SQLite from "expo-sqlite";
 
-export const GITA_DB_VERSION = 2;
+export const GITA_DB_VERSION = 4;
 // A new file name per data version: importDatabaseFromAssetAsync never
 // overwrites an existing file, so bump GITA_DB_VERSION whenever gita.db changes.
 export const GITA_DB_NAME = `gita-v${GITA_DB_VERSION}.db`;
@@ -172,12 +174,16 @@ const VERSE_COLS =
   "id, chapter, verse, speaker, speaker_iast, speaker_en, speaker_position, meter, lines_json, padas_json, " +
   "iast_lines_json, iast_padas_json, ascii_key, transliteration_legacy, word_meanings_legacy";
 
-/** Plain text of a block list (pratīka markers removed). */
+export const FOOTNOTE_MARK = /⁽(\d+)⁾/g;
+
+/** Plain text of a block list (pratīka and footnote markers removed, notes left out). */
 export function blocksToPlain(blocks) {
   return (blocks || [])
+    .filter((b) => b.type !== "footnotes")
     .map((b) => (b.type === "verse_quote" ? b.lines.join("\n") : (b.label ? `${b.label} — ` : "") + b.text))
     .join("\n\n")
-    .replace(/[⟦⟧]/g, "");
+    .replace(/[⟦⟧]/g, "")
+    .replace(FOOTNOTE_MARK, "");
 }
 
 const ftsQuote = (t) => `"${t.replace(/"/g, '""')}"`;
@@ -406,6 +412,30 @@ export function createGitaDb(db) {
           dcsIdx: parse(m.dcs_idx_json, []),
         })),
       };
+    },
+
+    /**
+     * Study material for a verse from one source (default Swami Nirvikalpananda, Telugu):
+     * the units (a verse, or verses the book explains together) that cover it, in order.
+     * Each: {id, label, verses, verseId, verseIdEnd, blocks: [{lines, verses, padaccheda, speaker?}],
+     *        words: [{term, meaning, implied?, term_notes?}], footnotes: [{n, text}], textId}
+     * Telugu text throughout; ⁽n⁾ in it refers to `footnotes`.
+     */
+    async getStudyUnits(verseId, source = "nirvikalpananda") {
+      const rows = await all(
+        `SELECT u.id, u.verse_id, u.verse_id_end, u.label, u.data
+           FROM study_verse_units vu JOIN study_units u ON u.id = vu.unit_id AND u.source = vu.source
+          WHERE vu.source = ? AND vu.verse_id = ? ORDER BY vu.ord`,
+        source,
+        verseId
+      ).catch(() => []); // older database without the study tables
+      return rows.map((r) => ({ id: r.id, verseId: r.verse_id, verseIdEnd: r.verse_id_end, label: r.label, ...parse(r.data, {}) }));
+    },
+
+    /** Chapter intro verse, colophon and their notes from a study source (or null). */
+    async getStudyChapter(chapter, source = "nirvikalpananda") {
+      const r = await first("SELECT data FROM study_chapters WHERE source = ? AND chapter = ?", source, chapter).catch(() => null);
+      return r ? parse(r.data, null) : null;
     },
 
     /** {url, fallbackUrl, bytes, cdnOk, duplicateOf} – prefer `url`, retry with `fallbackUrl`. */

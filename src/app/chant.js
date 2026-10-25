@@ -296,7 +296,10 @@ function VerseItem({ item, on, showIast, showMeaning, script, primary, scale }) 
       {tr ? (
         <View style={{ marginTop: 10, opacity: on ? 1 : 0.6 }}>
           <T style={{ fontFamily: fonts.serif, fontSize: 15 * scale, lineHeight: 23 * scale, color: on ? K.sub : K.dim, textAlign: "center" }}>
-            {(tr.blocks || []).map((b) => (b.text || (b.lines || []).join(" ")).replace(/[⟦⟧]/g, "")).join(" ")}
+            {(tr.blocks || [])
+              .filter((b) => b.type !== "footnotes")
+              .map((b) => (b.text || (b.lines || []).join(" ")).replace(/[⟦⟧]/g, "").replace(/⁽\d+⁾/g, ""))
+              .join(" ")}
           </T>
         </View>
       ) : null}

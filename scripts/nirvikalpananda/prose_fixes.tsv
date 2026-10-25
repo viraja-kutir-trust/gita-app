@@ -1,0 +1,63 @@
+# Reviewed fixes of the Telugu text (meanings, translations, footnotes).
+# unit (* = everywhere)	field (* | meaning | translation | footnote)	wrong	right	note
+# Found with review_prose.py and judged in context; whole-word replacements.
+*	*	ఏందుకంటే	ఎందుకంటే	typo
+*	*	ఏందుకు	ఎందుకు	typo
+*	*	యద్ధంలో	యుద్ధంలో	typo
+*	*	మనషి	మనిషి	typo
+*	*	జీవితంలోఅధ్యాత్మిక	జీవితంలో ఆధ్యాత్మిక	missing space, ఆధ్యాత్మిక
+*	*	తత్వ్వాన్ని	తత్త్వాన్ని	typo
+*	*	సంబంధిచిన	సంబంధించిన	typo
+*	*	పుర్వజన్మలో	పూర్వజన్మలో	typo
+*	*	పొందుడు	పొందడు	typo (2.72 మోహాన్ని పొందడు)
+*	*	వరుకు	వరకు	typo
+*	*	శ్వేతశ్వతరోపనిషత్తు	శ్వేతాశ్వతరోపనిషత్తు	typo
+*	*	మృతువు	మృత్యువు	typo
+*	*	యధార్థంగా	యథార్థంగా	spelling
+*	*	శ్రేష్ఠుమైన	శ్రేష్ఠమైన	typo
+*	*	బ్రహాన్ని	బ్రహ్మాన్ని	typo
+*	*	ఏకాక్ష	ఏకాక్షర	8.12-13 ఏకాక్షర బ్రహ్మాన్ని (ekākṣaraṃ brahma)
+*	*	ఎమన	ఏమన	typo
+*	*	జానాన్ని	జ్ఞానాన్ని	typo
+*	*	సత్వాది	సత్త్వాది	spelling as elsewhere in the book
+*	*	సాత్విక	సాత్త్విక	spelling as elsewhere in the book
+*	*	సాత్వికులు	సాత్త్వికులు	spelling as elsewhere in the book
+*	*	పాఠాతరం	పాఠాంతరం	typo
+*	*	అందరకీ	అందరికీ	spelling
+*	*	తొలుగుతుంది	తొలగుతుంది	typo
+*	*	వస్తువునను	వస్తువును	typo
+*	*	శ్రేష్ఠమైగు	శ్రేష్ఠమగు	typo
+*	*	ఉచ్ఛరించి	ఉచ్చరించి	typo (ఉచ్చరించు)
+*	*	జీవులందరూనాకు	జీవులందరూ నాకు	missing space
+*	*	కూడానా	కూడా నా	missing space
+*	*	అపాత–మనోహర	ఆపాత–మనోహర	āpāta
+*	*	అనుభవిస్తునప్పుడు	అనుభవిస్తున్నప్పుడు	typo
+*	*	కాలాలో	కాలాలలో	typo
+*	*	పుణ్యకాలాలో	పుణ్యకాలాలలో	typo
+16.11	*	పురుషార్థర	పురుషార్థం	the book's bare ర glyph for ం (as in 2.62)
+# words split by a stray space
+*	*	తొలగి నప్పుడు	తొలగినప్పుడు	stray space
+*	*	ఉపదేశించ బడింది	ఉపదేశించబడింది	stray space
+*	*	ప్రదర్శించ బడుతోంది	ప్రదర్శించబడుతోంది	stray space
+*	*	అంతర్గతాలవు తున్నాయి	అంతర్గతాలవుతున్నాయి	stray space
+*	*	బంధించ బడుతున్నాడు	బంధించబడుతున్నాడు	stray space
+*	*	సూచించ బడుతోంది	సూచించబడుతోంది	stray space
+*	*	వర్ణించ బడుతోంది	వర్ణించబడుతోంది	stray space
+*	*	కృతార్థులవు తున్నారు	కృతార్థులవుతున్నారు	stray space
+*	*	ప్రసాది స్తున్నాను	ప్రసాదిస్తున్నాను	stray space
+*	*	సంభవ మవుతుంది	సంభవమవుతుంది	stray space
+*	*	నిరూపించ బడుతోంది	నిరూపించబడుతోంది	stray space
+*	*	చేకూర్చు తోంది	చేకూర్చుతోంది	stray space
+*	*	పరిలక్షిత మవుతోందో	పరిలక్షితమవుతోందో	stray space
+*	*	చెప్పబడు తోంది	చెప్పబడుతోంది	stray space
+*	*	వివరింప బడుతోంది	వివరింపబడుతోంది	stray space
+*	*	నిర్మించ బడ్డాయి	నిర్మించబడ్డాయి	stray space
+*	*	అనుష్ఠించ బడుతున్నాయో	అనుష్ఠించబడుతున్నాయో	stray space
+*	*	నియమింప బడుతున్నాయో	నియమింపబడుతున్నాయో	stray space
+*	*	కుల స్త్రీలు	కులస్త్రీలు	stray space
+*	*	అమృత తుల్యమైన	అమృతతుల్యమైన	stray space
+*	*	శబ్దం తోనే	శబ్దంతోనే	stray space
+# notes on the three verses the book prints with another reading (gita.db's reading is now in the text)
+3.26	footnote	జోషయేత్. - పాఠాంతరం	యోజయేత్ - పాఠాంతరం (ఈ పుస్తకంలోని పాఠం)	text follows gita.db (joṣayet)
+7.11	footnote	చాహమ్. - పాఠాంతరం.	బలవతామస్మి - పాఠాంతరం (ఈ పుస్తకంలోని పాఠం).	text follows gita.db (cāham)
+18.13	footnote	పంచైతాని - పాఠాంతరం.	పంచేమాని - పాఠాంతరం (ఈ పుస్తకంలోని పాఠం).	text follows gita.db (pañcaitāni)

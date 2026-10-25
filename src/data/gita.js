@@ -113,6 +113,8 @@ export function useWordMeanings(verse) {
   const source = useSelector((s) => s.settings.wordSource) || DEFAULT_WORD_SOURCE;
   return useQuery(verse ? `wbw:${source}:${verse.id}` : null, (g) => getWordMeanings(g, source, verse));
 }
+/** Swami Nirvikalpananda's padaccheda / Telugu word meanings for a verse (units that cover it). */
+export const useStudyUnits = (verseId) => useQuery(verseId ? `study:${verseId}` : null, (g) => g.getStudyUnits(verseId));
 export const useAudioInfo = (c, v) => useQuery(c && v ? `audio:${c}.${v}` : null, (g) => g.getAudioUrl(c, v));
 
 export function prefetchVerse(_gita, c, v) {

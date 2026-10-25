@@ -33,18 +33,24 @@ export function describeText(t) {
   };
 }
 
+const NOTE_MARK = /⁽\d+⁾/g;
+
 /** First words of a body, for previews. */
 export function previewOf(blocks, max = 140) {
-  const b = (blocks || []).find((x) => x.type === "paragraph") || (blocks || [])[0];
+  const b = (blocks || []).find((x) => x.type === "paragraph") || (blocks || []).find((x) => x.type !== "footnotes");
   if (!b) return "";
-  const s = (b.type === "verse_quote" ? b.lines.join(" ") : b.text).replace(/[⟦⟧]/g, "").replace(/\s+/g, " ").trim();
+  const s = (b.type === "verse_quote" ? b.lines.join(" ") : b.text).replace(/[⟦⟧]/g, "").replace(NOTE_MARK, "").replace(/\s+/g, " ").trim();
   return s.length > max ? s.slice(0, max).replace(/\s+\S*$/, "") + "…" : s;
 }
 
-/** Plain text of blocks, for copy/share. */
+/** Plain text of blocks, for copy/share. Footnote markers become [n]; the notes follow. */
 export function plainText(blocks) {
   return (blocks || [])
-    .map((b) => (b.type === "verse_quote" ? b.lines.join("\n") : (b.label ? `${b.label} — ` : "") + b.text))
+    .map((b) => {
+      if (b.type === "footnotes") return b.items.map((f) => `[${f.n}] ${f.text}`).join("\n");
+      return b.type === "verse_quote" ? b.lines.join("\n") : (b.label ? `${b.label} — ` : "") + b.text;
+    })
     .join("\n\n")
-    .replace(/[⟦⟧]/g, "");
+    .replace(/[⟦⟧]/g, "")
+    .replace(/⁽(\d+)⁾/g, "[$1]");
 }

@@ -49,6 +49,7 @@ outliers are listed in `validate_verses.py` (`EXPLAINED`) and `validate_texts.py
 - `word_meanings(verse_id, idx, term_iast, term_dev, meaning, dcs_idx_json)`
 - `audio(verse_id, url, fallback_url, bytes, cdn_ok, duplicate_of)`
 - `sources(id, name, license, attribution, url)`: attribution text, including the Project Madurai header and the Andhra poet's introduction.
+- `study_units(id, source, chapter, verse_id, verse_id_end, label, data)`, `study_verse_units(source, verse_id, unit_id, ord)`, `study_chapters(source, chapter, data)`: padaccheda and Telugu word meanings of Swami Nirvikalpananda, added by `scripts/nirvikalpananda/integrate.py` (see its README).
 - `meta(key, value)`
 - FTS5:
   - `verse_fts(deva, iast, ascii, phon, meanings, lemmas)` uses the trigram tokenizer, so substring search works in any script. `phon` is a loose phonetic key: `krishna` and `kṛṣṇa` both map to `krsna`.

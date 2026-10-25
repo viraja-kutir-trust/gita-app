@@ -30,6 +30,9 @@ export const settingsSlice = createSlice({
     recentSearches: [],
     collapsedSections: {},
     wordSource: "sivananda",
+    showPadaccheda: true,
+    teluguScript: "te", // te: Telugu text as printed | follow: in the verse script
+    translateTo: null, // last language a card was translated into (ML Kit code)
     onboarded: false,
     migratedLegacy: false,
   },

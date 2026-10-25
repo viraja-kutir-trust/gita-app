@@ -4,18 +4,22 @@ import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useDispatch, useSelector } from "react-redux";
 import { Card, Chip, ChipRow, Glass, Icon, IconButton, T, tap } from "../../../ui/components";
-import { Blocks, mapTokensToMeanings, Sloka } from "../../../ui/reading";
+import { Blocks, Sloka } from "../../../ui/reading";
 import SelectionBar from "../../../ui/SelectionBar";
 import Section, { expandSection } from "../../../ui/Section";
-import { wordSourceInfo } from "../../../lib/wordMeanings";
+import { mapPadacchedaToMeanings, mapTokensToMeanings, wordSourceInfo } from "../../../lib/wordMeanings";
 import useTextSelection from "../../../ui/useTextSelection";
 import { fonts, useTheme, UI } from "../../../ui/theme";
-import { prefetchVerse, useGita, useTexts, useVerse, useWordMeanings } from "../../../data/gita";
+import { prefetchVerse, useGita, useStudyUnits, useTexts, useVerse, useWordMeanings } from "../../../data/gita";
+import { Padaccheda, padacchedaItems, TeluguWords } from "../../../ui/study";
 import { useRecitation, useRecitationProgress } from "../../../audio/AudioProvider";
 import { AUDIO_ENABLED } from "../../../lib/features";
 import { authorName, bookIndex, CHAPTERS, fromBookIndex, langLabel, TOTAL_VERSES, VERSE_COUNTS } from "../../../lib/names";
-import { orderCommentaries, pickTranslation, previewOf, describeText } from "../../../lib/texts";
-import { markRead, setLast, toggleBookmark, unmarkRead } from "../../../state/store";
+import { orderCommentaries, pickTranslation, plainText, previewOf, describeText } from "../../../lib/texts";
+import { blocksPropsFor } from "../../../lib/translate";
+import CardMenu, { TranslationNote } from "../../../ui/CardMenu";
+import useCardTranslation from "../../../ui/useCardTranslation";
+import { markRead, setLast, setSetting, toggleBookmark, togglePinnedCommentator, unmarkRead } from "../../../state/store";
 
 const PAGES = Array.from({ length: TOTAL_VERSES }, (_, i) => i + 1);
 
@@ -193,11 +197,14 @@ const VersePage = memo(function VersePage({ i, width, bottomPad, barBottom, acti
   const { data: words } = useWordMeanings(verse);
   const { data: translations } = useTexts(verse?.id, "translation");
   const { data: commentaries } = useTexts(verse?.id, "commentary");
+  const { data: study } = useStudyUnits(verse?.id);
+  const teluguScript = s.teluguScript === "follow" ? s.script : "te";
+  const showPad = s.showPadaccheda !== false && !!study?.some((u) => (u.blocks || []).some((b) => b.padaccheda && (b.verses || []).includes(v)));
   const scrollRef = useRef(null);
   const offsets = useRef({});
   const size = 23 * s.fontScale;
 
-  const tokenMap = useMemo(() => (verse && words?.meanings?.length ? mapTokensToMeanings(verse.iastLines, words.meanings) : null), [verse, words]);
+  const tokenMap = useMemo(() => (verse && words?.meanings?.length ? mapTokensToMeanings(verse.iastLines, words.meanings, words.words) : null), [verse, words]);
   const tr = pickTranslation(translations, s.primaryTranslatorId);
   const selection = useTextSelection({
     textId: tr?.id,
@@ -209,9 +216,22 @@ const VersePage = memo(function VersePage({ i, width, bottomPad, barBottom, acti
   useEffect(() => {
     if (!active && selection.selection) selection.clear();
   }, [active]); // eslint-disable-line react-hooks/exhaustive-deps
+  const trTx = useCardTranslation({ key: tr?.id, lang: tr?.lang, source: tr?.blocks });
+  const wordsLang = words?.lang || "english";
+  const wTx = useCardTranslation({ key: verse && words ? `${verse.id}:${words.source}` : null, lang: wordsLang, source: words?.meanings, kind: "meanings" });
+  const meanings = wTx.value || [];
   const coms = useMemo(() => orderCommentaries(commentaries, s.pinnedCommentators), [commentaries, s.pinnedCommentators]);
   const pinnedComs = coms.filter((t) => s.pinnedCommentators.includes(t.authorId)).slice(0, 2);
   const openWord = (tokenIdx) => router.push(`/word/${chapter}/${v}/${tokenMap ? tokenMap[tokenIdx] ?? 0 : 0}`);
+  // Padaccheda words → word-by-word entries; a padaccheda word glossed in parts opens them together.
+  const padMap = useMemo(
+    () => (showPad && words?.meanings?.length ? mapPadacchedaToMeanings(padacchedaItems(study, v), words.meanings, words.words) : null),
+    [showPad, study, v, words]
+  );
+  const openPadWord = (k) => {
+    const [first = 0, ...rest] = padMap?.[k] || [];
+    router.push({ pathname: `/word/${chapter}/${v}/${first}`, params: rest.length ? { with: rest.join(",") } : {} });
+  };
   const collapsedMap = useSelector((st) => st.settings.collapsedSections);
   const jump = (k) => {
     expandSection(dispatch, collapsedMap, k);
@@ -239,6 +259,7 @@ const VersePage = memo(function VersePage({ i, width, bottomPad, barBottom, acti
 
       <ChipRow style={[styles.jumpRow, { borderColor: c.line }]} contentStyle={{ paddingVertical: 8 }}>
         <Chip label={`Translations ${translations?.length || ""}`.trim()} tone="surface2" small onPress={() => jump("translation")} />
+        {showPad ? <Chip label="Padaccheda" tone="surface2" small onPress={() => jump("padaccheda")} /> : null}
         <Chip label="Words" tone="surface2" small onPress={() => jump("words")} />
         <Chip label={`Commentaries ${commentaries?.length || ""}`.trim()} tone="surface2" small onPress={() => jump("commentary")} />
         <Chip label={note ? "Your note" : "Note"} tone="surface2" small onPress={() => jump("note")} />
@@ -253,51 +274,94 @@ const VersePage = memo(function VersePage({ i, width, bottomPad, barBottom, acti
           title={`${authorName(tr.authorId, tr.authorName)} · ${langLabel(tr.lang)}`}
           right={`Compare all ${translations.length}`}
           onRightPress={() => router.push(`/compare/${chapter}/${v}`)}
+          menu={
+            <CardMenu
+              title={`${authorName(tr.authorId, tr.authorName)} · ${langLabel(tr.lang)}`}
+              tx={trTx}
+              text={() => plainText(trTx.value)}
+              cite={`— ${authorName(tr.authorId, tr.authorName)}, Bhagavad Gita ${chapter}.${v}`}
+              extra={
+                tr.authorId !== s.primaryTranslatorId
+                  ? [{ label: "Make default translation", icon: "star", onPress: () => dispatch(setSetting({ primaryTranslatorId: tr.authorId })) }]
+                  : []
+              }
+            />
+          }
         >
-          <Blocks
-            blocks={tr.blocks}
-            lang={tr.lang}
-            size={18 * s.fontScale}
-            highlights={selection.highlights}
-            onSelectText={selection.onSelectText}
-            resetKey={selection.resetKey}
-          />
+          {trTx.to ? (
+            // Highlights and selection belong to the original wording, so a translation is read-only.
+            <Blocks blocks={trTx.value} {...blocksPropsFor(trTx.to)} size={18 * s.fontScale} />
+          ) : (
+            <Blocks
+              blocks={tr.blocks}
+              lang={tr.lang}
+              teluguScript={teluguScript}
+              size={18 * s.fontScale}
+              highlights={selection.highlights}
+              onSelectText={selection.onSelectText}
+              resetKey={selection.resetKey}
+            />
+          )}
+          <TranslationNote tx={trTx} />
+        </Section>
+      ) : null}
+
+      {/* Padaccheda (Swami Nirvikalpananda) */}
+      {showPad ? (
+        <Section id="padaccheda" onLayout={mark("padaccheda")} style={styles.section} title="Padaccheda · పదచ్ఛేదః" right="Swami Nirvikalpananda">
+          <Padaccheda units={study} chapter={chapter} verseNo={v} script={s.script} size={17 * s.fontScale} onWordPress={padMap ? openPadWord : undefined} />
         </Section>
       ) : null}
 
       {/* Word by word */}
-      <Section id="words" onLayout={mark("words")} style={styles.section} title="Word by word" right={words ? wordSourceInfo(words.source).name : ""}>
-        <T style={{ ...UI.regular, fontSize: 15 * s.fontScale, lineHeight: 25 * s.fontScale, color: c.ink2 }}>
-          {(words?.meanings || []).map((m, k) => (
-            <T key={k} style={{ ...UI.regular, fontSize: 15 * s.fontScale, color: c.ink2 }} onPress={() => router.push(`/word/${chapter}/${v}/${k}`)}>
-              <T style={{ fontFamily: fonts.sanskritItalic, fontSize: 15 * s.fontScale, color: c.accent }}>{m.termIast}</T>
-              {` — ${m.meaning}`}
-              {k < words.meanings.length - 1 ? ";  " : ""}
-            </T>
-          ))}
-        </T>
+      <Section
+        id="words"
+        onLayout={mark("words")}
+        style={styles.section}
+        title="Word by word"
+        right={words ? wordSourceInfo(words.source).name : ""}
+        menu={
+          words?.meanings?.length ? (
+            <CardMenu
+              title={`Word by word · ${wordSourceInfo(words.source).name}`}
+              tx={wTx}
+              text={() => meanings.map((m) => `${m.termIast} — ${m.meaning}`).join("\n")}
+              cite={`— ${wordSourceInfo(words.source).name}, Bhagavad Gita ${chapter}.${v}`}
+            />
+          ) : null
+        }
+      >
+        {words?.lang === "telugu" ? (
+          <TeluguWords
+            meanings={meanings}
+            meaningFont={wTx.to ? blocksPropsFor(wTx.to).font : undefined}
+            units={words.units}
+            chapter={chapter}
+            verseNo={v}
+            script={s.script}
+            teluguScript={teluguScript}
+            size={15 * s.fontScale}
+            onWordPress={(k) => router.push(`/word/${chapter}/${v}/${k}`)}
+          />
+        ) : (
+          <T style={{ ...UI.regular, fontSize: 15 * s.fontScale, lineHeight: 25 * s.fontScale, color: c.ink2 }}>
+            {meanings.map((m, k) => (
+              <T key={k} style={{ ...UI.regular, fontSize: 15 * s.fontScale, color: c.ink2 }} onPress={() => router.push(`/word/${chapter}/${v}/${k}`)}>
+                <T style={{ fontFamily: fonts.sanskritItalic, fontSize: 15 * s.fontScale, color: c.accent }}>{m.termIast}</T>
+                {` — ${m.meaning}`}
+                {k < meanings.length - 1 ? ";  " : ""}
+              </T>
+            ))}
+          </T>
+        )}
+        <TranslationNote tx={wTx} />
       </Section>
 
       {/* Commentaries */}
       <Section id="commentary" onLayout={mark("commentary")} style={styles.section} title="Commentaries" right={commentaries?.length ? `${commentaries.length} available` : undefined}>
-        {pinnedComs.map((t) => {
-          const d = describeText(t);
-          return (
-            <Card key={t.id} tone="muted" style={styles.comCard} onPress={() => router.push(`/commentary/${chapter}/${v}/${t.authorId}`)} accessibilityLabel={`Read ${d.name}`}>
-              <View style={styles.between}>
-                <T v="subheadStrong" numberOfLines={1} style={{ flexShrink: 1 }}>
-                  {d.name}
-                </T>
-                <T v="caption" muted numberOfLines={1}>
-                  {langLabel(t.lang)} · {d.minutes} min
-                </T>
-              </View>
-              <T numberOfLines={3} style={{ fontFamily: t.lang === "english" ? fonts.serif : fonts.sanskrit, fontSize: 15, lineHeight: 24, color: c.ink2 }}>
-                {previewOf(t.blocks, 220)}
-              </T>
-            </Card>
-          );
-        })}
+        {pinnedComs.map((t) => (
+          <PinnedCommentary key={t.id} t={t} chapter={chapter} v={v} />
+        ))}
         <Card tone="muted" style={styles.allCom} onPress={() => router.push(`/commentaries/${chapter}/${v}`)} accessibilityLabel="All commentaries">
           <View style={{ flex: 1, gap: 2 }}>
             <T v="calloutStrong" numberOfLines={1}>
@@ -345,12 +409,49 @@ const VersePage = memo(function VersePage({ i, width, bottomPad, barBottom, acti
   );
 });
 
+/** A pinned commentator's opening lines, with its ⋯ menu (translate, copy, share, unpin). */
+function PinnedCommentary({ t, chapter, v }) {
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const { c } = useTheme();
+  const d = describeText(t);
+  const tx = useCardTranslation({ key: t.id, lang: t.lang, source: t.blocks });
+  const font = tx.to ? blocksPropsFor(tx.to).font : t.lang === "english" ? fonts.serif : fonts.sanskrit;
+  return (
+    <Card tone="muted" style={styles.comCard} onPress={() => router.push(`/commentary/${chapter}/${v}/${t.authorId}`)} accessibilityLabel={`Read ${d.name}`}>
+      <View style={styles.between}>
+        <T v="subheadStrong" numberOfLines={1} style={{ flexShrink: 1 }}>
+          {d.name}
+        </T>
+        <View style={styles.cardEnd}>
+          <T v="caption" muted numberOfLines={1}>
+            {langLabel(t.lang)} · {d.minutes} min
+          </T>
+          <CardMenu
+            size={28}
+            title={`${d.name} · ${langLabel(t.lang)}`}
+            tx={tx}
+            text={() => plainText(tx.value)}
+            cite={`— ${d.name}, on Bhagavad Gita ${chapter}.${v}`}
+            extra={[{ label: "Unpin commentator", icon: "pin", onPress: () => dispatch(togglePinnedCommentator(t.authorId)) }]}
+          />
+        </View>
+      </View>
+      <T numberOfLines={3} style={{ fontFamily: font, fontSize: 15, lineHeight: 24, color: c.ink2 }}>
+        {previewOf(tx.value, 220)}
+      </T>
+      <TranslationNote tx={tx} />
+    </Card>
+  );
+}
+
 const styles = StyleSheet.create({
+  cardEnd: { flexDirection: "row", alignItems: "center", gap: 2, marginRight: -6 },
   headerBtn: { width: 36, height: 36, alignItems: "center", justifyContent: "center" },
   verseBlock: { paddingHorizontal: 22, paddingTop: 22, paddingBottom: 16, alignItems: "center" },
   jumpRow: { borderTopWidth: StyleSheet.hairlineWidth, borderBottomWidth: StyleSheet.hairlineWidth, marginBottom: 6 },
   section: { paddingHorizontal: 22, paddingTop: 18, gap: 8 },
-  between: { flexDirection: "row", justifyContent: "space-between", alignItems: "baseline", gap: 12 },
+  between: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", gap: 12 },
   comCard: { borderRadius: 16, padding: 14, gap: 6 },
   allCom: { borderRadius: 16, padding: 14, flexDirection: "row", alignItems: "center", gap: 12 },
   readRow: { flexDirection: "row", alignItems: "center", gap: 8, paddingVertical: 10, alignSelf: "flex-start" },

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Switch, View } from "react-native";
 import { useRouter } from "expo-router";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,6 +10,7 @@ import { useTheme } from "../ui/theme";
 import { useVerse } from "../data/gita";
 import { SCRIPTS } from "../lib/script";
 import { setSetting } from "../state/store";
+import { deleteModel, downloadedModels, targetByCode, translationAvailable } from "../lib/translate";
 
 const THEMES = [
   { key: "auto", label: "Auto" },
@@ -137,11 +139,45 @@ export default function Settings() {
         </Card>
       </View>
 
+      <View style={{ gap: 8 }}>
+        <T v="footnoteStrong" muted>
+          Telugu meanings (Swami Nirvikalpananda)
+        </T>
+        <Card tone="muted" style={{ padding: 0, overflow: "hidden" }}>
+          {[
+            { key: "te", title: "In Telugu script", sub: "తెలుగు లిపిలో, as printed in the book" },
+            { key: "follow", title: "In the script chosen above", sub: "Transliterated, e.g. Telugu words in देवनागरी" },
+          ].map((o, i) => {
+            const on = (s.teluguScript || "te") === o.key;
+            return (
+              <Pressable
+                key={o.key}
+                onPress={() => set({ teluguScript: o.key })}
+                accessibilityRole="radio"
+                accessibilityState={{ checked: on }}
+                style={[styles.toggle, i === 0 && { borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: c.line }]}
+              >
+                <View style={{ flex: 1, gap: 2, paddingVertical: 8 }}>
+                  <T v="callout">{o.title}</T>
+                  <T v="caption" muted>
+                    {o.sub}
+                  </T>
+                </View>
+                {on ? <Icon name="checkCircle" size={20} color={c.accent} /> : null}
+              </Pressable>
+            );
+          })}
+        </Card>
+      </View>
+
       <Card tone="muted" style={{ padding: 0, overflow: "hidden" }}>
         <Toggle label="Transliteration under each verse" value={s.showIast} onChange={(x) => set({ showIast: x })} />
+        <Toggle label="Padaccheda (words split) under each verse" value={s.showPadaccheda !== false} onChange={(x) => set({ showPadaccheda: x })} />
         {AUDIO_ENABLED ? <Toggle label="Play the next verse automatically" value={s.autoPlayNext} onChange={(x) => set({ autoPlayNext: x })} /> : null}
         <Toggle label="Mark a verse read when I move on" value={s.markReadOnMove} onChange={(x) => set({ markReadOnMove: x })} last />
       </Card>
+
+      {translationAvailable ? <TranslationLanguages /> : null}
 
       <Card tone="muted" style={{ padding: 0, overflow: "hidden" }}>
         <ListRow
@@ -163,6 +199,48 @@ export default function Settings() {
         />
       </Card>
     </ScrollView>
+  );
+}
+
+/** Languages downloaded for on-device translation (the ⋯ menu on a card), each removable. */
+function TranslationLanguages() {
+  const { c } = useTheme();
+  const [have, setHave] = useState(null);
+  useEffect(() => {
+    downloadedModels().then(setHave);
+  }, []);
+  const removable = (have || []).filter((code) => code !== "en");
+  const remove = (code) => {
+    tap();
+    deleteModel(code)
+      .catch(() => {})
+      .then(() => downloadedModels().then(setHave));
+  };
+  return (
+    <View style={{ gap: 8 }}>
+      <T v="footnoteStrong" muted>
+        Translation languages
+      </T>
+      <Card tone="muted" style={{ padding: 0, overflow: "hidden" }}>
+        {removable.map((code) => (
+          <View key={code} style={[styles.toggle, { borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: c.line }]}>
+            <View style={{ flex: 1, paddingVertical: 8 }}>
+              <T v="callout">{targetByCode[code]?.native || code}</T>
+              {targetByCode[code] && targetByCode[code].native !== targetByCode[code].name ? (
+                <T v="caption" muted>
+                  {targetByCode[code].name}
+                </T>
+              ) : null}
+            </View>
+            <IconButton name="trash" label={`Remove ${targetByCode[code]?.name || code}`} size={36} iconSize={17} color={c.muted} onPress={() => remove(code)} />
+          </View>
+        ))}
+        <T v="caption" muted style={{ padding: 14 }}>
+          {removable.length ? "Kept on this device so translation works offline. " : "None downloaded yet. "}
+          Translate a translation, commentary or word meaning from the ⋯ on its card. It's a machine's reading, so some meaning may get lost in translation. Sanskrit is never translated.
+        </T>
+      </Card>
+    </View>
   );
 }
 

@@ -51,6 +51,20 @@ const w = await g.getWords(v.id);
 ok(w.words.length > 5 && w.meanings.length > 5 && w.words[0].morph.includes("·"), "words + meanings for 2.47");
 const au = await g.getAudioUrl(18, 78);
 ok(au && /18\/78\.mp3$/.test(au.url), "audio 18.78 " + (au && au.url));
+// Swami Nirvikalpananda (Telugu): padaccheda, word meanings, translation with footnotes
+const su11 = await g.getStudyUnits((await g.getVerse(1, 1)).id);
+ok(su11.length === 1 && su11[0].words.length === 10 && su11[0].blocks[0].padaccheda.startsWith("ధర్మక్షేత్రే,"), "1.1 study unit: padaccheda + 10 words");
+const su15 = await g.getStudyUnits((await g.getVerse(1, 5)).id);
+ok(su15.length === 1 && su15[0].id === "1.4-6" && su15[0].verses.join() === "4,5,6", "1.5 is in the 1.4–6 unit");
+const su121 = await g.getStudyUnits((await g.getVerse(1, 21)).id);
+ok(su121.length === 2, "1.21 is split across two units: " + su121.map((u) => u.id).join(", "));
+const nv = await g.getTexts((await g.getVerse(1, 1)).id, { authorIds: [22] });
+ok(nv.length === 1 && nv[0].lang === "telugu" && /⁽1⁾/.test(nv[0].blocks[0].text) && nv[0].blocks.at(-1).type === "footnotes", "1.1 Telugu translation with footnote 1");
+let units = 0;
+for (let c = 1; c <= 18; c++) for (const vv of await g.getVersesInChapter(c)) units += (await g.getStudyUnits(vv.id)).length ? 1 : 0;
+ok(units === 701, "every verse has a study unit: " + units);
+const sr = await g.search("కురుక్షేత్రంలో", { scope: "texts" }).catch((e) => ({ error: e.message }));
+ok(!sr.error, "Telugu search runs");
 const a = await g.getAuthors({ type: "commentary" });
 ok(a.length >= 16, "commentary authors: " + a.length);
 
