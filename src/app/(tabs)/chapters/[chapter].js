@@ -101,7 +101,7 @@ export default function ChapterDetail() {
           index < verses.length - 1 && { borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: c.line },
         ]}
       >
-        <T v="footnoteStrong" color={upNext ? c.accent : c.muted} style={{ width: 40 }}>
+        <T v="footnoteStrong" color={upNext ? c.accent : c.muted} numberOfLines={1} style={{ minWidth: 40, flexShrink: 0, fontVariant: ["tabular-nums"] }}>
           {n}.{v.verse}
         </T>
         <T numberOfLines={1} style={{ flex: 1, fontFamily: script === "ro" ? fonts.sanskritItalic : scriptFont(script), fontSize: 16, lineHeight: 26, color: c.ink }}>

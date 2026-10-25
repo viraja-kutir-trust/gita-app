@@ -1,4 +1,4 @@
-import { memo, useMemo, useState } from "react";
+import { memo, useCallback, useMemo, useState } from "react";
 import { Platform, StyleSheet, Text, TextInput, View } from "react-native";
 import { fonts, useTheme, UI } from "./theme";
 import { T } from "./components";
@@ -19,6 +19,17 @@ function withVerseNumber(line, n, script) {
   // Non-breaking spaces keep "॥ ४७ ॥" with the last word; the word joiner stops the
   // break Unicode otherwise allows after a danda.
   return line.replace(/[\s।॥|]+$/, "") + `\u00A0॥\u2060\u00A0${num}\u00A0॥`;
+}
+
+// The trailing "॥ ४७ ॥" is set smaller so it doesn't make the last line the one that
+// decides how much the whole verse has to shrink.
+const NUM_SCALE = 0.72;
+const NUM_MARK = "\u00A0॥\u2060";
+
+/** Split a token into its word and the verse-number suffix added by withVerseNumber. */
+function splitNumber(tok) {
+  const at = tok.indexOf(NUM_MARK);
+  return at < 0 ? [tok, ""] : [tok.slice(0, at), tok.slice(at)];
 }
 
 /**
@@ -45,11 +56,32 @@ export const Sloka = memo(function Sloka({
     const src = script === "ro" ? verse.iastLines.map((l) => l.replace(/\|\|/g, "॥").replace(/\|/g, "।")) : verse.lines.map((l) => toScript(l, script));
     return src.map((l, i) => (showNumber && i === src.length - 1 ? withVerseNumber(l, verse.verse, script) : l));
   }, [verse, script, showNumber]);
-  if (!verse) return null;
   const font = scriptFont(script);
-  const speaker = verse.speaker ? (script === "ro" ? verse.speakerIast || verse.speaker : toScript(verse.speaker, script)) : null;
-  const speakerAt = verse.speaker ? verse.speakerPosition || 0 : -1;
-  const lineH = Math.round(size * 1.75);
+  const speaker = verse?.speaker ? (script === "ro" ? verse.speakerIast || verse.speaker : toScript(verse.speaker, script)) : null;
+  const speakerAt = verse?.speaker ? verse.speakerPosition || 0 : -1;
+  // One printed line per half-verse/pāda, sized to the space: every line takes the
+  // same size, growing up to 25% when there is room (tablets) or shrinking down to
+  // 70% so the widest line fits. At very large reading sizes, wrapping is better than tiny text.
+  const fitLines = size <= 27;
+  const sig = `${font}|${size}|${lines.join("\n")}`;
+  const [fit, setFit] = useState({ sig: "", box: 0, widths: {} });
+  const cur = fit.sig === sig ? fit : { sig, box: fit.box, widths: {} };
+  const onBox = useCallback((e) => {
+    const box = e.nativeEvent.layout.width;
+    setFit((f) => (Math.abs(f.box - box) < 0.5 ? f : { ...f, box }));
+  }, []);
+  const onNatural = (li, w) =>
+    setFit((f) => {
+      const base = f.sig === sig ? f : { sig, box: f.box, widths: {} };
+      return base.widths[li] === w ? base : { ...base, widths: { ...base.widths, [li]: w } };
+    });
+  const measured = fitLines && cur.box > 0 && lines.every((_, li) => cur.widths[li] > 0);
+  const widest = measured ? Math.max(...lines.map((_, li) => cur.widths[li])) : 0;
+  // A little slack so rounding never pushes a line into the per-line shrink fallback.
+  const scale = measured ? Math.max(0.7, Math.min(1.25, (cur.box * 0.98) / widest)) : 1;
+  const lineSize = size * scale;
+  const lineH = Math.round(lineSize * 1.75);
+  if (!verse) return null;
   let tokenIndex = -1;
 
   const speakerLabel = (key) => (
@@ -67,16 +99,25 @@ export const Sloka = memo(function Sloka({
     rendered.push(
       <Text
         key={li}
-        style={{ fontFamily: font, fontSize: size, lineHeight: lineH, color: ink, textAlign: align, alignSelf: "stretch" }}
+        style={{ fontFamily: font, fontSize: lineSize, lineHeight: lineH, color: ink, textAlign: align, alignSelf: "stretch" }}
         accessibilityLanguage="sa"
-        // One printed line per half-verse/pāda: shrink a little rather than wrap mid-line.
-        // At very large reading sizes, wrapping is better than tiny text.
-        {...(size <= 27 ? { numberOfLines: 1, adjustsFontSizeToFit: true, minimumFontScale: 0.7 } : null)}
+        // Per-line shrink stays only as a fallback until the shared size is measured.
+        {...(fitLines ? { numberOfLines: 1, ...(measured ? null : { adjustsFontSizeToFit: true, minimumFontScale: 0.7 }) } : null)}
       >
-        {toks.map((tok, ti) => {
+        {toks.map((full, ti) => {
+          const [tok, num] = splitNumber(full);
+          const numEl = num ? <Text style={{ fontSize: lineSize * NUM_SCALE }}>{num}</Text> : null;
           const isPunct = PUNCT.test(tok) || /^[०-९0-9౦-౯೦-೯൦-൯০-৯૦-૯]+$/.test(tok);
           const sep = ti < toks.length - 1 ? " " : "";
-          if (isPunct || !onWordPress) return tok + sep;
+          if (isPunct || !onWordPress) {
+            return (
+              <Text key={ti}>
+                {tok}
+                {numEl}
+                {sep}
+              </Text>
+            );
+          }
           tokenIndex += 1;
           const my = tokenIndex;
           const on = activeToken === my;
@@ -89,6 +130,7 @@ export const Sloka = memo(function Sloka({
               >
                 {tok}
               </Text>
+              {numEl}
               {sep}
             </Text>
           );
@@ -98,7 +140,33 @@ export const Sloka = memo(function Sloka({
   });
 
   return (
-    <View style={{ alignItems: align === "center" ? "center" : "flex-start", gap: 2 }}>
+    <View style={{ alignItems: align === "center" ? "center" : "flex-start", gap: 2 }} onLayout={fitLines ? onBox : undefined}>
+      {fitLines ? (
+        // Off-screen copies at full size, unconstrained, to learn each line's natural width.
+        <View style={styles.measureClip} pointerEvents="none" accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
+          <View style={styles.measure}>
+            {lines.map((line, li) => (
+              <Text
+                key={`${sig}-${li}`}
+                numberOfLines={1}
+                style={{ fontFamily: font, fontSize: size, alignSelf: "flex-start" }}
+                onLayout={(e) => onNatural(li, e.nativeEvent.layout.width)}
+              >
+                {lineTokens(line).map((full, ti, all) => {
+                  const [tok, num] = splitNumber(full);
+                  return (
+                    <Text key={ti}>
+                      {tok}
+                      {num ? <Text style={{ fontSize: size * NUM_SCALE }}>{num}</Text> : null}
+                      {ti < all.length - 1 ? " " : ""}
+                    </Text>
+                  );
+                })}
+              </Text>
+            ))}
+          </View>
+        </View>
+      ) : null}
       {rendered}
       {showIast && script !== "ro" ? (
         <View style={{ marginTop: 10, alignItems: align === "center" ? "center" : "flex-start" }}>
@@ -484,6 +552,8 @@ export const Blocks = memo(function Blocks({
 
 const styles = StyleSheet.create({
   speaker: { marginBottom: 4, textAlign: "center" },
+  measureClip: { position: "absolute", top: 0, left: 0, width: 0, height: 0, overflow: "hidden", opacity: 0 },
+  measure: { position: "absolute", top: 0, left: 0, width: 10000, alignItems: "flex-start" },
   quote: { borderRadius: 14, paddingVertical: 12, paddingHorizontal: 14 },
   notesRow: { flexDirection: "row", flexWrap: "wrap", alignItems: "center", gap: 8, paddingTop: 10, borderTopWidth: StyleSheet.hairlineWidth },
   notePill: { minWidth: 30, paddingHorizontal: 9, paddingVertical: 3, borderRadius: 13, overflow: "hidden", textAlign: "center" },

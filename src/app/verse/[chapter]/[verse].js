@@ -448,7 +448,7 @@ function PinnedCommentary({ t, chapter, v }) {
 const styles = StyleSheet.create({
   cardEnd: { flexDirection: "row", alignItems: "center", gap: 2, marginRight: -6 },
   headerBtn: { width: 36, height: 36, alignItems: "center", justifyContent: "center" },
-  verseBlock: { paddingHorizontal: 22, paddingTop: 22, paddingBottom: 16, alignItems: "center" },
+  verseBlock: { paddingHorizontal: 10, paddingTop: 22, paddingBottom: 16, alignItems: "center" },
   jumpRow: { borderTopWidth: StyleSheet.hairlineWidth, borderBottomWidth: StyleSheet.hairlineWidth, marginBottom: 6 },
   section: { paddingHorizontal: 22, paddingTop: 18, gap: 8 },
   between: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", gap: 12 },

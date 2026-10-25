@@ -1,5 +1,5 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { FlatList, Pressable, StyleSheet, View } from "react-native";
+import { Animated, Easing, FlatList, Pressable, StyleSheet, View } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useKeepAwake } from "expo-keep-awake";
 import { StatusBar } from "expo-status-bar";
@@ -60,6 +60,66 @@ export default function Chant() {
   const items = useMemo(() => buildItems(scope, startChapter), [scope, startChapter]);
   const indexOf = useCallback((c, v) => items.findIndex((it) => it.type === "verse" && it.chapter === c && it.verse === v), [items]);
 
+  // Where each row sits in the list, and how much of the screen is free to read in,
+  // so the verse at the middle of the visible area is the one in focus.
+  const rows = useRef(new Map());
+  const view = useRef({ listH: 0, contentH: 0, controlsH: 0 });
+  const [range, setRange] = useState({ lo: -1, hi: -1 });
+  const updateFocus = useCallback(() => {
+    const { listH, contentH, controlsH } = view.current;
+    if (!listH) return;
+    const y = offset.current;
+    const visibleH = Math.max(1, listH - controlsH);
+    const line = y + visibleH / 2;
+    let best = -1;
+    let bestD = Infinity;
+    let first = -1;
+    let last = -1;
+    rows.current.forEach((r, i) => {
+      if (items[i]?.type !== "verse") return;
+      if (first < 0 || i < first) first = i;
+      if (i > last) last = i;
+      const d = line < r.y ? r.y - line : line > r.y + r.h ? line - r.y - r.h : 0;
+      if (d < bestD || (d === bestD && i < best)) {
+        bestD = d;
+        best = i;
+      }
+    });
+    if (best < 0) return;
+    // At either end of the list the middle can't reach the outermost verses, so
+    // everything between the edge and the middle counts as in focus.
+    const atTop = y <= 4;
+    const atEnd = contentH > 0 && y >= contentH - listH - 4;
+    const lastVerse = items.reduce((k, it, i) => (it.type === "verse" ? i : k), -1);
+    const firstVerse = items.findIndex((it) => it.type === "verse");
+    const lo = atTop ? firstVerse : best;
+    const hi = atEnd ? lastVerse : best;
+    setRange((r) => (r.lo === lo && r.hi === hi ? r : { lo, hi }));
+    const it = items[best];
+    setFocus((f) => (f.chapter === it.chapter && f.verse === it.verse ? f : { chapter: it.chapter, verse: it.verse }));
+  }, [items]);
+  useEffect(() => {
+    rows.current = new Map();
+  }, [items]);
+  // A cell that reports its position in the list (FlatList's own onLayout is still called).
+  const Cell = useMemo(
+    () =>
+      function Cell({ index, onLayout, cellKey, item, ...props }) { // eslint-disable-line no-unused-vars
+        return (
+          <View
+            {...props}
+            onLayout={(e) => {
+              onLayout?.(e);
+              const { y, height } = e.nativeEvent.layout;
+              rows.current.set(index, { y, h: height });
+              updateFocus();
+            }}
+          />
+        );
+      },
+    [updateFocus]
+  );
+
   // In whole-book mode, start at the beginning of the chosen chapter.
   useEffect(() => {
     const i = scope === "book" ? items.findIndex((it) => it.type === "head" && it.chapter === startChapter) : 0;
@@ -68,6 +128,12 @@ export default function Chant() {
 
   const chanting = audio.current && (audio.current.mode === "chapter" || audio.current.mode === "book");
   const active = chanting ? audio.current : focus;
+  // Each verse is "read" (passed), "on" (being read) or "next" (still ahead).
+  const activeRange = useMemo(() => {
+    if (!chanting) return range;
+    const i = indexOf(audio.current.chapter, audio.current.verse);
+    return { lo: i, hi: i };
+  }, [chanting, range, audio.current?.chapter, audio.current?.verse, indexOf]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Follow the recitation; mark each chanted verse as read.
   const lastChanted = useRef(null);
@@ -77,7 +143,7 @@ export default function Chant() {
     if (lastChanted.current && lastChanted.current !== `${c}.${v}`) dispatch(markRead(lastChanted.current));
     lastChanted.current = `${c}.${v}`;
     const i = indexOf(c, v);
-    if (i >= 0 && !userScrolling.current) listRef.current?.scrollToIndex({ index: i, animated: true, viewPosition: 0.3 });
+    if (i >= 0 && !userScrolling.current) listRef.current?.scrollToIndex({ index: i, animated: true, viewPosition: 0.4 });
   }, [audio.current?.chapter, audio.current?.verse, chanting]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Silent auto-scroll for reading along without audio.
@@ -91,11 +157,6 @@ export default function Chant() {
     }, 50);
     return () => clearInterval(t);
   }, [speed, chanting]);
-
-  const onViewable = useRef(({ viewableItems }) => {
-    const v = viewableItems.find((x) => x.item.type === "verse");
-    if (v) setFocus({ chapter: v.item.chapter, verse: v.item.verse });
-  }).current;
 
   const togglePlay = () => {
     tap();
@@ -169,12 +230,31 @@ export default function Chant() {
         ref={listRef}
         data={items}
         keyExtractor={(it) => it.key}
-        renderItem={({ item }) => <Row item={item} active={active} showIast={s.chantShowIast} showMeaning={s.chantShowMeaning} script={s.script} primary={s.primaryTranslatorId} scale={s.fontScale} />}
+        renderItem={({ item, index }) => (
+          <Row
+            item={item}
+            state={index < activeRange.lo ? "read" : index <= activeRange.hi ? "on" : "next"}
+            showIast={s.chantShowIast}
+            showMeaning={s.chantShowMeaning}
+            script={s.script}
+            primary={s.primaryTranslatorId}
+            scale={s.fontScale}
+          />
+        )}
+        extraData={activeRange}
+        CellRendererComponent={Cell}
+        onLayout={(e) => {
+          view.current.listH = e.nativeEvent.layout.height;
+          updateFocus();
+        }}
+        onContentSizeChange={(_, h) => {
+          view.current.contentH = h;
+          updateFocus();
+        }}
         contentContainerStyle={{ paddingTop: 20, paddingBottom: insets.bottom + 220, paddingHorizontal: 24 }}
-        onViewableItemsChanged={onViewable}
-        viewabilityConfig={{ itemVisiblePercentThreshold: 60 }}
         onScroll={(e) => {
           offset.current = e.nativeEvent.contentOffset.y;
+          updateFocus();
         }}
         scrollEventThrottle={32}
         onScrollBeginDrag={() => {
@@ -192,7 +272,13 @@ export default function Chant() {
         windowSize={9}
       />
 
-      <View style={[styles.controls, { bottom: insets.bottom + 10 }]}>
+      <View
+        style={[styles.controls, { bottom: insets.bottom + 10 }]}
+        onLayout={(e) => {
+          view.current.controlsH = e.nativeEvent.layout.height + insets.bottom + 10;
+          updateFocus();
+        }}
+      >
         <View style={styles.ctrlRow}>
           <Pressable
             onPress={AUDIO_ENABLED ? togglePlay : () => (tap(), setSpeed((x) => (x ? 0 : 1)))}
@@ -256,7 +342,7 @@ function Toggle({ label, on, onPress }) {
   );
 }
 
-const Row = memo(function Row({ item, active, showIast, showMeaning, script, primary, scale }) {
+const Row = memo(function Row({ item, state, showIast, showMeaning, script, primary, scale }) {
   if (item.type === "head") {
     const ch = CHAPTERS[item.chapter];
     return (
@@ -278,24 +364,38 @@ const Row = memo(function Row({ item, active, showIast, showMeaning, script, pri
       </T>
     );
   }
-  return <VerseItem item={item} on={active.chapter === item.chapter && active.verse === item.verse} showIast={showIast} showMeaning={showMeaning} script={script} primary={primary} scale={scale} />;
+  return <VerseItem item={item} state={state} showIast={showIast} showMeaning={showMeaning} script={script} primary={primary} scale={scale} />;
 });
 
-function VerseItem({ item, on, showIast, showMeaning, script, primary, scale }) {
+function VerseItem({ item, state, showIast, showMeaning, script, primary, scale }) {
   const { data: verses } = useChapterVerses(item.chapter);
   const verse = verses?.[item.verse - 1];
   const { data: texts } = useTexts(showMeaning ? verse?.id : null, "translation");
   const tr = showMeaning ? pickTranslation(texts, primary) : null;
+  // Focus drifts softly from verse to verse: every verse keeps one size (so nothing
+  // reflows) and only fades and settles in scale, on the native thread.
+  const level = FOCUS_LEVEL[state];
+  const anim = useRef(new Animated.Value(level)).current;
+  useEffect(() => {
+    const a = Animated.timing(anim, { toValue: level, duration: 650, easing: Easing.out(Easing.cubic), useNativeDriver: true });
+    a.start();
+    return () => a.stop();
+  }, [level, anim]);
+  const opacity = anim.interpolate({ inputRange: [0, 1, 2], outputRange: [0.32, 0.5, 1] });
+  const zoom = anim.interpolate({ inputRange: [0, 1, 2], outputRange: [0.9, 0.9, 1] });
   return (
-    <View style={{ marginBottom: 34, alignItems: "center" }}>
+    <Animated.View style={{ marginBottom: 34, alignItems: "center", opacity, transform: [{ scale: zoom }] }}>
       {verse ? (
-        <Sloka verse={verse} script={script} size={(on ? 23 : 20) * scale} showIast={showIast} color={on ? K.ink : K.dim} dimColor={on ? K.sub : "#6E6A65"} />
+        // Reach past the page gutter so sloka lines get nearly the full width.
+        <View style={{ alignSelf: "stretch", marginHorizontal: -14 }}>
+          <Sloka verse={verse} script={script} size={23 * scale} showIast={showIast} color={K.ink} dimColor={K.sub} />
+        </View>
       ) : (
         <View style={{ height: 80 }} />
       )}
       {tr ? (
-        <View style={{ marginTop: 10, opacity: on ? 1 : 0.6 }}>
-          <T style={{ fontFamily: fonts.serif, fontSize: 15 * scale, lineHeight: 23 * scale, color: on ? K.sub : K.dim, textAlign: "center" }}>
+        <View style={{ marginTop: 10 }}>
+          <T style={{ fontFamily: fonts.serif, fontSize: 15 * scale, lineHeight: 23 * scale, color: K.sub, textAlign: "center" }}>
             {(tr.blocks || [])
               .filter((b) => b.type !== "footnotes")
               .map((b) => (b.text || (b.lines || []).join(" ")).replace(/[⟦⟧]/g, "").replace(/⁽\d+⁾/g, ""))
@@ -303,9 +403,12 @@ function VerseItem({ item, on, showIast, showMeaning, script, primary, scale }) 
           </T>
         </View>
       ) : null}
-    </View>
+    </Animated.View>
   );
 }
+
+// Passed verses fade furthest, verses ahead a little less, the verse in focus is full.
+const FOCUS_LEVEL = { read: 0, next: 1, on: 2 };
 
 const styles = StyleSheet.create({
   top: { paddingHorizontal: 16, paddingBottom: 10, gap: 10, backgroundColor: "rgba(14,14,16,0.94)" },
