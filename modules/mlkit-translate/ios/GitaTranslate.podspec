@@ -1,7 +1,8 @@
 Pod::Spec.new do |s|
-  s.name           = 'MlkitTranslate'
+  s.name           = 'GitaTranslate'
   s.version        = '0.1.0'
   s.summary        = 'On-device translation with Google ML Kit'
+  # Not 'MlkitTranslate': that name collides with Google's MLKitTranslate pod on case-insensitive disks.
   s.description    = 'Translates vernacular commentary text on device with Google ML Kit'
   s.license        = 'MIT'
   s.author         = 'Sai Teja'

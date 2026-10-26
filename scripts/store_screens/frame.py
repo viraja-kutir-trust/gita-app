@@ -28,13 +28,15 @@ DARK = {"bg": (14, 14, 16), "title": (242, 237, 228), "sub": (162, 157, 149), "a
 # (file, title, subtitle, dark?)
 SHOTS = [
     ("01", "Every verse, laid out\nas it is meant to be read", "Sanskrit, transliteration and translation", False),
-    ("02", "Tap any word", "Its meaning, root and grammar", False),
+    ("02", "Tap any word", "Even sandhi-joined ones — meaning,\nroot and the Sanskrit grammar terms", False),
     ("03", "The great commentaries", "Śaṅkara, Rāmānuja, Madhva and more —\nsearch inside them, filter by school", False),
     ("04", "Śaṅkara in English", "Select any words to highlight\nor add them to your notes", False),
     ("05", "Search the whole Gita", "Verse numbers, any script,\nno accents needed", False),
     ("06", "Read in your script", "Devanagari, Telugu, Kannada, Tamil,\nMalayalam, Bengali, Gujarati, IAST", False),
     ("07", "Chanting mode", "A chapter or the whole Gita,\nas one continuous stream", True),
     ("08", "A verse for every day", "Pick up right where you left off", False),
+    ("09", "Translate any card", "Into your language, on your device —\nthe Sanskrit always stays as it is", False),
+    ("10", "Telugu word meanings", "Swami Nirvikalpananda's padaccheda\nand word-by-word meanings", False),
 ]
 
 

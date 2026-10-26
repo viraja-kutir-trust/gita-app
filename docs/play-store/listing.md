@@ -1,4 +1,4 @@
-# Google Play listing — Gita All-In-One 3.0.0
+# Google Play listing — Gita All-In-One 3.1.0
 
 Play Console → **Grow users → Store presence → Main store listing**.
 
@@ -52,19 +52,16 @@ Sources are credited in the app under Settings → Sources & credits.
 
 ## Release notes — "What's new" (500)
 ```
-A completely new Gita All-In-One:
-• New verse pages with proper Sanskrit layout
-• Tap any word for meaning, root and grammar
-• Śaṅkara's commentary in English, plus Swarupananda (1909)
-• Search and filter commentaries; pin your favourites
-• Highlight any words, add notes, compare translations
-• Search the whole Gita in any script
-• Chanting mode, reading progress, Library
-• 8 scripts, light/sepia/dark themes
-Your favourites and notes carry over.
+• Translate any card into your language, on-device (Sanskrit is never translated)
+• Swami Nirvikalpananda's Telugu word meanings and padaccheda
+• Tap any word, even sandhi-joined ones, for meaning, root and Sanskrit grammar terms
+• Share and copy your notes with the verse attached
+• Even sloka sizing and a gentler chanting mode
+• A Gita line on launch that opens your verse of the day
+• Fixed long commentaries losing their last lines
 ```
 
 ## Graphics
 - App icon (512×512): `docs/play-store/icon-512.png`
 - Feature graphic (1024×500): `docs/app-store/header/header-1024x500.png`
-- Phone screenshots (1080×2160), order 01→07: `docs/play-store/screenshots/`
+- Phone screenshots (1080×2160), order 01→08: `docs/play-store/screenshots/`

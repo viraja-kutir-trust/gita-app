@@ -13,3 +13,6 @@ dist/
 scripts/
 App.js.bak
 .DS_Store
+/electron
+/webapp
+/docs

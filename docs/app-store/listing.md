@@ -1,6 +1,6 @@
-# App Store listing — Gita All-In-One 3.0.0
+# App Store listing — Gita All-In-One 3.1.0
 
-Paste each field into App Store Connect → your app → **3.0.0 Prepare for Submission**
+Paste each field into App Store Connect → your app → **3.1.0 Prepare for Submission**
 (and **App Information** for Name/Subtitle). Character limits are Apple's.
 
 ---
@@ -27,23 +27,16 @@ bhagavad,geeta,gita,sanskrit,shloka,sloka,vedanta,advaita,shankara,krishna,comme
 
 ## What's New in This Version (4000)
 ```
-A completely new Gita All-In-One, rebuilt for serious study.
+Gita All-In-One 3.1 — more ways to understand every word.
 
-• A new reading page for every verse — the Sanskrit laid out properly by its metre, with clean line breaks and verse numbers
-• Tap any word for its meaning, root and grammar
-• Word-by-word meanings from Swami Sivananda, Swami Swarupananda (1909) or Swami Mukundananda — your choice
-• Śaṅkarācārya's commentary in English (A. Mahadeva Sastri), plus Swami Swarupananda's translation and notes, alongside the existing Sanskrit, Hindi and English commentaries
-• Find a commentary fast: search inside them, filter by school (Advaita, Viśiṣṭādvaita, Dvaita…) and pin the ones you study with
-• Compare every translation side by side, and trace a Sanskrit word across all of them
-• Select any words to highlight them in four colours, copy them, or add them to your notes
-• Search the whole Gita: verse numbers, Sanskrit in any script, romanised words without accents, or English and Hindi phrases
-• Chanting mode: read a chapter or the whole Gita as one continuous stream, with auto-scroll
-• Reading progress, streaks, bookmarks, notes, highlights and history in a new Library
-• Read the Sanskrit in Devanagari, Telugu, Kannada, Tamil, Malayalam, Bengali, Gujarati or IAST
-• Light, sepia and dark themes, adjustable text size, and the new iOS design
-• A short guided tour on first launch
-
-Your favourites and notes from the previous version are carried over automatically.
+• Translate any card into your language, right on your device (Google ML Kit) — from the ⋯ menu on each card, next to Copy, Share and Make default. The Sanskrit is never translated, and machine translations are clearly marked with a one-tap Show original
+• Swami Nirvikalpananda's Telugu word-by-word meanings and padaccheda, with his footnotes
+• Tap any word in the sloka or the padaccheda — including words joined by sandhi — to see every word it holds, with meaning, root and the traditional grammar terms (vibhakti, vacana, liṅga, puruṣa, lakāra)
+• Share or copy your notes, with the verse and its sloka attached
+• Slokas are laid out more evenly and with more room on the verse and chanting pages
+• Chanting mode follows your reading more gently
+• A well-known line from the Gita greets you on launch — tap it to open that verse, which is also your verse of the day
+• Fixed long commentaries and translations losing their last lines on some devices
 ```
 
 ## Description (4000)
@@ -90,4 +83,5 @@ Keep your existing URLs.
 ## Screenshots
 `docs/app-store/screenshots/iphone-6.9/` — 1320 × 2868, upload to **iPhone 6.9" Display** (Apple scales these down for smaller iPhones).
 `docs/app-store/screenshots/ipad-13/` — 2064 × 2752, upload to **iPad 13" Display** (needed because the app supports iPad).
-Order: 01 → 08.
+`docs/app-store/screenshots/iphone-6.3/` — 1206 × 2622, only if App Store Connect asks for the 6.3" size separately.
+Order: 01 → 10 (iPad: 01 → 03).
