@@ -250,3 +250,42 @@ export function Bar({ value, label }) {
 export function Skeleton({ h = 14, w = "100%", style }) {
   return <div className="skeleton" style={{ height: h, width: w, ...style }} />;
 }
+
+// ---------------------------------------------------------------- verse / reading switch
+/** Switch between the single-verse page and Reading mode, at the same verse. */
+export function ViewSwitch({ chapter, verse, current, onNavigate }) {
+  return (
+    <div className="seg view-switch" role="radiogroup" aria-label="View">
+      <button type="button" role="radio" aria-checked={current === "verse"} className={current === "verse" ? "on" : ""} onClick={() => current !== "verse" && onNavigate(`/verse/${chapter}/${verse}`)} title="One verse with translations, word study and commentaries">
+        Verse view
+      </button>
+      <button type="button" role="radio" aria-checked={current === "read"} className={current === "read" ? "on" : ""} onClick={() => current !== "read" && onNavigate(`/read/${chapter}${verse > 1 ? `?v=${verse}` : ""}`)} title="The whole Gita as one continuous page">
+        Reading mode
+      </button>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------- previous / next verse
+/**
+ * The floating pager at the bottom of a reading pane: previous verse, where you are,
+ * next verse (← and → on the keyboard; the page binds the keys).
+ */
+export function VersePager({ prev, next, label, sub, onGo }) {
+  return (
+    <nav className="vpager" aria-label="Previous and next verse">
+      <button type="button" className="vpager-btn" disabled={!prev} onClick={() => onGo(prev)} aria-label={prev ? `Previous verse, ${prev.chapter}.${prev.verse}` : "First verse"}>
+        <span className="vpager-arrow">‹</span>
+        {prev ? <span className="tnum">{prev.chapter}.{prev.verse}</span> : null}
+      </button>
+      <div className="vpager-mid">
+        <span className="t-strong tnum">{label}</span>
+        {sub ? <span className="t-caption muted">{sub}</span> : null}
+      </div>
+      <button type="button" className="vpager-btn" disabled={!next} onClick={() => onGo(next)} aria-label={next ? `Next verse, ${next.chapter}.${next.verse}` : "Last verse"}>
+        {next ? <span className="tnum">{next.chapter}.{next.verse}</span> : null}
+        <span className="vpager-arrow">›</span>
+      </button>
+    </nav>
+  );
+}

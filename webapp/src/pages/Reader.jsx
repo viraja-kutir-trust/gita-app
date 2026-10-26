@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Bookmark, BookmarkCheck, Copy, ExternalLink, MoreHorizontal, NotebookPen, Type } from "lucide-react";
 import Frame from "../components/Frame";
 import { Blocks, Sloka } from "../components/reading";
-import { IconButton, Menu, MOD, Skeleton, useToast } from "../components/ui";
+import { IconButton, Menu, MOD, Skeleton, useToast, ViewSwitch } from "../components/ui";
 import { useChapterVerses, useStudyUnits, useTexts, useWordMeanings } from "../data/gita";
 import { setLast, setSetting, toggleBookmark } from "../state/store";
 import { Padaccheda } from "./Verse";
@@ -151,6 +151,8 @@ export default function Reader({ onSettings }) {
       crumbs={[{ label: "Reading" }, { label: `Chapter ${focus.chapter} · ${meta.name}` }, { label: `Verse ${focus.verse} of ${VERSE_COUNTS[focus.chapter]}` }]}
       actions={
         <>
+          <ViewSwitch chapter={focus.chapter} verse={focus.verse} current="read" onNavigate={navigate} />
+          <span className="divider" />
           <div className="rd-toggles" role="group" aria-label="Show">
             {PARTS.map((p) => (
               <button key={p.key} type="button" className={`rd-toggle ${show[p.key] ? "on" : ""}`} aria-pressed={show[p.key]} onClick={() => toggle(p.key)}>

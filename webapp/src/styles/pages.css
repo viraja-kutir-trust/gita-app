@@ -1558,3 +1558,76 @@ a.stat:hover {
     max-height: 180px;
   }
 }
+
+/* commentary: commentator tabs + picker (instead of a list column) */
+.md-reader.full {
+  height: 100%;
+  overflow-y: auto;
+}
+.com-switch {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: -4px 0 14px;
+}
+.com-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--bg-elev);
+  font-size: 12.5px;
+  font-weight: 550;
+  color: var(--ink-2);
+  transition: border-color 0.12s, background 0.12s;
+}
+.com-tab:hover {
+  border-color: var(--border-strong);
+}
+.com-tab.on {
+  background: var(--accent-soft);
+  border-color: var(--accent-soft-2);
+  color: var(--accent-ink);
+}
+.com-tab svg {
+  color: var(--accent);
+}
+.com-tab.more {
+  color: var(--muted);
+  border-style: dashed;
+}
+.com-tab.more svg {
+  color: var(--muted);
+}
+.com-picker {
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  max-height: min(560px, 70vh);
+}
+.com-picker .md-list-head {
+  background: var(--sidebar);
+}
+.com-picker .md-list-body {
+  overflow-y: auto;
+  padding: 6px;
+}
+.com-missing {
+  margin: -6px 0 12px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+}
+.md-reader.full {
+  display: flex;
+  flex-direction: column;
+}
+.md-reader.full > .reader {
+  flex: 1 0 auto;
+  width: 100%;
+}

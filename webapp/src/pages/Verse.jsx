@@ -2,13 +2,10 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  ArrowLeft,
-  ArrowRight,
   Bookmark,
   BookmarkCheck,
   Check,
   CheckCircle2,
-  ChevronLeft,
   ChevronRight,
   Columns2,
   Copy,
@@ -24,7 +21,7 @@ import { Blocks, FootnoteMark, Sloka } from "../components/reading";
 import { useHighlighter } from "../components/Highlighter";
 import StudyPanel from "../components/StudyPanel";
 import { NoteCard, NoteDialog } from "../components/Notes";
-import { IconButton, Menu, MOD, Skeleton, useToast } from "../components/ui";
+import { IconButton, Menu, MOD, Skeleton, useToast, VersePager, ViewSwitch } from "../components/ui";
 import { prefetchVerse, useStudyUnits, useTexts, useVerse, useWordMeanings } from "../data/gita";
 import { markRead, setLast, setSetting, toggleBookmark, togglePinnedCommentator, unmarkRead } from "../state/store";
 import { authorName, bookIndex, CHAPTERS, fromBookIndex, langLabel, TOTAL_VERSES, VERSE_COUNTS } from "../../../src/lib/names";
@@ -122,11 +119,7 @@ export default function Verse({ onSettings }) {
 
   const actions = (
     <>
-      <span className="t-caption muted tnum" style={{ marginRight: 4 }}>
-        {v} of {VERSE_COUNTS[chapter]}
-      </span>
-      <IconButton icon={ChevronLeft} label={prev ? `Previous verse · ${prev.chapter}.${prev.verse}` : "First verse"} keys={["←"]} disabled={!prev} onClick={() => go(prev)} />
-      <IconButton icon={ChevronRight} label={next ? `Next verse · ${next.chapter}.${next.verse}` : "Last verse"} keys={["→"]} disabled={!next} onClick={() => go(next)} />
+      <ViewSwitch chapter={chapter} verse={v} current="verse" onNavigate={navigate} />
       <span className="divider" />
       <IconButton icon={isRead ? CheckCircle2 : Check} on={isRead} label={isRead ? "Marked as read" : "Mark as read"} onClick={() => dispatch(isRead ? unmarkRead(key) : markRead(key))} />
       <IconButton icon={bookmarked ? BookmarkCheck : Bookmark} on={bookmarked} label={bookmarked ? "Remove bookmark" : "Bookmark"} keys={["B"]} onClick={() => dispatch(toggleBookmark(key))} />
@@ -201,27 +194,8 @@ export default function Verse({ onSettings }) {
 
             <CommentarySection chapter={chapter} v={v} commentaries={commentaries} pinned={s.pinnedCommentators} />
 
-            <nav className="verse-pager" aria-label="Verse navigation">
-              {prev ? (
-                <button type="button" className="pager-card" onClick={() => go(prev)}>
-                  <span className="t-caption muted row">
-                    <ArrowLeft size={13} /> Previous
-                  </span>
-                  <span className="t-strong">Verse {prev.chapter}.{prev.verse}</span>
-                </button>
-              ) : (
-                <span />
-              )}
-              {next ? (
-                <button type="button" className="pager-card end" onClick={() => go(next)}>
-                  <span className="t-caption muted row" style={{ justifyContent: "flex-end" }}>
-                    Next <ArrowRight size={13} />
-                  </span>
-                  <span className="t-strong">Verse {next.chapter}.{next.verse}</span>
-                </button>
-              ) : null}
-            </nav>
           </article>
+          <VersePager prev={prev} next={next} label={`Verse ${key}`} sub={`${v} of ${VERSE_COUNTS[chapter]} · ${meta.name}`} onGo={go} />
         </div>
         {panelOpen ? (
           <StudyPanel

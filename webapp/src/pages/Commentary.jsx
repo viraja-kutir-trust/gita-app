@@ -1,17 +1,17 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { ChevronDown, ChevronUp, Copy, MoreHorizontal, Pin, PinOff, Search, Share, X } from "lucide-react";
 import Frame from "../components/Frame";
 import { Blocks, Sloka } from "../components/reading";
 import { useHighlighter } from "../components/Highlighter";
-import { Empty, IconButton, Menu, MOD, Segmented, Skeleton, useToast } from "../components/ui";
+import { Empty, IconButton, Menu, MOD, Popover, Segmented, Skeleton, useToast, VersePager } from "../components/ui";
 import { useTexts, useVerse } from "../data/gita";
 import { setSetting, togglePinnedCommentator } from "../state/store";
 import { countMatches, plainText } from "../lib/text";
 import { scriptByKey } from "../lib/script";
 import { copyText, shareText } from "../lib/share";
-import { CHAPTERS, LANGS, SCHOOLS, langLabel } from "../../../src/lib/names";
+import { bookIndex, CHAPTERS, fromBookIndex, LANGS, SCHOOLS, TOTAL_VERSES, langLabel } from "../../../src/lib/names";
 import { describeText, orderCommentaries } from "../../../src/lib/texts";
 import { editing } from "../App";
 import { useCloseToVerse, useScrollMemory } from "../lib/nav";
@@ -36,6 +36,9 @@ export default function Commentary() {
   const [showVerse, setShowVerse] = useState(true);
   const readerRef = useRef(null);
   const findRef = useRef(null);
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const [pickerAnchor, setPickerAnchor] = useState(null);
+  const closePicker = useCallback(() => setPickerOpen(false), []);
   const location = useLocation();
   const close = useCloseToVerse(chapter, vn);
 
@@ -84,7 +87,13 @@ export default function Commentary() {
         return;
       }
       if (editing(document.activeElement) || e.metaKey || e.ctrlKey) return;
-      if (e.key === "ArrowDown" || e.key === "j") {
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        goVerse(prevV);
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        goVerse(nextV);
+      } else if (e.key === "ArrowDown" || e.key === "j") {
         e.preventDefault();
         open(ordered[idx + 1]);
       } else if (e.key === "ArrowUp" || e.key === "k") {
@@ -97,6 +106,18 @@ export default function Commentary() {
   });
 
   const d = current ? describeText(current) : null;
+  // One-click tabs: the pinned commentators on this verse, plus the one being read.
+  const quick = useMemo(() => {
+    const pinned = ordered.filter((t) => settings.pinnedCommentators.includes(t.authorId));
+    return current && !pinned.includes(current) ? [...pinned, current] : pinned;
+  }, [ordered, settings.pinnedCommentators, current]);
+  // The commentator asked for (e.g. carried over from the previous verse) may not cover this verse.
+  const missing = author && texts && current && String(current.authorId) !== String(author) ? describeText({ authorId: Number(author) }).name : null;
+  const index = bookIndex(chapter, vn);
+  const prevV = index > 1 ? fromBookIndex(index - 1) : null;
+  const nextV = index < TOTAL_VERSES ? fromBookIndex(index + 1) : null;
+  // Previous / next verse, staying with the same commentator.
+  const goVerse = (p) => p && navigate(`/verse/${p.chapter}/${p.verse}/commentary/${author || current?.authorId || ""}${find ? `?q=${encodeURIComponent(find)}` : ""}`);
   const isPinned = current && settings.pinnedCommentators.includes(current.authorId);
   const sanskritLike = current && (current.lang === "sanskrit" || current.lang === "hindi");
   const scriptOptions = [...new Set(["dv", settings.script !== "dv" && settings.script !== "ro" ? settings.script : "te", "ro"])];
@@ -113,8 +134,46 @@ export default function Commentary() {
       className="no-scroll"
       close={{ label: `Close commentaries, back to verse ${chapter}.${vn}`, text: `Back to ${chapter}.${vn}`, onClick: close }}
     >
-      <div className="md-layout">
-        <aside className="md-list">
+      <div className="md-reader full" ref={readerRef}>
+          {current ? (
+            <article className="reader">
+              <header className="reader-head">
+                <div className="grow">
+                  <div className="t-eyebrow">
+                    {d.school} · {langLabel(current.lang)} · {d.minutes} min read
+                  </div>
+                  <h1 className="t-title" style={{ marginTop: 4 }}>
+                    {d.name}
+                  </h1>
+                </div>
+                <IconButton icon={isPinned ? PinOff : Pin} on={isPinned} label={isPinned ? "Unpin commentator" : "Pin to the top on every verse"} onClick={() => dispatch(togglePinnedCommentator(current.authorId))} />
+                <Menu
+                  trigger={(o) => <IconButton icon={MoreHorizontal} label="More actions" onClick={o} />}
+                  items={[
+                    {
+                      label: "Copy commentary",
+                      icon: Copy,
+                      onSelect: async () => {
+                        await copyText(`${plainText(current.blocks)}\n\n${cite}`);
+                        toast("Copied");
+                      },
+                    },
+                    { label: "Share…", icon: Share, onSelect: () => shareText(`${plainText(current.blocks)}\n\n${cite}`, toast) },
+                  ]}
+                />
+              </header>
+
+              <div className="com-switch">
+                {quick.map((t) => (
+                  <button key={t.id} type="button" className={`com-tab ${t.id === current.id ? "on" : ""}`} onClick={() => open(t)}>
+                    {settings.pinnedCommentators.includes(t.authorId) ? <Pin size={11} /> : null}
+                    {describeText(t).name}
+                  </button>
+                ))}
+                <button type="button" ref={setPickerAnchor} className="com-tab more" onClick={() => setPickerOpen((x) => !x)} aria-expanded={pickerOpen}>
+                  All {texts?.length || ""} commentators <ChevronDown size={13} />
+                </button>
+                <Popover anchor={pickerAnchor} open={pickerOpen} onClose={closePicker} align="start" width={380} className="com-picker">
           <div className="md-list-head">
             <div className="input-wrap">
               <Search size={15} />
@@ -148,51 +207,32 @@ export default function Commentary() {
               {texts ? (filterTerms.length ? `${rows.length} of ${texts.length} mention “${filter.trim()}”` : `${rows.length} of ${texts.length} · pinned first`) : "Loading…"}
             </div>
           </div>
-          <div className="md-list-body">
-            {rows.map(({ t, d: dd, hits }) => (
-              <button key={t.id} type="button" className={`md-item ${current?.id === t.id ? "on" : ""}`} onClick={() => open(t)}>
-                <span className="row" style={{ justifyContent: "space-between", gap: 6 }}>
-                  <span className="t-strong ellipsis">{dd.name}</span>
-                  {settings.pinnedCommentators.includes(t.authorId) ? <Pin size={12} className="accent" style={{ flex: "none" }} /> : null}
-                </span>
-                <span className="t-caption muted ellipsis">
-                  {dd.school} · {langLabel(t.lang)} · {dd.minutes} min
-                  {hits ? ` · ${hits} ${hits === 1 ? "match" : "matches"}` : ""}
-                </span>
-              </button>
-            ))}
-            {texts && !rows.length ? <Empty title="No commentary matches">Try another word, or clear the filters.</Empty> : null}
-          </div>
-        </aside>
-
-        <div className="md-reader" ref={readerRef}>
-          {current ? (
-            <article className="reader">
-              <header className="reader-head">
-                <div className="grow">
-                  <div className="t-eyebrow">
-                    {d.school} · {langLabel(current.lang)} · {d.minutes} min read
+                  <div className="md-list-body">
+                    {rows.map(({ t, d: dd, hits }) => (
+                      <button
+                        key={t.id}
+                        type="button"
+                        className={`md-item ${current?.id === t.id ? "on" : ""}`}
+                        onClick={() => {
+                          open(t);
+                          closePicker();
+                        }}
+                      >
+                        <span className="row" style={{ justifyContent: "space-between", gap: 6 }}>
+                          <span className="t-strong ellipsis">{dd.name}</span>
+                          {settings.pinnedCommentators.includes(t.authorId) ? <Pin size={12} className="accent" style={{ flex: "none" }} /> : null}
+                        </span>
+                        <span className="t-caption muted ellipsis">
+                          {dd.school} · {langLabel(t.lang)} · {dd.minutes} min
+                          {hits ? ` · ${hits} ${hits === 1 ? "match" : "matches"}` : ""}
+                        </span>
+                      </button>
+                    ))}
+                    {texts && !rows.length ? <Empty title="No commentary matches">Try another word, or clear the filters.</Empty> : null}
                   </div>
-                  <h1 className="t-title" style={{ marginTop: 4 }}>
-                    {d.name}
-                  </h1>
-                </div>
-                <IconButton icon={isPinned ? PinOff : Pin} on={isPinned} label={isPinned ? "Unpin commentator" : "Pin to the top on every verse"} onClick={() => dispatch(togglePinnedCommentator(current.authorId))} />
-                <Menu
-                  trigger={(o) => <IconButton icon={MoreHorizontal} label="More actions" onClick={o} />}
-                  items={[
-                    {
-                      label: "Copy commentary",
-                      icon: Copy,
-                      onSelect: async () => {
-                        await copyText(`${plainText(current.blocks)}\n\n${cite}`);
-                        toast("Copied");
-                      },
-                    },
-                    { label: "Share…", icon: Share, onSelect: () => shareText(`${plainText(current.blocks)}\n\n${cite}`, toast) },
-                  ]}
-                />
-              </header>
+                </Popover>
+              </div>
+              {missing ? <p className="com-missing t-small">{missing} has no commentary on {chapter}.{vn}; showing {d.name}.</p> : null}
 
               <div className="reader-tools">
                 <div className="input-wrap grow">
@@ -233,7 +273,7 @@ export default function Commentary() {
               <footer className="reader-foot">
                 <span className="t-caption muted">{current.attribution || current.license || ""}</span>
                 <span className="t-caption faint">
-                  <span className="kbd">↑</span> <span className="kbd">↓</span> switch commentator · <span className="kbd">{MOD} F</span> find
+                  <span className="kbd">←</span> <span className="kbd">→</span> verse · <span className="kbd">↑</span> <span className="kbd">↓</span> commentator · <span className="kbd">{MOD} F</span> find
                 </span>
               </footer>
             </article>
@@ -244,7 +284,7 @@ export default function Commentary() {
               <Skeleton h={18} style={{ marginTop: 10 }} />
             </div>
           )}
-        </div>
+        <VersePager prev={prevV} next={nextV} label={`Verse ${chapter}.${vn}`} sub={d ? d.name : "Commentaries"} onGo={goVerse} />
       </div>
     </Frame>
   );

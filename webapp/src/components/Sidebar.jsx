@@ -91,9 +91,9 @@ export default function Sidebar({ onSearch, onSettings }) {
             return (
               <NavLink
                 key={n}
-                to={`/read/${n}`}
+                to={`/chapter/${n}`}
                 className={() => `ch-item ${currentChapter === n ? "active" : ""}`}
-                title={`Read chapter ${n} · ${ch.name} · ${ch.en} · ${VERSE_COUNTS[n]} verses`}
+                title={`${ch.name} · ${ch.en} · ${VERSE_COUNTS[n]} verses`}
               >
                 <span className="ch-num">{devaDigits(n)}</span>
                 <span className="ellipsis">{ch.name}</span>
